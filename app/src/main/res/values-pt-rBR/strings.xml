@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="app_name">CallGuard</string>
+<string name="language_selection_title">Selecione o idioma</string>
+<string name="language_selection_subtitle">Escolha o idioma que deseja usar no CallGuard.</string>
+<string name="confirm">Confirmar</string>
+<string name="language_change_later">Você poderá alterar o idioma depois nas configurações.</string>
+<string name="onboarding_title">Proteja suas chamadas</string>
+<string name="onboarding_description">O CallGuard ajuda a bloquear chamadas de números que não estejam nos seus contatos ou na sua lista de permitidos.</string>
+<string name="continue_text">Continuar</string>
+<string name="onboarding_feature_1_title">Permita números confiáveis</string>
+<string name="onboarding_feature_1_description">Mantenha seus números permitidos organizados e sob seu controle.</string>
+
+<string name="onboarding_feature_2_title">Bloqueie números desconhecidos</string>
+<string name="onboarding_feature_2_description">Reduza interrupções de chamadas que você não reconhece.</string>
+
+<string name="onboarding_feature_3_title">Assine para proteção completa</string>
+<string name="onboarding_feature_3_description">O Premium libera integração com contatos e whitelist ilimitada.</string>
+</resources>

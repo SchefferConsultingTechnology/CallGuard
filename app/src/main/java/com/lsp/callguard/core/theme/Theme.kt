@@ -4,7 +4,23 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 
-private val LightColors = lightColorScheme()
+private val LightColors = lightColorScheme(
+    primary = BluePrimary,
+    onPrimary = SurfaceLight,
+
+    primaryContainer = BluePrimaryLight,
+
+    background = BackgroundLight,
+    onBackground = TextPrimary,
+
+    surface = SurfaceLight,
+    onSurface = TextPrimary,
+
+    surfaceVariant = SurfaceVariantLight,
+    onSurfaceVariant = TextSecondary,
+
+    outlineVariant = OutlineLight
+)
 
 @Composable
 fun CallGuardTheme(

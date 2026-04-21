@@ -39,12 +39,12 @@ fun LanguageItem(
 
             Column {
                 Text(
-                    text = language.displayName,
+                    text = language.title,
                     style = MaterialTheme.typography.titleMedium
                 )
 
                 Text(
-                    text = language.nativeName,
+                    text = language.subtitle,
                     style = MaterialTheme.typography.bodySmall
                 )
             }
