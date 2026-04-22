@@ -14,6 +14,7 @@ import com.lsp.callguard.ui.screen.language.LanguageSelectionScreen
 import com.lsp.callguard.ui.screen.language.rememberLanguageSelectionViewModel
 import com.lsp.callguard.ui.screen.onboarding.OnboardingScreen
 import com.lsp.callguard.ui.screen.paywall.PaywallScreen
+import com.lsp.callguard.core.language.LocaleManagerHelper
 
 @Composable
 fun CallGuardNavHost( languagePreferences: LanguagePreferences) {
@@ -36,15 +37,28 @@ fun CallGuardNavHost( languagePreferences: LanguagePreferences) {
         }
 
         composable(Routes.Language.route) {
-            LanguageSelectionRoute(
-                languagePreferences = languagePreferences,
+            val viewModel = rememberLanguageSelectionViewModel(languagePreferences)
+            val uiState by viewModel.uiState.collectAsState()
+
+            LanguageSelectionScreen(
+                selectedLanguage = uiState.selectedLanguage,
+                onSelectLanguage = { language ->
+                    viewModel.onLanguageSelected(language)
+                },
                 onConfirm = {
-                    navController.navigate(Routes.Onboarding.route) {
-                        popUpTo(Routes.Language.route) { inclusive = true }
+                    val selectedLanguage = uiState.selectedLanguage ?: return@LanguageSelectionScreen
+
+                    viewModel.onConfirm {
+                        LocaleManagerHelper.applyLanguage(selectedLanguage)
+
+                        navController.navigate(Routes.Onboarding.route) {
+                            popUpTo(Routes.Language.route) { inclusive = true }
+                        }
                     }
                 }
             )
         }
+
         composable(Routes.Home.route) {
             HomeScreen(
                 onOpenWhitelist = { navController.navigate(Routes.Whitelist.route) },
@@ -79,22 +93,22 @@ fun CallGuardNavHost( languagePreferences: LanguagePreferences) {
     }
 }
 
-@Composable
-fun LanguageSelectionRoute(
-    languagePreferences: LanguagePreferences,
-    onConfirm: () -> Unit
-) {
-    val viewModel = rememberLanguageSelectionViewModel(languagePreferences)
-
-    val uiState by viewModel.uiState.collectAsState()
-
-    LanguageSelectionScreen(
-        selectedLanguage = uiState.selectedLanguage,
-        onSelectLanguage = viewModel::onLanguageSelected,
-        onConfirm = {
-            viewModel.onConfirm {
-                onConfirm()
-            }
-        }
-    )
-}
+//@Composable
+//fun LanguageSelectionRoute(
+//    languagePreferences: LanguagePreferences,
+//    onConfirm: () -> Unit
+//) {
+//    val viewModel = rememberLanguageSelectionViewModel(languagePreferences)
+//
+//    val uiState by viewModel.uiState.collectAsState()
+//
+//    LanguageSelectionScreen(
+//        selectedLanguage = uiState.selectedLanguage,
+//        onSelectLanguage = viewModel::onLanguageSelected,
+//        onConfirm = {
+//            viewModel.onConfirm {
+//                onConfirm()
+//            }
+//        }
+//    )
+//}

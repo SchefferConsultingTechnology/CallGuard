@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -25,19 +26,21 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.lsp.callguard.R
 
 @Composable
 fun PaywallScreen(
@@ -45,63 +48,14 @@ fun PaywallScreen(
     onContinueFreeClick: () -> Unit
 ) {
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.background
-    ) { innerPadding: PaddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(horizontal = 20.dp, vertical = 16.dp)
-                .navigationBarsPadding(),
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column {
-                Spacer(modifier = Modifier.height(12.dp))
-
-                PaywallHeader()
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                PremiumHighlightCard()
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                Text(
-                    text = "O que você desbloqueia com a assinatura",
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.SemiBold
-                    ),
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-
-                Spacer(modifier = Modifier.height(14.dp))
-
-                FeatureItem(
-                    title = "Contatos automáticos",
-                    description = "Use sua lista de contatos como permitidos automaticamente."
-                )
-
-                FeatureItem(
-                    title = "Whitelist ilimitada",
-                    description = "Adicione quantos números quiser à sua lista manual."
-                )
-
-                FeatureItem(
-                    title = "Sem anúncios, nunca",
-                    description = "Seu app continua limpo, sem publicidade e sem rastreamento."
-                )
-
-                FeatureItem(
-                    title = "Base para backup e restauração",
-                    description = "Recupere suas configurações ao trocar de smartphone."
-                )
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                FreePlanInfoCard()
-            }
-
-            Column {
+        containerColor = MaterialTheme.colorScheme.background,
+        bottomBar = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .navigationBarsPadding()
+                    .padding(horizontal = 20.dp, vertical = 12.dp)
+            ) {
                 Button(
                     onClick = onSubscribeClick,
                     modifier = Modifier
@@ -114,7 +68,7 @@ fun PaywallScreen(
                     )
                 ) {
                     Text(
-                        text = "Assinar CallGuard Premium",
+                        text = stringResource(R.string.paywallscreen_bottom_bar_premium),
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.SemiBold
                         )
@@ -135,7 +89,7 @@ fun PaywallScreen(
                     )
                 ) {
                     Text(
-                        text = "Continuar com versão gratuita",
+                        text = stringResource(R.string.paywallscreen_bottom_bar_free),
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.Medium
                         ),
@@ -143,17 +97,75 @@ fun PaywallScreen(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
                 Text(
-                    text = "A versão gratuita permite uso básico com whitelist limitada. O acesso aos contatos só é solicitado após assinatura.",
-                    style = MaterialTheme.typography.bodyMedium,
+                    text = stringResource(R.string.paywallscreen_bottom_bar_footer),
+                    style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth()
                 )
+            }
+        }
+    ) { innerPadding ->
 
-                Spacer(modifier = Modifier.height(6.dp))
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(horizontal = 20.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(top = 16.dp, bottom = 20.dp)
+        ) {
+            item {
+                PaywallHeader()
+            }
+
+            item {
+                PremiumHighlightCard()
+            }
+
+            item {
+                Text(
+                    text = stringResource(R.string.paywallscreen_body_title),
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
+
+            item {
+                FeatureItem(
+                    title = stringResource(R.string.paywallscreen_body_item1_title),
+                    description = stringResource(R.string.paywallscreen_body_item1_description)
+                )
+            }
+
+            item {
+                FeatureItem(
+                    title = stringResource(R.string.paywallscreen_body_item2_title),
+                    description = stringResource(R.string.paywallscreen_body_item2_description)
+                )
+            }
+
+            item {
+                FeatureItem(
+                    title = stringResource(R.string.paywallscreen_body_item3_title),
+                    description = stringResource(R.string.paywallscreen_body_item3_description)
+                )
+            }
+
+            item {
+                FeatureItem(
+                    title = stringResource(R.string.paywallscreen_body_item4_title),
+                    description = stringResource(R.string.paywallscreen_body_item4_description)
+                )
+            }
+
+            item {
+                FreePlanInfoCard()
             }
         }
     }
@@ -167,7 +179,7 @@ private fun PaywallHeader() {
     ) {
         Box(
             modifier = Modifier
-                .size(64.dp)
+                .size(60.dp)
                 .background(
                     color = MaterialTheme.colorScheme.primaryContainer,
                     shape = CircleShape
@@ -178,14 +190,14 @@ private fun PaywallHeader() {
                 imageVector = Icons.Outlined.WorkspacePremium,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(32.dp)
+                modifier = Modifier.size(30.dp)
             )
         }
 
-        Spacer(modifier = Modifier.height(18.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "Proteção completa de chamadas",
+            text = stringResource(R.string.paywallscreen_header_title),
             style = MaterialTheme.typography.headlineSmall.copy(
                 fontWeight = FontWeight.Bold
             ),
@@ -193,16 +205,16 @@ private fun PaywallHeader() {
             textAlign = TextAlign.Center
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Controle quem pode falar com você, com mais privacidade e sem anúncios.",
+            text = stringResource(R.string.paywallscreen_header_description),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center
         )
 
-        Spacer(modifier = Modifier.height(18.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
     }
@@ -221,7 +233,7 @@ private fun PremiumHighlightCard() {
         )
     ) {
         Column(
-            modifier = Modifier.padding(18.dp)
+            modifier = Modifier.padding(16.dp)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -235,7 +247,7 @@ private fun PremiumHighlightCard() {
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Text(
-                    text = "Premium sem publicidade",
+                    text = stringResource(R.string.paywallscreen_premium_title),
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
@@ -243,10 +255,10 @@ private fun PremiumHighlightCard() {
                 )
             }
 
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "CallGuard é sustentado por assinatura. Isso significa uma experiência limpa, sem anúncios e sem monetização baseada nos seus dados.",
+                text = stringResource(R.string.paywallscreen_premium_description),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -262,20 +274,20 @@ private fun FeatureItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .padding(vertical = 6.dp),
         verticalAlignment = Alignment.Top
     ) {
         Surface(
             shape = CircleShape,
             color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
-            modifier = Modifier.size(32.dp)
+            modifier = Modifier.size(30.dp)
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Icon(
                     imageVector = Icons.Outlined.CheckCircle,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(18.dp)
+                    modifier = Modifier.size(16.dp)
                 )
             }
         }
@@ -317,7 +329,7 @@ private fun FreePlanInfoCard() {
         )
     ) {
         Column(
-            modifier = Modifier.padding(18.dp)
+            modifier = Modifier.padding(16.dp)
         ) {
             Text(
                 text = "Versão gratuita",
@@ -327,22 +339,21 @@ private fun FreePlanInfoCard() {
                 color = MaterialTheme.colorScheme.onSurface
             )
 
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Você pode instalar e usar o app gratuitamente com recursos básicos.",
+                text = stringResource(R.string.paywallscreen_free_version_description),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "• whitelist manual limitada\n• sem acesso aos contatos\n• sem solicitação de permissão de contatos\n• sem anúncios",
+                text = stringResource(R.string.paywallscreen_free_version_list),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
         }
     }
 }
-

@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">CallGuard</string>
+
     <string name="language_selection_title">Select your language</string>
     <string name="language_selection_subtitle">Choose the language you want to use in CallGuard.</string>
     <string name="confirm">Confirm</string>
     <string name="language_change_later">You can change the language later in settings.</string>
+
     <string name="onboarding_title">Protect your calls</string>
     <string name="onboarding_description">CallGuard helps block calls from numbers that are not in your contacts or allowed list.</string>
     <string name="continue_text">Continue</string>
+
     <string name="onboarding_feature_1_title">Allow trusted numbers</string>
     <string name="onboarding_feature_1_description">Keep your allowed numbers organized and under your control.</string>
 
@@ -16,4 +20,36 @@
 
     <string name="onboarding_feature_3_title">Upgrade for full protection</string>
     <string name="onboarding_feature_3_description">Premium unlocks contacts integration and an unlimited whitelist.</string>
+
+    <!-- PAYWALL -->
+
+    <string name="paywallscreen_header_title">Complete call protection</string>
+    <string name="paywallscreen_header_description">Control who can reach you, with more privacy and no ads.</string>
+
+    <string name="paywallscreen_premium_title">Premium without ads</string>
+    <string name="paywallscreen_premium_description">CallGuard is supported by subscriptions. This means a clean experience, without ads and without monetizing your data.</string>
+
+    <string name="paywallscreen_bottom_bar_premium">Subscribe to CallGuard Premium</string>
+    <string name="paywallscreen_bottom_bar_free">Continue with free version</string>
+    <string name="paywallscreen_bottom_bar_footer">The free version allows basic usage with a limited whitelist. Access to contacts is only requested after subscription.</string>
+
+    <string name="paywallscreen_body_title">What you unlock with subscription</string>
+
+    <string name="paywallscreen_body_item1_title">Automatic contacts</string>
+    <string name="paywallscreen_body_item1_description">Use your contacts list as allowed numbers automatically.</string>
+
+    <string name="paywallscreen_body_item2_title">Unlimited whitelist</string>
+    <string name="paywallscreen_body_item2_description">Add as many numbers as you want to your manual list.</string>
+
+    <string name="paywallscreen_body_item3_title">No ads, ever</string>
+    <string name="paywallscreen_body_item3_description">Your app stays clean, without ads or tracking.</string>
+
+    <string name="paywallscreen_body_item4_title">Backup and restore</string>
+    <string name="paywallscreen_body_item4_description">Recover your settings when changing devices.</string>
+
+    <string name="paywallscreen_free_version_title">Free version</string>
+    <string name="paywallscreen_free_version_description">You can install and use the app for free with basic features.</string>
+
+    <string name="paywallscreen_free_version_list">• limited manual whitelist\n• no access to contacts\n• no contact permission requested\n• no ads</string>
+
 </resources>

@@ -16,4 +16,25 @@
 
 <string name="onboarding_feature_3_title">Assine para proteção completa</string>
 <string name="onboarding_feature_3_description">O Premium libera integração com contatos e whitelist ilimitada.</string>
+
+<string name="paywallscreen_header_title">Proteção completa de chamadas</string>
+<string name="paywallscreen_header_description">Controle quem pode falar com você, com mais privacidade e sem anúncios.</string>
+<string name="paywallscreen_premium_title">Premium sem publicidade</string>
+<string name="paywallscreen_premium_description">CallGuard é sustentado por assinatura. Isso significa uma experiência limpa, sem anúncios e sem monetização baseada nos seus dados.</string>
+<string name="paywallscreen_bottom_bar_premium">Assinar CallGuard Premium</string>
+<string name="paywallscreen_bottom_bar_free">Continuar com versão gratuita</string>
+<string name="paywallscreen_bottom_bar_footer">A versão gratuita permite uso básico com whitelist limitada. O acesso aos contatos só é solicitado após assinatura.</string>
+<string name="paywallscreen_body_title">O que você desbloqueia com a assinatura</string>
+<string name="paywallscreen_body_item1_title">Contatos automáticos</string>
+<string name="paywallscreen_body_item1_description"> Use sua lista de contatos como permitidos automaticamente.</string>
+<string name="paywallscreen_body_item2_title">Whitelist ilimitada</string>
+<string name="paywallscreen_body_item2_description">Adicione quantos números quiser à sua lista manual.</string>
+<string name="paywallscreen_body_item3_title">Sem anúncios, nunca</string>
+<string name="paywallscreen_body_item3_description">Seu app continua limpo, sem publicidade e sem rastreamento.</string>
+<string name="paywallscreen_body_item4_title">Backup e restauração</string>
+<string name="paywallscreen_body_item4_description">Recupere suas configurações ao trocar de smartphone.</string>
+<string name="paywallscreen_free_version_title">Versão gratuita</string>
+<string name="paywallscreen_free_version_description">Você pode instalar e usar o app gratuitamente com recursos básicos.</string>
+<string name="paywallscreen_free_version_list">• whitelist manual limitada\n• sem acesso aos contatos\n• sem solicitação de permissão de contatos\n• sem anúncios</string>
+
 </resources>
