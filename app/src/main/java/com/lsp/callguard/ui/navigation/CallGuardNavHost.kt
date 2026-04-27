@@ -61,20 +61,36 @@ fun CallGuardNavHost( languagePreferences: LanguagePreferences) {
 
         composable(Routes.Home.route) {
             HomeScreen(
-                onOpenWhitelist = { navController.navigate(Routes.Whitelist.route) },
-                onOpenSettings = { navController.navigate(Routes.Settings.route) }
+                onOpenWhitelist = {
+                    navController.navigate(Routes.Whitelist.route)
+                },
+                onOpenSettings = {
+                    navController.navigate(Routes.Settings.route)
+                },
+                onOpenPaywall = {
+                    navController.navigate(Routes.Paywall.route)
+                }
             )
         }
 
         composable(Routes.Whitelist.route) {
             WhitelistScreen(
-                onBack = { navController.popBackStack() }
+                onBack = {
+                    navController.popBackStack()
+                },
+                onOpenPaywall = {
+                    navController.navigate(Routes.Paywall.route)
+                }
             )
         }
 
         composable(Routes.Settings.route) {
             SettingsScreen(
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
+                onOpenPaywall = { navController.navigate(Routes.Paywall.route) },
+                onOpenLanguage = { navController.navigate(Routes.Language.route) },
+                onOpenTerms = { /* depois */ },
+                onOpenPrivacyPolicy = { /* depois */ }
             )
         }
 

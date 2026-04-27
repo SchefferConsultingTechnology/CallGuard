@@ -332,7 +332,7 @@ private fun FreePlanInfoCard() {
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
-                text = "Versão gratuita",
+                text = stringResource(R.string.paywallscreen_free_version_title),
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
