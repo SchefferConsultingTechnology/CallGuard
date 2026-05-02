@@ -51,13 +51,15 @@ private const val FREE_WHITELIST_LIMIT = 5
 
 @Composable
 fun HomeScreen(
+    uiState: HomeUiState,
     onOpenWhitelist: () -> Unit,
     onOpenSettings: () -> Unit,
     onOpenPaywall: () -> Unit
 ) {
     val isSubscribed = false
-    val whitelistCount = 0
-    val progress = whitelistCount / FREE_WHITELIST_LIMIT.toFloat()
+    val whitelistCount = uiState.whitelistCount
+    val limit = uiState.whitelistLimit
+    val progress = uiState.progress
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background

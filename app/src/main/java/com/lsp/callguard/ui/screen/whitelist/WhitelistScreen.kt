@@ -29,7 +29,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -43,7 +42,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -52,7 +50,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import java.util.UUID
+import com.lsp.callguard.domain.model.AllowedNumber
+import com.lsp.callguard.domain.phone.PhoneNormalizationResult
+import com.lsp.callguard.domain.phone.PhoneNormalizer
 
 private const val FREE_WHITELIST_LIMIT = 5
 
@@ -64,22 +64,22 @@ data class WhitelistNumberUi(
 
 @Composable
 fun WhitelistScreen(
+    uiState: WhitelistUiState,
     onBack: () -> Unit,
-    onOpenPaywall: () -> Unit
+    onOpenPaywall: () -> Unit,
+    onAddNumber: (label: String, phoneE164: String) -> Unit,
+    onDeleteNumber: (id: String) -> Unit
 ) {
     val isSubscribed = false
-
-    val numbers = remember {
-        mutableStateListOf<WhitelistNumberUi>()
-    }
 
     var showAddDialog by remember { mutableStateOf(false) }
     var showLimitDialog by remember { mutableStateOf(false) }
 
-    val count = numbers.size
+    val count = uiState.count
     val limit = FREE_WHITELIST_LIMIT
-    val progress = count / limit.toFloat()
-    val reachedLimit = !isSubscribed && count >= limit
+    val progress = uiState.progress
+    val reachedLimit = uiState.reachedLimit
+    val numbers = uiState.numbers
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -150,7 +150,7 @@ fun WhitelistScreen(
                     WhitelistNumberCard(
                         item = item,
                         onDelete = {
-                            numbers.remove(item)
+                            onDeleteNumber(item.id)
                         }
                     )
                 }
@@ -170,14 +170,9 @@ fun WhitelistScreen(
         AddWhitelistNumberDialog(
             onDismiss = { showAddDialog = false },
             onConfirm = { label, phone ->
-                numbers.add(
-                    WhitelistNumberUi(
-                        id = UUID.randomUUID().toString(),
-                        label = label.ifBlank { "Sem nome" },
-                        phoneNumber = phone
-                    )
-                )
+                onAddNumber(label, phone)
                 showAddDialog = false
+
             }
         )
     }
@@ -378,7 +373,7 @@ private fun EmptyWhitelistCard() {
 
 @Composable
 private fun WhitelistNumberCard(
-    item: WhitelistNumberUi,
+    item: AllowedNumber,
     onDelete: () -> Unit
 ) {
     Card(
@@ -429,7 +424,7 @@ private fun WhitelistNumberCard(
                 Spacer(modifier = Modifier.height(3.dp))
 
                 Text(
-                    text = item.phoneNumber,
+                    text = item.phoneE164,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -496,7 +491,8 @@ private fun AddWhitelistNumberDialog(
     var label by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("") }
     val normalizedPhone = phone.trim()
-    val isPhoneValid = isValidE164(normalizedPhone)
+    val normalizedResult = PhoneNormalizer.normalize(phone)
+    val isPhoneValid = normalizedResult is PhoneNormalizationResult.Valid
 
 
 
@@ -536,14 +532,13 @@ private fun AddWhitelistNumberDialog(
         confirmButton = {
             TextButton(
                 onClick = {
-                    if (phone.isNotBlank()) {
-                        onConfirm(label, phone)
-                    }
-                    if (isPhoneValid) {
-                        onConfirm(label, phone.trim())
+                    val result = PhoneNormalizer.normalize(phone)
+
+                    if (result is PhoneNormalizationResult.Valid) {
+                        onConfirm(label, result.phoneE164)
                     }
                 },
-               enabled = isPhoneValid
+                enabled = isPhoneValid
             ) {
                 Text("Adicionar")
             }

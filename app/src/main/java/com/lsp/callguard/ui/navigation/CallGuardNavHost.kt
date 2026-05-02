@@ -15,6 +15,9 @@ import com.lsp.callguard.ui.screen.language.rememberLanguageSelectionViewModel
 import com.lsp.callguard.ui.screen.onboarding.OnboardingScreen
 import com.lsp.callguard.ui.screen.paywall.PaywallScreen
 import com.lsp.callguard.core.language.LocaleManagerHelper
+import com.lsp.callguard.ui.screen.home.HomeRoute
+import com.lsp.callguard.ui.screen.settings.SettingsRoute
+import com.lsp.callguard.ui.screen.whitelist.WhitelistRoute
 
 @Composable
 fun CallGuardNavHost( languagePreferences: LanguagePreferences) {
@@ -60,7 +63,7 @@ fun CallGuardNavHost( languagePreferences: LanguagePreferences) {
         }
 
         composable(Routes.Home.route) {
-            HomeScreen(
+            HomeRoute(
                 onOpenWhitelist = {
                     navController.navigate(Routes.Whitelist.route)
                 },
@@ -74,7 +77,7 @@ fun CallGuardNavHost( languagePreferences: LanguagePreferences) {
         }
 
         composable(Routes.Whitelist.route) {
-            WhitelistScreen(
+            WhitelistRoute(
                 onBack = {
                     navController.popBackStack()
                 },
@@ -85,12 +88,22 @@ fun CallGuardNavHost( languagePreferences: LanguagePreferences) {
         }
 
         composable(Routes.Settings.route) {
-            SettingsScreen(
-                onBack = { navController.popBackStack() },
-                onOpenPaywall = { navController.navigate(Routes.Paywall.route) },
-                onOpenLanguage = { navController.navigate(Routes.Language.route) },
-                onOpenTerms = { /* depois */ },
-                onOpenPrivacyPolicy = { /* depois */ }
+            SettingsRoute(
+                onBack = {
+                    navController.popBackStack()
+                },
+                onOpenPaywall = {
+                    navController.navigate(Routes.Paywall.route)
+                },
+                onOpenLanguage = {
+                    navController.navigate(Routes.Language.route)
+                },
+                onOpenTerms = {
+                    // depois
+                },
+                onOpenPrivacyPolicy = {
+                    // depois
+                }
             )
         }
 
@@ -109,22 +122,3 @@ fun CallGuardNavHost( languagePreferences: LanguagePreferences) {
     }
 }
 
-//@Composable
-//fun LanguageSelectionRoute(
-//    languagePreferences: LanguagePreferences,
-//    onConfirm: () -> Unit
-//) {
-//    val viewModel = rememberLanguageSelectionViewModel(languagePreferences)
-//
-//    val uiState by viewModel.uiState.collectAsState()
-//
-//    LanguageSelectionScreen(
-//        selectedLanguage = uiState.selectedLanguage,
-//        onSelectLanguage = viewModel::onLanguageSelected,
-//        onConfirm = {
-//            viewModel.onConfirm {
-//                onConfirm()
-//            }
-//        }
-//    )
-//}

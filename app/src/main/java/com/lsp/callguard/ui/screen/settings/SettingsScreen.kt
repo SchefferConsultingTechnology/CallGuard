@@ -58,17 +58,20 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun SettingsScreen(
+    uiState: SettingsUiState,
     onBack: () -> Unit,
     onOpenPaywall: () -> Unit,
     onOpenLanguage: () -> Unit,
     onOpenTerms: () -> Unit,
-    onOpenPrivacyPolicy: () -> Unit
+    onOpenPrivacyPolicy: () -> Unit,
+    onBlockUnknownChange: (Boolean) -> Unit,
+    onBlockPrivateNumbersChange: (Boolean) -> Unit,
+    onUseContactsAutomaticallyChange: (Boolean) -> Unit
 ) {
-    val isSubscribed = false
-
-    var blockUnknown by remember { mutableStateOf(true) }
-    var blockPrivateNumbers by remember { mutableStateOf(true) }
-    var useContactsAutomatically by remember { mutableStateOf(false) }
+    val isSubscribed = uiState.isSubscribed
+    val blockUnknown = uiState.appSettings.blockUnknown
+    val blockPrivateNumbers = uiState.appSettings.blockPrivateNumbers
+    val useContactsAutomatically = uiState.appSettings.useContactsAutomatically
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background
@@ -104,9 +107,9 @@ fun SettingsScreen(
             item {
                 ProtectionSettingsCard(
                     blockUnknown = blockUnknown,
-                    onBlockUnknownChange = { blockUnknown = it },
+                    onBlockUnknownChange = onBlockUnknownChange,
                     blockPrivateNumbers = blockPrivateNumbers,
-                    onBlockPrivateNumbersChange = { blockPrivateNumbers = it }
+                    onBlockPrivateNumbersChange = onBlockPrivateNumbersChange
                 )
             }
 
@@ -118,7 +121,7 @@ fun SettingsScreen(
                 ContactsSettingsCard(
                     isSubscribed = isSubscribed,
                     useContactsAutomatically = useContactsAutomatically,
-                    onUseContactsAutomaticallyChange = { useContactsAutomatically = it },
+                    onUseContactsAutomaticallyChange = onUseContactsAutomaticallyChange,
                     onOpenPaywall = onOpenPaywall
                 )
             }
