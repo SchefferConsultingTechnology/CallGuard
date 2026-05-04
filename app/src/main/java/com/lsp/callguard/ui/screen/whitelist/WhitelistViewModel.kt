@@ -34,6 +34,8 @@ sealed class WhitelistEvent {
     data object NumberAlreadyExists : WhitelistEvent()
 }
 
+
+
 class WhitelistViewModel(
     private val repository: WhitelistRepository
 ) : ViewModel() {
@@ -69,6 +71,7 @@ class WhitelistViewModel(
         viewModelScope.launch {
             when (repository.addNumber(label, phoneE164)) {
                 AddAllowedNumberResult.Success -> Unit
+
                 AddAllowedNumberResult.AlreadyExists -> {
                     _events.emit(WhitelistEvent.NumberAlreadyExists)
                 }

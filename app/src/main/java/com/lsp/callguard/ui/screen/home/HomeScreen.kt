@@ -54,7 +54,9 @@ fun HomeScreen(
     uiState: HomeUiState,
     onOpenWhitelist: () -> Unit,
     onOpenSettings: () -> Unit,
-    onOpenPaywall: () -> Unit
+    onOpenPaywall: () -> Unit,
+    onOpenProtectionSetup: () -> Unit
+
 ) {
     val isSubscribed = false
     val whitelistCount = uiState.whitelistCount
@@ -80,7 +82,10 @@ fun HomeScreen(
             }
 
             item {
-                ProtectionStatusCard()
+                ProtectionStatusCard(
+                    isProtectionEnabled = false,
+                    onOpenProtectionSetup = onOpenProtectionSetup
+                )
             }
 
             item {
@@ -151,7 +156,10 @@ private fun HomeHeader(
 }
 
 @Composable
-private fun ProtectionStatusCard() {
+private fun ProtectionStatusCard(
+    isProtectionEnabled: Boolean,
+    onOpenProtectionSetup: () -> Unit
+) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
@@ -204,7 +212,24 @@ private fun ProtectionStatusCard() {
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+
+                Button(
+                    onClick = onOpenProtectionSetup,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp)
+                ) {
+                    Text(
+                        text = if (isProtectionEnabled) {
+                            "Proteção ativa"
+                        } else {
+                            "Ativar proteção"
+                        }
+                    )
+                }
+
             }
+
         }
     }
 }

@@ -40,6 +40,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -65,15 +67,17 @@ data class WhitelistNumberUi(
 @Composable
 fun WhitelistScreen(
     uiState: WhitelistUiState,
+    snackbarHostState: SnackbarHostState,
+    showLimitDialog: Boolean,
+    onDismissLimitDialog: () -> Unit,
     onBack: () -> Unit,
     onOpenPaywall: () -> Unit,
     onAddNumber: (label: String, phoneE164: String) -> Unit,
     onDeleteNumber: (id: String) -> Unit
-) {
+){
     val isSubscribed = false
 
     var showAddDialog by remember { mutableStateOf(false) }
-    var showLimitDialog by remember { mutableStateOf(false) }
 
     val count = uiState.count
     val limit = FREE_WHITELIST_LIMIT
@@ -83,6 +87,9 @@ fun WhitelistScreen(
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        },
         bottomBar = {
             Column(
                 modifier = Modifier
@@ -92,11 +99,7 @@ fun WhitelistScreen(
             ) {
                 Button(
                     onClick = {
-                        if (reachedLimit) {
-                            showLimitDialog = true
-                        } else {
-                            showAddDialog = true
-                        }
+                           showAddDialog = true
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -172,24 +175,26 @@ fun WhitelistScreen(
             onConfirm = { label, phone ->
                 onAddNumber(label, phone)
                 showAddDialog = false
-
             }
         )
     }
 
     if (showLimitDialog) {
         AlertDialog(
-            onDismissRequest = { showLimitDialog = false },
+            onDismissRequest = onDismissLimitDialog,
             title = {
                 Text("Limite gratuito atingido")
             },
             text = {
-                Text("A versão gratuita permite até $FREE_WHITELIST_LIMIT números na whitelist. Assine o Premium para adicionar números ilimitados.")
+                Text(
+                    "A versão gratuita permite até ${uiState.limit} números na whitelist. " +
+                            "Assine o Premium para adicionar números ilimitados."
+                )
             },
             confirmButton = {
                 TextButton(
                     onClick = {
-                        showLimitDialog = false
+                        onDismissLimitDialog()
                         onOpenPaywall()
                     }
                 ) {
@@ -198,7 +203,7 @@ fun WhitelistScreen(
             },
             dismissButton = {
                 TextButton(
-                    onClick = { showLimitDialog = false }
+                    onClick = onDismissLimitDialog
                 ) {
                     Text("Agora não")
                 }

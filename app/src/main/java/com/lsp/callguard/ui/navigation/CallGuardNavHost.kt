@@ -16,6 +16,7 @@ import com.lsp.callguard.ui.screen.onboarding.OnboardingScreen
 import com.lsp.callguard.ui.screen.paywall.PaywallScreen
 import com.lsp.callguard.core.language.LocaleManagerHelper
 import com.lsp.callguard.ui.screen.home.HomeRoute
+import com.lsp.callguard.ui.screen.protection.ProtectionSetupScreen
 import com.lsp.callguard.ui.screen.settings.SettingsRoute
 import com.lsp.callguard.ui.screen.whitelist.WhitelistRoute
 
@@ -28,6 +29,12 @@ fun CallGuardNavHost( languagePreferences: LanguagePreferences) {
 
         startDestination = Routes.Language.route
     ) {
+
+        composable(Routes.ProtectionSetup.route) {
+            ProtectionSetupScreen(
+                onBack = { navController.popBackStack() }
+            )
+        }
 
         composable(Routes.Onboarding.route) {
             OnboardingScreen(
@@ -72,6 +79,9 @@ fun CallGuardNavHost( languagePreferences: LanguagePreferences) {
                 },
                 onOpenPaywall = {
                     navController.navigate(Routes.Paywall.route)
+                },
+                onOpenProtectionSetup = {
+                    navController.navigate(Routes.ProtectionSetup.route)
                 }
             )
         }

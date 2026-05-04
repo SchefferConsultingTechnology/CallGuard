@@ -8,5 +8,7 @@ sealed class Routes(val route: String) {
     data object Language : Routes("language")
 
     data object Paywall : Routes("paywall")
+
+    data object ProtectionSetup : Routes("protection_setup")
 }
 

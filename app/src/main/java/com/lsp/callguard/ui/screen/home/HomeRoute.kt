@@ -15,7 +15,8 @@ import com.lsp.callguard.data.repository.WhitelistRepository
 fun HomeRoute(
     onOpenWhitelist: () -> Unit,
     onOpenSettings: () -> Unit,
-    onOpenPaywall: () -> Unit
+    onOpenPaywall: () -> Unit,
+    onOpenProtectionSetup: () -> Unit
 ) {
     val context = LocalContext.current.applicationContext
 
@@ -39,7 +40,8 @@ fun HomeRoute(
         uiState = uiState,
         onOpenWhitelist = onOpenWhitelist,
         onOpenSettings = onOpenSettings,
-        onOpenPaywall = onOpenPaywall
+        onOpenPaywall = onOpenPaywall,
+        onOpenProtectionSetup = onOpenProtectionSetup
     )
 }
 
