@@ -83,7 +83,7 @@ fun HomeScreen(
 
             item {
                 ProtectionStatusCard(
-                    isProtectionEnabled = false,
+                    isProtectionEnabled = uiState.isProtectionEnabled,
                     onOpenProtectionSetup = onOpenProtectionSetup
                 )
             }
