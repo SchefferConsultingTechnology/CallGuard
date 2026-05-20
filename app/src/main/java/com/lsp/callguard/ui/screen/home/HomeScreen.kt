@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ContactPhone
 import androidx.compose.material.icons.outlined.CreditCard
+import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.PhoneLocked
 import androidx.compose.material.icons.outlined.Security
@@ -55,7 +56,8 @@ fun HomeScreen(
     onOpenWhitelist: () -> Unit,
     onOpenSettings: () -> Unit,
     onOpenPaywall: () -> Unit,
-    onOpenProtectionSetup: () -> Unit
+    onOpenProtectionSetup: () -> Unit,
+    onOpenCallHistory: () -> Unit
 
 ) {
     val isSubscribed = false
@@ -88,6 +90,9 @@ fun HomeScreen(
                 )
             }
 
+            item {
+                CallHistoryCard(onOpenCallHistory)
+            }
             item {
                 PlanStatusCard(
                     isSubscribed = isSubscribed,
@@ -198,7 +203,12 @@ private fun ProtectionStatusCard(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = "Proteção ainda não configurada",
+                    text = if (isProtectionEnabled) {
+                        "Proteção ativa"
+
+                    } else {
+                        "Proteção ainda não configurada"
+                    },
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
@@ -443,6 +453,80 @@ private fun HomeCardHeader(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+        }
+    }
+}
+
+@Composable
+private fun CallHistoryCard(
+    onOpenCallHistory: () -> Unit
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(22.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        border = BorderStroke(
+            width = 1.dp,
+            color = MaterialTheme.colorScheme.outlineVariant
+        )
+    ) {
+        Column(
+            modifier = Modifier.padding(20.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Surface(
+                    shape = CircleShape,
+                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                    modifier = Modifier.size(42.dp)
+                ) {
+                    Box(
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.History,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(22.dp)
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(
+                        text = "Histórico recente",
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.SemiBold
+                        ),
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+
+                    Spacer(modifier = Modifier.height(2.dp))
+
+                    Text(
+                        text = "Veja chamadas analisadas pelo CallGuard.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(18.dp))
+
+            FilledTonalButton(
+                onClick = onOpenCallHistory,
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(14.dp)
+            ) {
+                Text("Ver histórico")
+            }
         }
     }
 }

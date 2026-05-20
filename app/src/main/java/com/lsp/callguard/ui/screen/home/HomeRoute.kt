@@ -18,7 +18,8 @@ fun HomeRoute(
     onOpenWhitelist: () -> Unit,
     onOpenSettings: () -> Unit,
     onOpenPaywall: () -> Unit,
-    onOpenProtectionSetup: () -> Unit
+    onOpenProtectionSetup: () -> Unit,
+    onOpenCallHistory: () -> Unit
 ) {
     val context = LocalContext.current.applicationContext
 
@@ -44,7 +45,8 @@ fun HomeRoute(
         onOpenWhitelist = onOpenWhitelist,
         onOpenSettings = onOpenSettings,
         onOpenPaywall = onOpenPaywall,
-        onOpenProtectionSetup = onOpenProtectionSetup
+        onOpenProtectionSetup = onOpenProtectionSetup,
+        onOpenCallHistory = onOpenCallHistory
     )
 }
 

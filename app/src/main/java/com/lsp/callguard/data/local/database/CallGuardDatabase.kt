@@ -5,18 +5,23 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.lsp.callguard.data.local.dao.AllowedNumberDao
+import com.lsp.callguard.data.local.dao.CallDecisionLogDao
 import com.lsp.callguard.data.local.entity.AllowedNumberEntity
+import com.lsp.callguard.data.local.entity.CallDecisionLogEntity
 
 @Database(
     entities = [
-        AllowedNumberEntity::class
+        AllowedNumberEntity::class,
+        CallDecisionLogEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = true
 )
 abstract class CallGuardDatabase : RoomDatabase() {
 
     abstract fun allowedNumberDao(): AllowedNumberDao
+
+    abstract fun callDecisionLogDao(): CallDecisionLogDao
 
     companion object {
         @Volatile
@@ -28,7 +33,8 @@ abstract class CallGuardDatabase : RoomDatabase() {
                     context.applicationContext,
                     CallGuardDatabase::class.java,
                     "callguard.db"
-                ).build().also { INSTANCE = it }
+                ).fallbackToDestructiveMigration(dropAllTables=true)
+                 .build().also { INSTANCE = it }
             }
         }
     }

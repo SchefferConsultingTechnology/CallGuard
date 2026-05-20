@@ -2,9 +2,11 @@ package com.lsp.callguard.telecom.screening
 
 import android.telecom.Call
 import android.telecom.CallScreeningService
+import android.util.Log
 import com.lsp.callguard.data.local.database.CallGuardDatabase
 import com.lsp.callguard.data.local.preferences.SettingsPreferences
 import com.lsp.callguard.data.local.preferences.appPreferencesDataStore
+import com.lsp.callguard.data.repository.CallDecisionLogRepository
 import com.lsp.callguard.domain.engine.CallDecisionEngine
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -34,7 +36,17 @@ class AppCallScreeningService : CallScreeningService() {
                 settings = settings
             )
 
-            android.util.Log.d(
+            val logRepository = CallDecisionLogRepository(
+                dao = database.callDecisionLogDao()
+            )
+
+            logRepository.logDecision(
+                originalPhone = phoneNumber,
+                decision = decision
+            )
+
+
+            Log.d(
                 "CallGuardScreening",
                 "phone=$phoneNumber allow=${decision.allow} reason=${decision.reason}"
             )

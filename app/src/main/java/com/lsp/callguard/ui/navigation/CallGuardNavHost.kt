@@ -7,14 +7,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.lsp.callguard.data.local.preferences.LanguagePreferences
-import com.lsp.callguard.ui.screen.home.HomeScreen
-import com.lsp.callguard.ui.screen.settings.SettingsScreen
-import com.lsp.callguard.ui.screen.whitelist.WhitelistScreen
 import com.lsp.callguard.ui.screen.language.LanguageSelectionScreen
 import com.lsp.callguard.ui.screen.language.rememberLanguageSelectionViewModel
 import com.lsp.callguard.ui.screen.onboarding.OnboardingScreen
 import com.lsp.callguard.ui.screen.paywall.PaywallScreen
 import com.lsp.callguard.core.language.LocaleManagerHelper
+import com.lsp.callguard.ui.screen.history.CallHistoryRoute
 import com.lsp.callguard.ui.screen.home.HomeRoute
 import com.lsp.callguard.ui.screen.protection.ProtectionSetupScreen
 import com.lsp.callguard.ui.screen.settings.SettingsRoute
@@ -82,7 +80,11 @@ fun CallGuardNavHost( languagePreferences: LanguagePreferences) {
                 },
                 onOpenProtectionSetup = {
                     navController.navigate(Routes.ProtectionSetup.route)
+                },
+                onOpenCallHistory = {
+                    navController.navigate(Routes.CallHistory.route)
                 }
+
             )
         }
 
@@ -127,6 +129,13 @@ fun CallGuardNavHost( languagePreferences: LanguagePreferences) {
                         popUpTo(Routes.Paywall.route) { inclusive = true }
                     }
                 }
+            )
+        }
+
+        composable(Routes.CallHistory.route) {
+            CallHistoryRoute(
+                onBack = { navController.popBackStack() },
+
             )
         }
     }

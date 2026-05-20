@@ -10,5 +10,7 @@ sealed class Routes(val route: String) {
     data object Paywall : Routes("paywall")
 
     data object ProtectionSetup : Routes("protection_setup")
+
+    data object CallHistory : Routes("call_history")
 }
 
