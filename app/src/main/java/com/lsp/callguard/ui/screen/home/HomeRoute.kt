@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.lsp.callguard.data.local.database.CallGuardDatabase
 import com.lsp.callguard.data.local.preferences.SettingsPreferences
+import com.lsp.callguard.data.local.preferences.SubscriptionPreferences
 import com.lsp.callguard.data.local.preferences.appPreferencesDataStore
 import com.lsp.callguard.data.repository.WhitelistRepository
 
@@ -28,11 +29,13 @@ fun HomeRoute(
             val db = CallGuardDatabase.getInstance(context)
             val repository = WhitelistRepository(db.allowedNumberDao())
             val settingsPreferences = SettingsPreferences(context.appPreferencesDataStore)
+            val subscriptionPreferences = SubscriptionPreferences(context.appPreferencesDataStore)
+
 
             object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return HomeViewModel(repository, settingsPreferences) as T
+                    return HomeViewModel(repository, settingsPreferences,subscriptionPreferences) as T
                 }
             }
         }

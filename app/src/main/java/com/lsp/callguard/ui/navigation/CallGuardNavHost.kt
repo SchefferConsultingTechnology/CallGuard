@@ -12,6 +12,9 @@ import com.lsp.callguard.ui.screen.language.rememberLanguageSelectionViewModel
 import com.lsp.callguard.ui.screen.onboarding.OnboardingScreen
 import com.lsp.callguard.ui.screen.paywall.PaywallScreen
 import com.lsp.callguard.core.language.LocaleManagerHelper
+import com.lsp.callguard.ui.screen.consent.ContactsConsentRoute
+import com.lsp.callguard.ui.screen.consent.ContactsConsentScreen
+import com.lsp.callguard.ui.screen.contacts.ContactsImportRoute
 import com.lsp.callguard.ui.screen.history.CallHistoryRoute
 import com.lsp.callguard.ui.screen.home.HomeRoute
 import com.lsp.callguard.ui.screen.protection.ProtectionSetupScreen
@@ -115,6 +118,9 @@ fun CallGuardNavHost( languagePreferences: LanguagePreferences) {
                 },
                 onOpenPrivacyPolicy = {
                     // depois
+                },
+                {
+                    // depois
                 }
             )
         }
@@ -138,6 +144,33 @@ fun CallGuardNavHost( languagePreferences: LanguagePreferences) {
 
             )
         }
+
+        composable(Routes.ContactsConsent.route) {
+            ContactsConsentRoute(
+                onBack = { navController.popBackStack() },
+                onAccepted = {
+                    navController.navigate(Routes.ContactsImport.route) {
+                        popUpTo(Routes.ContactsConsent.route) { inclusive = true }
+                    }
+                },
+                onOpenPaywall = {
+                    navController.navigate(Routes.Paywall.route)
+                },
+                onOpenTerms = { },
+                onOpenPrivacyPolicy = { }
+            )
+        }
+
+        composable(Routes.ContactsImport.route) {
+            ContactsImportRoute(
+                onFinished = {
+                    navController.navigate(Routes.Home.route) {
+                        popUpTo(Routes.ContactsImport.route) { inclusive = true }
+                    }
+                }
+            )
+        }
+
     }
 }
 

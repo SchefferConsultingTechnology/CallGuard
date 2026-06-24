@@ -75,13 +75,14 @@ fun WhitelistScreen(
     onAddNumber: (label: String, phoneE164: String) -> Unit,
     onDeleteNumber: (id: String) -> Unit
 ){
-    val isSubscribed = false
+
 
     var showAddDialog by remember { mutableStateOf(false) }
 
     val count = uiState.count
-    val limit = FREE_WHITELIST_LIMIT
-    val progress = uiState.progress
+    val limit = uiState.limit
+    val progress = uiState.progress.coerceIn(0f, 1f)
+    val isSubscribed = uiState.isSubscribed
     val reachedLimit = uiState.reachedLimit
     val numbers = uiState.numbers
 
@@ -179,7 +180,7 @@ fun WhitelistScreen(
         )
     }
 
-    if (showLimitDialog) {
+    if (showLimitDialog && !isSubscribed) {
         AlertDialog(
             onDismissRequest = onDismissLimitDialog,
             title = {
@@ -320,6 +321,13 @@ private fun WhitelistUsageCard(
 
                     Text("Conhecer Premium")
                 }
+            } else {
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    text = "Você pode adicionar quantos números quiser à sua whitelist manual.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         }
     }

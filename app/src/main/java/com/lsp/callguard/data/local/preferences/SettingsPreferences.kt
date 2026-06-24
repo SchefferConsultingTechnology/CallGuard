@@ -14,6 +14,8 @@ class SettingsPreferences(
         val BLOCK_PRIVATE_NUMBERS = booleanPreferencesKey("block_private_numbers")
         val USE_CONTACTS_AUTOMATICALLY = booleanPreferencesKey("use_contacts_automatically")
         val PROTECTION_ENABLED = booleanPreferencesKey("protection_enabled")
+        val HAS_ACCEPTED_CONTACTS_CONSENT =
+            booleanPreferencesKey("has_accepted_contacts_consent")
     }
 
     val settingsFlow: Flow<AppSettings> =
@@ -22,7 +24,9 @@ class SettingsPreferences(
                 blockUnknown = preferences[Keys.BLOCK_UNKNOWN] ?: true,
                 blockPrivateNumbers = preferences[Keys.BLOCK_PRIVATE_NUMBERS] ?: true,
                 useContactsAutomatically = preferences[Keys.USE_CONTACTS_AUTOMATICALLY] ?: false,
-                isProtectionEnabled = preferences[Keys.PROTECTION_ENABLED] ?: false
+                isProtectionEnabled = preferences[Keys.PROTECTION_ENABLED] ?: false,
+                hasAcceptedContactsConsent =
+                    preferences[Keys.HAS_ACCEPTED_CONTACTS_CONSENT] ?: false
             )
         }
 
@@ -47,6 +51,12 @@ class SettingsPreferences(
     suspend fun setProtectionEnabled(value: Boolean) {
         dataStore.edit { preferences ->
             preferences[Keys.PROTECTION_ENABLED] = value
+        }
+    }
+
+    suspend fun setHasAcceptedContactsConsent(value: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[Keys.HAS_ACCEPTED_CONTACTS_CONSENT] = value
         }
     }
 }

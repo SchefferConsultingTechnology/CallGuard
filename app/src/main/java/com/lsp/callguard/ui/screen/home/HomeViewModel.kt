@@ -3,6 +3,7 @@ package com.lsp.callguard.ui.screen.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lsp.callguard.data.local.preferences.SettingsPreferences
+import com.lsp.callguard.data.local.preferences.SubscriptionPreferences
 import com.lsp.callguard.data.repository.WhitelistRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -23,17 +24,21 @@ data class HomeUiState(
 
 class HomeViewModel(
     repository: WhitelistRepository,
-    settingsPreferences: SettingsPreferences
+    settingsPreferences: SettingsPreferences,
+    subscriptionPreferences: SubscriptionPreferences
+
 ) : ViewModel() {
 
     val uiState: StateFlow<HomeUiState> =
         combine(
             repository.observeCount(),
-            settingsPreferences.settingsFlow
-        ) { count, settings ->
+            settingsPreferences.settingsFlow,
+            subscriptionPreferences.subscriptionFlow
+        ) { count, settings,subscription ->
             HomeUiState(
                 whitelistCount = count,
-                isProtectionEnabled = settings.isProtectionEnabled
+                isProtectionEnabled = settings.isProtectionEnabled,
+                isSubscribed = subscription.isSubscribed
             )
         }.stateIn(
             scope = viewModelScope,

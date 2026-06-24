@@ -10,7 +10,9 @@ fun SettingsRoute(
     onOpenPaywall: () -> Unit,
     onOpenLanguage: () -> Unit,
     onOpenTerms: () -> Unit,
-    onOpenPrivacyPolicy: () -> Unit
+    onOpenPrivacyPolicy: () -> Unit,
+    onMockSubscriptionChange: (Boolean) -> Unit
+
 ) {
     val viewModel = rememberSettingsViewModel()
     val uiState by viewModel.uiState.collectAsState()
@@ -24,6 +26,7 @@ fun SettingsRoute(
         onOpenPrivacyPolicy = onOpenPrivacyPolicy,
         onBlockUnknownChange = viewModel::setBlockUnknown,
         onBlockPrivateNumbersChange = viewModel::setBlockPrivateNumbers,
-        onUseContactsAutomaticallyChange = viewModel::setUseContactsAutomatically
+        onUseContactsAutomaticallyChange = viewModel::setUseContactsAutomatically,
+        onMockSubscriptionChange = viewModel::setMockSubscriptionActive
     )
 }

@@ -2,6 +2,7 @@ package com.lsp.callguard.ui.screen.whitelist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lsp.callguard.data.local.preferences.SubscriptionPreferences
 import com.lsp.callguard.data.repository.AddAllowedNumberResult
 import com.lsp.callguard.data.repository.WhitelistRepository
 import com.lsp.callguard.domain.model.AllowedNumber
@@ -37,17 +38,20 @@ sealed class WhitelistEvent {
 
 
 class WhitelistViewModel(
-    private val repository: WhitelistRepository
+    private val repository: WhitelistRepository,
+    private val subscriptionPreferences: SubscriptionPreferences
 ) : ViewModel() {
 
     val uiState: StateFlow<WhitelistUiState> =
         combine(
             repository.observeAllowedNumbers(),
-            repository.observeCount()
-        ) { numbers, count ->
+            repository.observeCount(),
+            subscriptionPreferences.subscriptionFlow
+        ) { numbers, count ,subscription ->
             WhitelistUiState(
                 numbers = numbers,
-                count = count
+                count = count,
+                isSubscribed = subscription.isSubscribed
             )
         }.stateIn(
             scope = viewModelScope,

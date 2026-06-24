@@ -33,7 +33,6 @@ import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.material.icons.outlined.WorkspacePremium
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -46,10 +45,6 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -66,7 +61,8 @@ fun SettingsScreen(
     onOpenPrivacyPolicy: () -> Unit,
     onBlockUnknownChange: (Boolean) -> Unit,
     onBlockPrivateNumbersChange: (Boolean) -> Unit,
-    onUseContactsAutomaticallyChange: (Boolean) -> Unit
+    onUseContactsAutomaticallyChange: (Boolean) -> Unit,
+    onMockSubscriptionChange: (Boolean) -> Unit
 ) {
     val isSubscribed = uiState.isSubscribed
     val blockUnknown = uiState.appSettings.blockUnknown
@@ -96,7 +92,8 @@ fun SettingsScreen(
             item {
                 SubscriptionCard(
                     isSubscribed = isSubscribed,
-                    onOpenPaywall = onOpenPaywall
+                    onOpenPaywall = onOpenPaywall,
+                    onMockSubscriptionChange = onMockSubscriptionChange
                 )
             }
 
@@ -206,7 +203,8 @@ private fun SettingsSectionTitle(
 @Composable
 private fun SubscriptionCard(
     isSubscribed: Boolean,
-    onOpenPaywall: () -> Unit
+    onOpenPaywall: () -> Unit,
+    onMockSubscriptionChange: (Boolean) -> Unit
 ) {
     SettingsCard {
         SettingsItemHeader(
@@ -244,6 +242,16 @@ private fun SubscriptionCard(
         SettingsInfoText(
             icon = Icons.Outlined.CreditCard,
             text = "A assinatura libera contatos automáticos, whitelist ilimitada e futura recuperação de dados."
+        )
+
+        SettingsDivider()
+
+        SettingsSwitchRow(
+            icon = Icons.Outlined.WorkspacePremium,
+            title = "Modo Premium mockado",
+            description = "Ativa recursos Premium localmente para desenvolvimento.",
+            checked = isSubscribed,
+            onCheckedChange = onMockSubscriptionChange
         )
     }
 }
