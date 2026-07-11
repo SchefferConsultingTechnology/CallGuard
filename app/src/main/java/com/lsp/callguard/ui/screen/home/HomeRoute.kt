@@ -20,7 +20,8 @@ fun HomeRoute(
     onOpenSettings: () -> Unit,
     onOpenPaywall: () -> Unit,
     onOpenProtectionSetup: () -> Unit,
-    onOpenCallHistory: () -> Unit
+    onOpenCallHistory: () -> Unit,
+    onOpenContactsConsent: () -> Unit
 ) {
     val context = LocalContext.current.applicationContext
 
@@ -30,12 +31,18 @@ fun HomeRoute(
             val repository = WhitelistRepository(db.allowedNumberDao())
             val settingsPreferences = SettingsPreferences(context.appPreferencesDataStore)
             val subscriptionPreferences = SubscriptionPreferences(context.appPreferencesDataStore)
+            val deviceContactDao = db.deviceContactDao()
 
 
             object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return HomeViewModel(repository, settingsPreferences,subscriptionPreferences) as T
+                    return HomeViewModel(
+                        repository = repository,
+                        settingsPreferences = settingsPreferences,
+                        subscriptionPreferences = subscriptionPreferences,
+                        deviceContactDao = deviceContactDao
+                    ) as T
                 }
             }
         }
@@ -49,7 +56,8 @@ fun HomeRoute(
         onOpenSettings = onOpenSettings,
         onOpenPaywall = onOpenPaywall,
         onOpenProtectionSetup = onOpenProtectionSetup,
-        onOpenCallHistory = onOpenCallHistory
+        onOpenCallHistory = onOpenCallHistory,
+        onOpenContactsConsent = onOpenContactsConsent
     )
 }
 

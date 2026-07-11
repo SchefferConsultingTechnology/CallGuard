@@ -86,8 +86,10 @@ fun CallGuardNavHost( languagePreferences: LanguagePreferences) {
                 },
                 onOpenCallHistory = {
                     navController.navigate(Routes.CallHistory.route)
+                },
+                onOpenContactsConsent = {
+                    navController.navigate(Routes.ContactsConsent.route)
                 }
-
             )
         }
 

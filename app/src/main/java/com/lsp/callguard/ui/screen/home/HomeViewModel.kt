@@ -2,6 +2,7 @@ package com.lsp.callguard.ui.screen.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lsp.callguard.data.local.dao.DeviceContactDao
 import com.lsp.callguard.data.local.preferences.SettingsPreferences
 import com.lsp.callguard.data.local.preferences.SubscriptionPreferences
 import com.lsp.callguard.data.repository.WhitelistRepository
@@ -16,7 +17,9 @@ data class HomeUiState(
     val whitelistCount: Int = 0,
     val whitelistLimit: Int = FREE_WHITELIST_LIMIT,
     val isSubscribed: Boolean = false,
-    val isProtectionEnabled: Boolean = false
+    val isProtectionEnabled: Boolean = false,
+    val useContactsAutomatically: Boolean = false,
+    val importedContactsCount: Int = 0
 ) {
     val progress: Float
         get() = whitelistCount / whitelistLimit.toFloat()
@@ -25,7 +28,8 @@ data class HomeUiState(
 class HomeViewModel(
     repository: WhitelistRepository,
     settingsPreferences: SettingsPreferences,
-    subscriptionPreferences: SubscriptionPreferences
+    subscriptionPreferences: SubscriptionPreferences,
+    deviceContactDao: DeviceContactDao
 
 ) : ViewModel() {
 
@@ -33,12 +37,15 @@ class HomeViewModel(
         combine(
             repository.observeCount(),
             settingsPreferences.settingsFlow,
-            subscriptionPreferences.subscriptionFlow
-        ) { count, settings,subscription ->
+            subscriptionPreferences.subscriptionFlow,
+            deviceContactDao.observeCount()
+        ) { whitelistCount, settings,subscription, contactsCount ->
             HomeUiState(
-                whitelistCount = count,
+                whitelistCount = whitelistCount,
                 isProtectionEnabled = settings.isProtectionEnabled,
-                isSubscribed = subscription.isSubscribed
+                isSubscribed = subscription.isSubscribed,
+                useContactsAutomatically = settings.useContactsAutomatically,
+                importedContactsCount = contactsCount
             )
         }.stateIn(
             scope = viewModelScope,

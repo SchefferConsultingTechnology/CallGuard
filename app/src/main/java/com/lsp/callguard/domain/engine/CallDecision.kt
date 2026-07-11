@@ -7,6 +7,7 @@ data class CallDecision(
 
 enum class CallDecisionReason {
     ALLOWED_BY_WHITELIST,
+    ALLOWED_BY_CONTACTS,
     ALLOWED_UNKNOWN_DISABLED,
     BLOCKED_NOT_IN_WHITELIST,
     BLOCKED_PRIVATE_NUMBER,

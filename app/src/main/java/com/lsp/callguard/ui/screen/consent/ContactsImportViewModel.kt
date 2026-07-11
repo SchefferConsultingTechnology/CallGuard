@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lsp.callguard.data.local.preferences.SettingsPreferences
 import com.lsp.callguard.data.repository.ContactsRepository
+import com.lsp.callguard.data.repository.DeviceContactCacheRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,6 +18,7 @@ data class ContactsImportUiState(
 
 class ContactsImportViewModel(
     private val contactsRepository: ContactsRepository,
+    private val contactCacheRepository: DeviceContactCacheRepository,
     private val settingsPreferences: SettingsPreferences
 ) : ViewModel() {
 
@@ -29,6 +31,8 @@ class ContactsImportViewModel(
                 _uiState.value = ContactsImportUiState(isLoading = true)
 
                 val contacts = contactsRepository.getDeviceContacts()
+
+                contactCacheRepository.replaceAll(contacts)
 
                 settingsPreferences.setUseContactsAutomatically(true)
 
@@ -47,4 +51,3 @@ class ContactsImportViewModel(
         }
     }
 }
-

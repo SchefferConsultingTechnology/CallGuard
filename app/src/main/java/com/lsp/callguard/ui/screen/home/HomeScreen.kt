@@ -47,6 +47,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.material3.Button
+import androidx.compose.material3.FilledTonalButton
 
 private const val FREE_WHITELIST_LIMIT = 5
 
@@ -57,7 +59,8 @@ fun HomeScreen(
     onOpenSettings: () -> Unit,
     onOpenPaywall: () -> Unit,
     onOpenProtectionSetup: () -> Unit,
-    onOpenCallHistory: () -> Unit
+    onOpenCallHistory: () -> Unit,
+    onOpenContactsConsent: () -> Unit
 
 ) {
     val isSubscribed = false
@@ -111,7 +114,11 @@ fun HomeScreen(
 
             item {
                 LockedContactsCard(
-                    onOpenPaywall = onOpenPaywall
+                    isSubscribed = uiState.isSubscribed,
+                    useContactsAutomatically = uiState.useContactsAutomatically,
+                    importedContactsCount = uiState.importedContactsCount,
+                    onOpenPaywall = onOpenPaywall,
+                    onOpenContactsConsent = onOpenContactsConsent
                 )
             }
 
@@ -341,8 +348,26 @@ private fun WhitelistLimitCard(
 
 @Composable
 private fun LockedContactsCard(
-    onOpenPaywall: () -> Unit
+    isSubscribed: Boolean,
+    useContactsAutomatically: Boolean,
+    importedContactsCount: Int,
+    onOpenPaywall: () -> Unit,
+    onOpenContactsConsent: () -> Unit
 ) {
+    val description = when {
+        !isSubscribed -> {
+            "Disponível no Premium. A permissão de contatos só será solicitada após assinatura."
+        }
+
+        useContactsAutomatically -> {
+            "$importedContactsCount contatos válidos importados e ativos como permitidos."
+        }
+
+        else -> {
+            "Premium ativo. Autorize o uso dos contatos para permitir números confiáveis automaticamente."
+        }
+    }
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(22.dp),
@@ -360,29 +385,61 @@ private fun LockedContactsCard(
             HomeCardHeader(
                 icon = Icons.Outlined.ContactPhone,
                 title = "Contatos automáticos",
-                description = "Disponível no Premium. A permissão de contatos só será solicitada após assinatura."
+                description = description
             )
 
             Spacer(modifier = Modifier.height(14.dp))
 
-            OutlinedButton(
-                onClick = onOpenPaywall,
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(14.dp),
-                border = BorderStroke(
-                    width = 1.dp,
-                    color = MaterialTheme.colorScheme.outlineVariant
-                )
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Lock,
-                    contentDescription = null,
-                    modifier = Modifier.size(18.dp)
-                )
+            when {
+                !isSubscribed -> {
+                    OutlinedButton(
+                        onClick = onOpenPaywall,
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(14.dp),
+                        border = BorderStroke(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.outlineVariant
+                        )
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Lock,
+                            contentDescription = null,
+                            modifier = Modifier.size(18.dp)
+                        )
 
-                Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(modifier = Modifier.width(8.dp))
 
-                Text("Desbloquear com Premium")
+                        Text("Desbloquear com Premium")
+                    }
+                }
+
+                !useContactsAutomatically -> {
+                    Button(
+                        onClick = onOpenContactsConsent,
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(14.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.ContactPhone,
+                            contentDescription = null,
+                            modifier = Modifier.size(18.dp)
+                        )
+
+                        Spacer(modifier = Modifier.width(8.dp))
+
+                        Text("Ativar contatos automáticos")
+                    }
+                }
+
+                else -> {
+                    FilledTonalButton(
+                        onClick = onOpenContactsConsent,
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(14.dp)
+                    ) {
+                        Text("Atualizar contatos")
+                    }
+                }
             }
         }
     }

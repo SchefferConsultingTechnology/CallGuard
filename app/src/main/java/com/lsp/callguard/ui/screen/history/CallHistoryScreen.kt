@@ -395,6 +395,7 @@ private fun formatReason(reason: String): String {
         "BLOCKED_PRIVATE_NUMBER" -> "número privado"
         "ALLOWED_PRIVATE_NUMBER_DISABLED" -> "bloqueio de privados desativado"
         "INVALID_NUMBER" -> "número inválido"
+        "ALLOWED_BY_CONTACTS" -> "nos contatos"
         else -> reason
     }
 }
