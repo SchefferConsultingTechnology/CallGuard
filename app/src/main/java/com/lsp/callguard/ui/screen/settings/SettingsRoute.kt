@@ -11,7 +11,7 @@ fun SettingsRoute(
     onOpenLanguage: () -> Unit,
     onOpenTerms: () -> Unit,
     onOpenPrivacyPolicy: () -> Unit,
-    onMockSubscriptionChange: (Boolean) -> Unit
+    onMockLicenseChange: (Boolean) -> Unit
 
 ) {
     val viewModel = rememberSettingsViewModel()
@@ -27,6 +27,6 @@ fun SettingsRoute(
         onBlockUnknownChange = viewModel::setBlockUnknown,
         onBlockPrivateNumbersChange = viewModel::setBlockPrivateNumbers,
         onUseContactsAutomaticallyChange = viewModel::setUseContactsAutomatically,
-        onMockSubscriptionChange = viewModel::setMockSubscriptionActive
+        onMockLicenseChange = viewModel::setMockLicenseActive
     )
 }

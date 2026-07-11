@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lsp.callguard.data.local.dao.DeviceContactDao
 import com.lsp.callguard.data.local.preferences.SettingsPreferences
-import com.lsp.callguard.data.local.preferences.SubscriptionPreferences
+import com.lsp.callguard.data.local.preferences.LicensePreferences
 import com.lsp.callguard.data.repository.WhitelistRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +16,7 @@ private const val FREE_WHITELIST_LIMIT = 5
 data class HomeUiState(
     val whitelistCount: Int = 0,
     val whitelistLimit: Int = FREE_WHITELIST_LIMIT,
-    val isSubscribed: Boolean = false,
+    val isLicensed: Boolean = false,
     val isProtectionEnabled: Boolean = false,
     val useContactsAutomatically: Boolean = false,
     val importedContactsCount: Int = 0
@@ -28,7 +28,7 @@ data class HomeUiState(
 class HomeViewModel(
     repository: WhitelistRepository,
     settingsPreferences: SettingsPreferences,
-    subscriptionPreferences: SubscriptionPreferences,
+    licensePreferences: LicensePreferences,
     deviceContactDao: DeviceContactDao
 
 ) : ViewModel() {
@@ -37,13 +37,13 @@ class HomeViewModel(
         combine(
             repository.observeCount(),
             settingsPreferences.settingsFlow,
-            subscriptionPreferences.subscriptionFlow,
+            licensePreferences.licenseFlow,
             deviceContactDao.observeCount()
-        ) { whitelistCount, settings,subscription, contactsCount ->
+        ) { whitelistCount, settings,license, contactsCount ->
             HomeUiState(
                 whitelistCount = whitelistCount,
                 isProtectionEnabled = settings.isProtectionEnabled,
-                isSubscribed = subscription.isSubscribed,
+                isLicensed = license.isLicensed,
                 useContactsAutomatically = settings.useContactsAutomatically,
                 importedContactsCount = contactsCount
             )

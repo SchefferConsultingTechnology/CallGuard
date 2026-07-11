@@ -54,7 +54,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.lsp.callguard.domain.model.AllowedNumber
 import com.lsp.callguard.domain.phone.PhoneNormalizationResult
+import com.lsp.callguard.R
 import com.lsp.callguard.domain.phone.PhoneNormalizer
+import androidx.compose.ui.res.stringResource
 
 private const val FREE_WHITELIST_LIMIT = 5
 
@@ -82,7 +84,7 @@ fun WhitelistScreen(
     val count = uiState.count
     val limit = uiState.limit
     val progress = uiState.progress.coerceIn(0f, 1f)
-    val isSubscribed = uiState.isSubscribed
+    val isLicensed = uiState.isLicensed
     val reachedLimit = uiState.reachedLimit
     val numbers = uiState.numbers
 
@@ -115,7 +117,7 @@ fun WhitelistScreen(
 
                     Spacer(modifier = Modifier.width(8.dp))
 
-                    Text("Adicionar número")
+                    Text(stringResource(R.string.whitelist_add_number))
                 }
             }
         }
@@ -140,7 +142,7 @@ fun WhitelistScreen(
                     count = count,
                     limit = limit,
                     progress = progress,
-                    isSubscribed = isSubscribed,
+                    isLicensed = isLicensed,
                     onOpenPaywall = onOpenPaywall
                 )
             }
@@ -160,7 +162,7 @@ fun WhitelistScreen(
                 }
             }
 
-            if (!isSubscribed) {
+            if (!isLicensed) {
                 item {
                     PremiumHintCard(
                         onOpenPaywall = onOpenPaywall
@@ -180,17 +182,14 @@ fun WhitelistScreen(
         )
     }
 
-    if (showLimitDialog && !isSubscribed) {
+    if (showLimitDialog && !isLicensed) {
         AlertDialog(
             onDismissRequest = onDismissLimitDialog,
             title = {
-                Text("Limite gratuito atingido")
+                Text(stringResource(R.string.limit_reached))
             },
             text = {
-                Text(
-                    "A versão gratuita permite até ${uiState.limit} números na whitelist. " +
-                            "Assine o Premium para adicionar números ilimitados."
-                )
+                Text(stringResource(R.string.limit_reached_text, uiState.limit))
             },
             confirmButton = {
                 TextButton(
@@ -199,14 +198,14 @@ fun WhitelistScreen(
                         onOpenPaywall()
                     }
                 ) {
-                    Text("Ver Premium")
+                    Text(stringResource(R.string.view_premium))
                 }
             },
             dismissButton = {
                 TextButton(
                     onClick = onDismissLimitDialog
                 ) {
-                    Text("Agora não")
+                    Text(stringResource(R.string.now_no))
                 }
             }
         )
@@ -224,7 +223,7 @@ private fun WhitelistHeader(
         IconButton(onClick = onBack) {
             Icon(
                 imageVector = Icons.Outlined.ArrowBack,
-                contentDescription = "Voltar"
+                contentDescription = stringResource(R.string.back)
             )
         }
 
@@ -232,7 +231,7 @@ private fun WhitelistHeader(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = "Whitelist",
+                text = stringResource(R.string.whitelist_header_title),
                 style = MaterialTheme.typography.headlineSmall.copy(
                     fontWeight = FontWeight.Bold
                 ),
@@ -240,7 +239,7 @@ private fun WhitelistHeader(
             )
 
             Text(
-                text = "Gerencie os números sempre permitidos.",
+                text = stringResource(R.string.whitelist_header_description),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -253,7 +252,7 @@ private fun WhitelistUsageCard(
     count: Int,
     limit: Int,
     progress: Float,
-    isSubscribed: Boolean,
+    isLicensed: Boolean,
     onOpenPaywall: () -> Unit
 ) {
     Card(
@@ -271,16 +270,16 @@ private fun WhitelistUsageCard(
             modifier = Modifier.padding(18.dp)
         ) {
             WhitelistCardHeader(
-                icon = if (isSubscribed) Icons.Outlined.Star else Icons.Outlined.Lock,
-                title = if (isSubscribed) "Whitelist ilimitada" else "Versão gratuita",
-                description = if (isSubscribed) {
-                    "Você pode adicionar números sem limite."
+                icon = if (isLicensed) Icons.Outlined.Star else Icons.Outlined.Lock,
+                title = if (isLicensed) stringResource(R.string.whitelist_unlimited) else stringResource(R.string.whitelist_free_version),
+                description = if (isLicensed) {
+                    stringResource(R.string.whitelist_premium_description)
                 } else {
-                    "$count de $limit números usados."
+                    stringResource(R.string.whitelist_usage, count, limit)
                 }
             )
 
-            if (!isSubscribed) {
+            if (!isLicensed) {
                 Spacer(modifier = Modifier.height(14.dp))
 
                 LinearProgressIndicator(
@@ -295,7 +294,7 @@ private fun WhitelistUsageCard(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Text(
-                    text = "Assine o Premium para usar contatos automáticos e whitelist ilimitada.",
+                    text = stringResource(R.string.whitelist_premium_description),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -319,12 +318,12 @@ private fun WhitelistUsageCard(
 
                     Spacer(modifier = Modifier.width(8.dp))
 
-                    Text("Conhecer Premium")
+                    Text(stringResource(R.string.learn_premium))
                 }
             } else {
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = "Você pode adicionar quantos números quiser à sua whitelist manual.",
+                    text = stringResource(R.string.add_numbers_description),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -366,7 +365,7 @@ private fun EmptyWhitelistCard() {
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "Nenhum número permitido ainda",
+                text = stringResource(R.string.no_numbers_yet),
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
@@ -376,7 +375,7 @@ private fun EmptyWhitelistCard() {
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "Adicione números que sempre poderão entrar em contato com você.",
+                text = stringResource(R.string.add_numbers_description),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -446,7 +445,7 @@ private fun WhitelistNumberCard(
             IconButton(onClick = onDelete) {
                 Icon(
                     imageVector = Icons.Outlined.Delete,
-                    contentDescription = "Remover",
+                    contentDescription = stringResource(R.string.remove),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
@@ -474,8 +473,8 @@ private fun PremiumHintCard(
         ) {
             WhitelistCardHeader(
                 icon = Icons.Outlined.Star,
-                title = "Quer automatizar sua lista?",
-                description = "Com Premium, seus contatos podem ser usados como permitidos automaticamente."
+                title = stringResource(R.string.premium_automate_title),
+                description = stringResource(R.string.premium_automate_description)
             )
 
             Spacer(modifier = Modifier.height(14.dp))
@@ -485,7 +484,7 @@ private fun PremiumHintCard(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(14.dp)
             ) {
-                Text("Ver benefícios do Premium")
+                Text(stringResource(R.string.view_premium_benefits))
             }
         }
     }
@@ -512,14 +511,14 @@ private fun AddWhitelistNumberDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text("Adicionar número")
+            Text(stringResource(R.string.add_number_dialog_title))
         },
         text = {
             Column {
                 OutlinedTextField(
                     value = label,
                     onValueChange = { label = it },
-                    label = { Text("Nome ou rótulo") },
+                    label = { Text(stringResource(R.string.label_name_or_label)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
@@ -529,14 +528,14 @@ private fun AddWhitelistNumberDialog(
                 OutlinedTextField(
                     value = phone,
                     onValueChange = { phone = it },
-                    label = { Text("Telefone em formato internacional") },
-                    placeholder = { Text("+5549999999999") },
+                    label = { Text(stringResource(R.string.phone_international_format)) },
+                    placeholder = { Text(stringResource(R.string.phone_example)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     isError = phone.isNotBlank() && !isPhoneValid,
                     supportingText = {
                         if (phone.isNotBlank() && !isPhoneValid) {
-                            Text("Use o formato E.164. Exemplo: +5549999999999")
+                            Text(stringResource(R.string.phone_e164_help))
                         }
                     }
                 )
@@ -553,12 +552,12 @@ private fun AddWhitelistNumberDialog(
                 },
                 enabled = isPhoneValid
             ) {
-                Text("Adicionar")
+                Text(stringResource(R.string.add))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancelar")
+                Text(stringResource(R.string.cancel))
             }
         }
     )

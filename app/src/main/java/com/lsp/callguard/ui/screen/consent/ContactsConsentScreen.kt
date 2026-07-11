@@ -44,9 +44,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.lsp.callguard.R
 
 @Composable
 fun ContactsConsentScreen(
@@ -77,13 +79,13 @@ fun ContactsConsentScreen(
                         .height(54.dp),
                     shape = RoundedCornerShape(16.dp)
                 ) {
-                    Text("Continuar")
+                    Text(stringResource(R.string.continue_text))
                 }
 
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Text(
-                    text = "A permissão de contatos só será solicitada após seu consentimento.",
+                    text = stringResource(R.string.contact_permission_consent_note),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
@@ -111,24 +113,24 @@ fun ContactsConsentScreen(
             item {
                 ConsentInfoCard(
                     icon = Icons.Outlined.ContactPhone,
-                    title = "Por que acessar seus contatos?",
-                    description = "Para considerar automaticamente seus contatos como números confiáveis e reduzir chamadas indesejadas."
+                    title = stringResource(R.string.why_access_contacts),
+                    description = stringResource(R.string.why_access_contacts_description)
                 )
             }
 
             item {
                 ConsentInfoCard(
                     icon = Icons.Outlined.Lock,
-                    title = "Quando a permissão será solicitada?",
-                    description = "Somente após assinatura Premium e depois que você aceitar os termos nesta tela."
+                    title = stringResource(R.string.when_permission_requested),
+                    description = stringResource(R.string.when_permission_requested_description)
                 )
             }
 
             item {
                 ConsentInfoCard(
                     icon = Icons.Outlined.PrivacyTip,
-                    title = "O que não fazemos",
-                    description = "O CallGuard não exibe anúncios, não vende seus dados e não acessa contatos sem sua autorização."
+                    title = stringResource(R.string.what_we_dont_do),
+                    description = stringResource(R.string.what_we_dont_do_description)
                 )
             }
 
@@ -157,23 +159,25 @@ private fun ContactsConsentHeader(
         IconButton(onClick = onBack) {
             Icon(
                 imageVector = Icons.Outlined.ArrowBack,
-                contentDescription = "Voltar"
+                contentDescription = stringResource(R.string.back)
             )
         }
 
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
+        Spacer(modifier = Modifier.width(12.dp))
+
+        Column {
             Text(
-                text = "Permissão de contatos",
+                text = stringResource(R.string.contacts_permission_title),
                 style = MaterialTheme.typography.headlineSmall.copy(
                     fontWeight = FontWeight.Bold
                 ),
                 color = MaterialTheme.colorScheme.onBackground
             )
 
+            Spacer(modifier = Modifier.height(4.dp))
+
             Text(
-                text = "Transparência antes de solicitar acesso.",
+                text = stringResource(R.string.contacts_permission_subtitle),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -216,7 +220,7 @@ private fun IntroCard() {
             Spacer(modifier = Modifier.height(18.dp))
 
             Text(
-                text = "Você controla o acesso",
+                text = stringResource(R.string.you_control_access),
                 style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.Bold
                 ),
@@ -227,7 +231,7 @@ private fun IntroCard() {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "O CallGuard só solicitará acesso aos contatos quando isso for necessário para ativar recursos Premium.",
+                text = stringResource(R.string.you_control_access_description),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
@@ -321,7 +325,7 @@ private fun ConsentChecksCard(
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
-                text = "Consentimento",
+                text = stringResource(R.string.consent_title),
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
@@ -333,8 +337,8 @@ private fun ConsentChecksCard(
             ConsentCheckRow(
                 checked = acceptedTerms,
                 onCheckedChange = onAcceptedTermsChange,
-                text = "Li e aceito os Termos de Uso",
-                actionText = "Abrir",
+                text = stringResource(R.string.accept_terms_text),
+                actionText = stringResource(R.string.open),
                 onActionClick = onOpenTerms
             )
 
@@ -343,8 +347,8 @@ private fun ConsentChecksCard(
             ConsentCheckRow(
                 checked = acceptedPrivacy,
                 onCheckedChange = onAcceptedPrivacyChange,
-                text = "Li e aceito a Política de Privacidade",
-                actionText = "Abrir",
+                text = stringResource(R.string.accept_privacy_text),
+                actionText = stringResource(R.string.open),
                 onActionClick = onOpenPrivacyPolicy
             )
         }

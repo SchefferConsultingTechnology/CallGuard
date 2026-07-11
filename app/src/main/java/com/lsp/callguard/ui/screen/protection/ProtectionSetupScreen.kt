@@ -18,10 +18,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import com.lsp.callguard.R
 
 @Composable
 fun ProtectionSetupScreen(
@@ -48,13 +50,13 @@ fun ProtectionSetupScreen(
                         .height(54.dp),
                     shape = RoundedCornerShape(16.dp)
                 ) {
-                    Text("Abrir configurações do Android")
+                    Text(stringResource(R.string.protection_setup_button))
                 }
 
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Text(
-                    text = "Ative o CallGuard como serviço de filtragem/bloqueio de chamadas nas configurações do telefone.",
+                    text = stringResource(R.string.protection_setup_description),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
@@ -77,12 +79,12 @@ fun ProtectionSetupScreen(
                 IconButton(onClick = onBack) {
                     Icon(
                         imageVector = Icons.Outlined.ArrowBack,
-                        contentDescription = "Voltar"
+                        contentDescription = stringResource(R.string.back)
                     )
                 }
 
                 Text(
-                    text = "Ativar proteção",
+                    text = stringResource(R.string.activate_protection_title),
                     style = MaterialTheme.typography.headlineSmall.copy(
                         fontWeight = FontWeight.Bold
                     )
@@ -112,7 +114,7 @@ fun ProtectionSetupScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
-                text = "Permita que o CallGuard filtre chamadas",
+                text = stringResource(R.string.allow_filter_calls),
                 style = MaterialTheme.typography.headlineSmall.copy(
                     fontWeight = FontWeight.Bold
                 ),
@@ -124,7 +126,7 @@ fun ProtectionSetupScreen(
             Spacer(modifier = Modifier.height(10.dp))
 
             Text(
-                text = "Para bloquear chamadas desconhecidas, o Android precisa permitir que o CallGuard analise chamadas recebidas.",
+                text = stringResource(R.string.enable_filter_calls_description),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
@@ -135,24 +137,24 @@ fun ProtectionSetupScreen(
 
             ProtectionInfoCard(
                 icon = Icons.Outlined.Security,
-                title = "Decisão local e rápida",
-                description = "As chamadas são avaliadas usando sua whitelist salva no próprio aparelho."
+                title = stringResource(R.string.protection_info_local),
+                description = stringResource(R.string.protection_info_local_description)
             )
 
             Spacer(modifier = Modifier.height(12.dp))
 
             ProtectionInfoCard(
                 icon = Icons.Outlined.CheckCircle,
-                title = "Sem internet obrigatória",
-                description = "A proteção não depende do backend para decidir se uma chamada deve ser permitida."
+                title = stringResource(R.string.protection_info_no_internet),
+                description = stringResource(R.string.protection_info_no_internet_description)
             )
 
             Spacer(modifier = Modifier.height(12.dp))
 
             ProtectionInfoCard(
                 icon = Icons.Outlined.PrivacyTip,
-                title = "Privacidade primeiro",
-                description = "O CallGuard não envia seus contatos ou chamadas sem sua autorização."
+                title = stringResource(R.string.protection_info_privacy_first),
+                description = stringResource(R.string.protection_info_privacy_first_description)
             )
         }
     }

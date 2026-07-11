@@ -47,10 +47,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.lsp.callguard.R
 import com.lsp.callguard.domain.model.CallDecisionLog
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import androidx.compose.ui.res.stringResource
 
 @Composable
 fun CallHistoryScreen(
@@ -89,7 +91,7 @@ fun CallHistoryScreen(
 
                         Spacer(modifier = Modifier.width(8.dp))
 
-                        Text("Limpar histórico")
+                        Text(stringResource(R.string.clear_history))
                     }
                 }
             }
@@ -126,8 +128,8 @@ fun CallHistoryScreen(
     if (showClearDialog) {
         AlertDialog(
             onDismissRequest = { showClearDialog = false },
-            title = { Text("Limpar histórico?") },
-            text = { Text("Essa ação remove todos os registros locais de decisões de chamada.") },
+            title = { Text(stringResource(R.string.clear_history_dialog_title)) },
+            text = { Text(stringResource(R.string.clear_history_dialog_text)) },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -135,14 +137,14 @@ fun CallHistoryScreen(
                         showClearDialog = false
                     }
                 ) {
-                    Text("Limpar")
+                    Text(stringResource(R.string.clear))
                 }
             },
             dismissButton = {
                 TextButton(
                     onClick = { showClearDialog = false }
                 ) {
-                    Text("Cancelar")
+                    Text(stringResource(R.string.cancel))
                 }
             }
         )
@@ -160,7 +162,7 @@ private fun CallHistoryHeader(
         IconButton(onClick = onBack) {
             Icon(
                 imageVector = Icons.Outlined.ArrowBack,
-                contentDescription = "Voltar"
+                contentDescription = stringResource(R.string.back)
             )
         }
 
@@ -168,7 +170,7 @@ private fun CallHistoryHeader(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = "Histórico de chamadas",
+                text = stringResource(R.string.history_title),
                 style = MaterialTheme.typography.headlineSmall.copy(
                     fontWeight = FontWeight.Bold
                 ),
@@ -176,7 +178,7 @@ private fun CallHistoryHeader(
             )
 
             Text(
-                text = "Veja as decisões recentes do CallGuard.",
+                text = stringResource(R.string.history_subtitle),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -217,7 +219,7 @@ private fun EmptyHistoryCard() {
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "Nenhum registro ainda",
+                text = stringResource(R.string.no_history_yet),
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
@@ -227,7 +229,7 @@ private fun EmptyHistoryCard() {
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "Quando o CallGuard analisar chamadas, os registros aparecerão aqui.",
+                text = stringResource(R.string.no_history_subtitle),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -257,7 +259,7 @@ private fun HistorySummaryCard(
             modifier = Modifier.padding(18.dp)
         ) {
             Text(
-                text = "Resumo recente",
+                text = stringResource(R.string.recent_summary),
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.SemiBold
                 )
@@ -270,12 +272,12 @@ private fun HistorySummaryCard(
             ) {
                 SummaryPill(
                     icon = Icons.Outlined.Verified,
-                    title = "$allowed permitidas"
+                    title = stringResource(R.string.allowed_count, allowed)
                 )
 
                 SummaryPill(
                     icon = Icons.Outlined.Block,
-                    title = "$blocked bloqueadas"
+                    title = stringResource(R.string.blocked_count, blocked)
                 )
             }
         }
@@ -318,8 +320,8 @@ private fun SummaryPill(
 private fun CallHistoryItemCard(
     log: CallDecisionLog
 ) {
-    val title = log.normalizedPhone ?: log.phone ?: "Número privado"
-    val statusText = if (log.allowed) "Permitida" else "Bloqueada"
+    val title = log.normalizedPhone ?: log.phone ?: stringResource(R.string.private_number)
+    val statusText = if (log.allowed) stringResource(R.string.status_allowed) else stringResource(R.string.status_blocked)
     val icon = if (log.allowed) Icons.Outlined.Verified else Icons.Outlined.Block
 
     Card(
@@ -387,15 +389,16 @@ private fun CallHistoryItemCard(
     }
 }
 
+@Composable
 private fun formatReason(reason: String): String {
     return when (reason) {
-        "ALLOWED_BY_WHITELIST" -> "na whitelist"
-        "ALLOWED_UNKNOWN_DISABLED" -> "bloqueio de desconhecidos desativado"
-        "BLOCKED_NOT_IN_WHITELIST" -> "fora da whitelist"
-        "BLOCKED_PRIVATE_NUMBER" -> "número privado"
-        "ALLOWED_PRIVATE_NUMBER_DISABLED" -> "bloqueio de privados desativado"
-        "INVALID_NUMBER" -> "número inválido"
-        "ALLOWED_BY_CONTACTS" -> "nos contatos"
+        "ALLOWED_BY_WHITELIST" -> stringResource(R.string.reason_whitelist)
+        "ALLOWED_UNKNOWN_DISABLED" -> stringResource(R.string.reason_unknown_disabled)
+        "BLOCKED_NOT_IN_WHITELIST" -> stringResource(R.string.reason_blocked_not_in_whitelist)
+        "BLOCKED_PRIVATE_NUMBER" -> stringResource(R.string.reason_blocked_private_number)
+        "ALLOWED_PRIVATE_NUMBER_DISABLED" -> stringResource(R.string.reason_private_disabled)
+        "INVALID_NUMBER" -> stringResource(R.string.reason_invalid_number)
+        "ALLOWED_BY_CONTACTS" -> stringResource(R.string.reason_allowed_by_contacts)
         else -> reason
     }
 }

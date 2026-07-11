@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.lazy.LazyColumn
@@ -27,29 +28,22 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.lsp.callguard.R
 import com.lsp.callguard.core.language.AppLanguage
-
 
 @Composable
 fun LanguageSelectionScreen(
@@ -113,7 +107,7 @@ fun LanguageSelectionScreen(
                     )
                 ) {
                     Text(
-                        text = "Confirmar",
+                        text = stringResource(R.string.confirm),
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.SemiBold
                         )
@@ -123,7 +117,7 @@ fun LanguageSelectionScreen(
                 Spacer(modifier = Modifier.height(14.dp))
 
                 Text(
-                    text = "Você poderá alterar o idioma depois nas configurações.",
+                    text = stringResource(R.string.language_change_later),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -139,14 +133,12 @@ private fun LanguageHeader() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         Box(
             modifier = Modifier
                 .size(56.dp)
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.background),
             contentAlignment = Alignment.Center
-
         ) {
             Icon(
                 imageVector = Icons.Outlined.Language,
@@ -159,29 +151,22 @@ private fun LanguageHeader() {
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(
-
-            text = "Selecione o idioma",
+            text = stringResource(R.string.language_selection_title),
             style = MaterialTheme.typography.headlineMedium.copy(
                 fontWeight = FontWeight.Bold
             ),
             color = MaterialTheme.colorScheme.onBackground
-
-
-
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Escolha o idioma que deseja usar no CallGuard.".trimIndent(),
-            style = MaterialTheme.typography.bodyLarge,
+            text = stringResource(R.string.language_selection_subtitle),
+            style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
         )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-
     }
 }
 
@@ -217,7 +202,7 @@ private fun LanguageOptionCard(
             color = borderColor
         ),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = containerColor
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = if (isSelected) 4.dp else 1.dp
@@ -230,14 +215,12 @@ private fun LanguageOptionCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Surface(
-//                shape = RoundedCornerShape(14.dp),
                 color = MaterialTheme.colorScheme.surfaceVariant,
-                modifier = Modifier.size(48.dp).padding(horizontal = 5.dp)
+                modifier = Modifier.size(48.dp)
             ) {
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface)
-
                 ) {
                     Text(
                         text = language.flag,
@@ -246,7 +229,7 @@ private fun LanguageOptionCard(
                 }
             }
 
-
+            Spacer(modifier = Modifier.width(12.dp))
 
             Column(
                 modifier = Modifier.weight(1f)
@@ -257,7 +240,6 @@ private fun LanguageOptionCard(
                         fontWeight = FontWeight.SemiBold
                     ),
                     color = MaterialTheme.colorScheme.onSurface
-
                 )
 
                 Spacer(modifier = Modifier.height(2.dp))
@@ -287,4 +269,3 @@ private fun LanguageOptionCard(
         }
     }
 }
-

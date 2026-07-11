@@ -48,8 +48,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.lsp.callguard.R
 
 @Composable
 fun SettingsScreen(
@@ -62,9 +64,9 @@ fun SettingsScreen(
     onBlockUnknownChange: (Boolean) -> Unit,
     onBlockPrivateNumbersChange: (Boolean) -> Unit,
     onUseContactsAutomaticallyChange: (Boolean) -> Unit,
-    onMockSubscriptionChange: (Boolean) -> Unit
+    onMockLicenseChange: (Boolean) -> Unit
 ) {
-    val isSubscribed = uiState.isSubscribed
+    val isLicensed = uiState.isLicensed
     val blockUnknown = uiState.appSettings.blockUnknown
     val blockPrivateNumbers = uiState.appSettings.blockPrivateNumbers
     val useContactsAutomatically = uiState.appSettings.useContactsAutomatically
@@ -86,19 +88,19 @@ fun SettingsScreen(
             }
 
             item {
-                SettingsSectionTitle("Conta e assinatura")
+                SettingsSectionTitle(stringResource(R.string.section_account))
             }
 
             item {
-                SubscriptionCard(
-                    isSubscribed = isSubscribed,
+                LicenseCard(
+                    isLicensed = isLicensed,
                     onOpenPaywall = onOpenPaywall,
-                    onMockSubscriptionChange = onMockSubscriptionChange
+                    onMockLicenseChange = onMockLicenseChange
                 )
             }
 
             item {
-                SettingsSectionTitle("Proteção de chamadas")
+                SettingsSectionTitle(stringResource(R.string.section_protection))
             }
 
             item {
@@ -111,12 +113,12 @@ fun SettingsScreen(
             }
 
             item {
-                SettingsSectionTitle("Whitelist e contatos")
+                SettingsSectionTitle(stringResource(R.string.section_whitelist_contacts))
             }
 
             item {
                 ContactsSettingsCard(
-                    isSubscribed = isSubscribed,
+                    isLicensed = isLicensed,
                     useContactsAutomatically = useContactsAutomatically,
                     onUseContactsAutomaticallyChange = onUseContactsAutomaticallyChange,
                     onOpenPaywall = onOpenPaywall
@@ -124,7 +126,7 @@ fun SettingsScreen(
             }
 
             item {
-                SettingsSectionTitle("Privacidade")
+                SettingsSectionTitle(stringResource(R.string.section_privacy))
             }
 
             item {
@@ -135,7 +137,7 @@ fun SettingsScreen(
             }
 
             item {
-                SettingsSectionTitle("Aplicativo")
+                SettingsSectionTitle(stringResource(R.string.section_app))
             }
 
             item {
@@ -162,7 +164,7 @@ private fun SettingsHeader(
         IconButton(onClick = onBack) {
             Icon(
                 imageVector = Icons.Outlined.ArrowBack,
-                contentDescription = "Voltar"
+                contentDescription = stringResource(R.string.back)
             )
         }
 
@@ -170,7 +172,7 @@ private fun SettingsHeader(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = "Configurações",
+                text = stringResource(R.string.settings),
                 style = MaterialTheme.typography.headlineSmall.copy(
                     fontWeight = FontWeight.Bold
                 ),
@@ -178,7 +180,7 @@ private fun SettingsHeader(
             )
 
             Text(
-                text = "Controle privacidade, proteção e assinatura.",
+                text = stringResource(R.string.settings_subtitle),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -201,23 +203,23 @@ private fun SettingsSectionTitle(
 }
 
 @Composable
-private fun SubscriptionCard(
-    isSubscribed: Boolean,
+private fun LicenseCard(
+    isLicensed: Boolean,
     onOpenPaywall: () -> Unit,
-    onMockSubscriptionChange: (Boolean) -> Unit
+    onMockLicenseChange: (Boolean) -> Unit
 ) {
     SettingsCard {
         SettingsItemHeader(
             icon = Icons.Outlined.WorkspacePremium,
-            title = if (isSubscribed) "CallGuard Premium" else "Plano gratuito",
-            description = if (isSubscribed) {
-                "Sua assinatura está ativa."
+            title = if (isLicensed) stringResource(R.string.app_name) + " Premium" else stringResource(R.string.plan_free),
+            description = if (isLicensed) {
+                stringResource(R.string.license_active)
             } else {
-                "Você está usando recursos básicos com limite de whitelist."
+                stringResource(R.string.license_free)
             }
         )
 
-        if (!isSubscribed) {
+        if (!isLicensed) {
             Spacer(modifier = Modifier.height(14.dp))
 
             FilledTonalButton(
@@ -233,7 +235,7 @@ private fun SubscriptionCard(
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                Text("Ver Premium")
+                Text(stringResource(R.string.view_premium))
             }
         }
 
@@ -241,17 +243,17 @@ private fun SubscriptionCard(
 
         SettingsInfoText(
             icon = Icons.Outlined.CreditCard,
-            text = "A assinatura libera contatos automáticos, whitelist ilimitada e futura recuperação de dados."
+            text = stringResource(R.string.subscription_benefits)
         )
 
         SettingsDivider()
 
         SettingsSwitchRow(
             icon = Icons.Outlined.WorkspacePremium,
-            title = "Modo Premium mockado",
-            description = "Ativa recursos Premium localmente para desenvolvimento.",
-            checked = isSubscribed,
-            onCheckedChange = onMockSubscriptionChange
+            title = stringResource(R.string.license_mock_mode),
+            description = stringResource(R.string.license_mock_mode_description),
+            checked = isLicensed,
+            onCheckedChange = onMockLicenseChange
         )
     }
 }
@@ -266,8 +268,8 @@ private fun ProtectionSettingsCard(
     SettingsCard {
         SettingsSwitchRow(
             icon = Icons.Outlined.Security,
-            title = "Bloquear números desconhecidos",
-            description = "Bloqueia chamadas que não estejam nos contatos ou na whitelist.",
+            title = stringResource(R.string.block_unknown_numbers),
+            description = stringResource(R.string.block_unknown_description),
             checked = blockUnknown,
             onCheckedChange = onBlockUnknownChange
         )
@@ -276,8 +278,8 @@ private fun ProtectionSettingsCard(
 
         SettingsSwitchRow(
             icon = Icons.Outlined.Block,
-            title = "Bloquear números privados",
-            description = "Impede chamadas ocultas ou sem identificação.",
+            title = stringResource(R.string.block_private_numbers),
+            description = stringResource(R.string.block_private_description),
             checked = blockPrivateNumbers,
             onCheckedChange = onBlockPrivateNumbersChange
         )
@@ -286,14 +288,14 @@ private fun ProtectionSettingsCard(
 
         SettingsInfoText(
             icon = Icons.Outlined.Info,
-            text = "Essas opções serão aplicadas quando a proteção por chamadas estiver configurada."
+            text = stringResource(R.string.settings_applied_when_enabled)
         )
     }
 }
 
 @Composable
 private fun ContactsSettingsCard(
-    isSubscribed: Boolean,
+    isLicensed: Boolean,
     useContactsAutomatically: Boolean,
     onUseContactsAutomaticallyChange: (Boolean) -> Unit,
     onOpenPaywall: () -> Unit
@@ -301,18 +303,18 @@ private fun ContactsSettingsCard(
     SettingsCard {
         SettingsSwitchRow(
             icon = Icons.Outlined.Lock,
-            title = "Usar contatos automaticamente",
-            description = if (isSubscribed) {
-                "Permite considerar seus contatos como números confiáveis."
+            title = stringResource(R.string.use_contacts_automatically),
+            description = if (isLicensed) {
+                stringResource(R.string.contacts_auto_description_enabled)
             } else {
-                "Disponível apenas no Premium. Nenhuma permissão será solicitada no plano gratuito."
+                stringResource(R.string.contacts_auto_description_disabled)
             },
             checked = useContactsAutomatically,
-            enabled = isSubscribed,
+            enabled = isLicensed,
             onCheckedChange = onUseContactsAutomaticallyChange
         )
 
-        if (!isSubscribed) {
+        if (!isLicensed) {
             Spacer(modifier = Modifier.height(14.dp))
 
             OutlinedButton(
@@ -324,7 +326,7 @@ private fun ContactsSettingsCard(
                     color = MaterialTheme.colorScheme.outlineVariant
                 )
             ) {
-                Text("Desbloquear contatos com Premium")
+                Text(stringResource(R.string.unlock_contacts_premium))
             }
         }
 
@@ -332,7 +334,7 @@ private fun ContactsSettingsCard(
 
         SettingsInfoText(
             icon = Icons.Outlined.PrivacyTip,
-            text = "O acesso aos contatos só será solicitado após assinatura e consentimento explícito."
+            text = stringResource(R.string.contacts_access_policy)
         )
     }
 }
@@ -345,16 +347,16 @@ private fun PrivacySettingsCard(
     SettingsCard {
         SettingsItemHeader(
             icon = Icons.Outlined.VerifiedUser,
-            title = "Privacidade primeiro",
-            description = "O CallGuard não exibe anúncios e não monetiza seus dados."
+            title = stringResource(R.string.privacy_first),
+            description = stringResource(R.string.privacy_first_description)
         )
 
         SettingsDivider()
 
         SettingsActionRow(
             icon = Icons.Outlined.Policy,
-            title = "Termos de uso",
-            description = "Leia as regras de uso do aplicativo.",
+            title = stringResource(R.string.terms_of_use),
+            description = stringResource(R.string.terms_description),
             onClick = onOpenTerms
         )
 
@@ -362,8 +364,8 @@ private fun PrivacySettingsCard(
 
         SettingsActionRow(
             icon = Icons.Outlined.PrivacyTip,
-            title = "Política de privacidade",
-            description = "Entenda como seus dados e permissões são tratados.",
+            title = stringResource(R.string.privacy_policy),
+            description = stringResource(R.string.privacy_policy_description),
             onClick = onOpenPrivacyPolicy
         )
     }
@@ -376,8 +378,8 @@ private fun AppSettingsCard(
     SettingsCard {
         SettingsActionRow(
             icon = Icons.Outlined.Language,
-            title = "Idioma",
-            description = "Alterar idioma do aplicativo.",
+            title = stringResource(R.string.language),
+            description = stringResource(R.string.change_language),
             onClick = onOpenLanguage
         )
 
@@ -385,8 +387,8 @@ private fun AppSettingsCard(
 
         SettingsItemHeader(
             icon = Icons.Outlined.NotificationsOff,
-            title = "Sem publicidade",
-            description = "Mesmo na versão gratuita, o app não exibirá anúncios."
+            title = stringResource(R.string.no_ads),
+            description = stringResource(R.string.privacy_description)
         )
     }
 }
@@ -396,8 +398,8 @@ private fun AppInfoCard() {
     SettingsCard {
         SettingsItemHeader(
             icon = Icons.Outlined.Settings,
-            title = "CallGuard",
-            description = "Versão 1.0.0"
+            title = stringResource(R.string.app_name),
+            description = stringResource(R.string.app_version)
         )
     }
 }

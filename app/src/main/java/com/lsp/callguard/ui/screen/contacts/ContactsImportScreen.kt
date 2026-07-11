@@ -33,7 +33,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.lsp.callguard.R
 import com.lsp.callguard.ui.screen.consent.ContactsImportUiState
+import androidx.compose.ui.res.stringResource
 
 @Composable
 fun ContactsImportScreen(
@@ -57,7 +59,7 @@ fun ContactsImportScreen(
                             .height(54.dp),
                         shape = RoundedCornerShape(16.dp)
                     ) {
-                        Text("Continuar")
+                        Text(stringResource(R.string.continue_text))
                     }
                 }
             }
@@ -114,7 +116,7 @@ private fun ContactsImportLoading() {
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
-                text = "Lendo seus contatos",
+                text = stringResource(R.string.contacts_import_title),
                 style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.Bold
                 ),
@@ -124,7 +126,7 @@ private fun ContactsImportLoading() {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Estamos procurando números válidos em formato internacional.",
+                text = stringResource(R.string.contacts_import_description),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
@@ -170,7 +172,7 @@ private fun ContactsImportSuccess(
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
-                text = "Contatos ativados",
+                text = stringResource(R.string.contacts_activated),
                 style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.Bold
                 ),
@@ -180,7 +182,7 @@ private fun ContactsImportSuccess(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "$importedCount números válidos foram encontrados e poderão ser usados como permitidos.",
+                text = stringResource(R.string.contacts_imported_count, importedCount),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
@@ -226,7 +228,7 @@ private fun ContactsImportError(
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
-                text = "Não foi possível ler os contatos",
+                text = stringResource(R.string.contacts_read_error),
                 style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.Bold
                 ),

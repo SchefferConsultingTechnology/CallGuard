@@ -3,7 +3,7 @@ package com.lsp.callguard.ui.screen.consent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lsp.callguard.data.local.preferences.SettingsPreferences
-import com.lsp.callguard.data.local.preferences.SubscriptionPreferences
+import com.lsp.callguard.data.local.preferences.LicensePreferences
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -14,14 +14,14 @@ sealed class ContactsConsentEvent {
 
 class ContactsConsentViewModel(
     private val settingsPreferences: SettingsPreferences,
-    private val subscriptionPreferences: SubscriptionPreferences
+    private val licensePreferences: LicensePreferences
 ) : ViewModel() {
 
     fun acceptConsent(onEvent: (ContactsConsentEvent) -> Unit) {
         viewModelScope.launch {
-            val subscription = subscriptionPreferences.subscriptionFlow.first()
+            val license = licensePreferences.licenseFlow.first()
 
-            if (!subscription.isSubscribed) {
+            if (!license.isLicensed) {
                 onEvent(ContactsConsentEvent.OpenPaywall)
                 return@launch
             }

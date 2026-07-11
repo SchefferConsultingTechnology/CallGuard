@@ -13,7 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import com.lsp.callguard.data.local.preferences.SubscriptionPreferences
+import com.lsp.callguard.data.local.preferences.LicensePreferences
 
 class AppCallScreeningService : CallScreeningService() {
 
@@ -27,11 +27,11 @@ class AppCallScreeningService : CallScreeningService() {
             val settingsPreferences = SettingsPreferences(applicationContext.appPreferencesDataStore)
 
             val settings = settingsPreferences.settingsFlow.first()
-            val subscriptionPreferences = SubscriptionPreferences(
+            val licensePreferences = LicensePreferences(
                 applicationContext.appPreferencesDataStore
             )
 
-            val subscription = subscriptionPreferences.subscriptionFlow.first()
+            val license = licensePreferences.licenseFlow.first()
 
 
             val engine = CallDecisionEngine(
@@ -43,7 +43,7 @@ class AppCallScreeningService : CallScreeningService() {
             val decision = engine.evaluate(
                 phone = phoneNumber,
                 settings = settings,
-                isSubscribed = subscription.isSubscribed
+                isLicensed = license.isLicensed
             )
 
             val logRepository = CallDecisionLogRepository(

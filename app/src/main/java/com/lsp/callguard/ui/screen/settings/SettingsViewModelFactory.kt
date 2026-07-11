@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lsp.callguard.data.local.preferences.SettingsPreferences
-import com.lsp.callguard.data.local.preferences.SubscriptionPreferences
+import com.lsp.callguard.data.local.preferences.LicensePreferences
 import com.lsp.callguard.data.local.preferences.appPreferencesDataStore
 
 @Composable
@@ -16,13 +16,13 @@ fun rememberSettingsViewModel(): SettingsViewModel {
 
     val factory = remember(context) {
         val preferences = SettingsPreferences(context.appPreferencesDataStore)
-        val subscriptionPreferences = SubscriptionPreferences(context.appPreferencesDataStore)
+        val licensePreferences = LicensePreferences(context.appPreferencesDataStore)
 
 
         object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return SettingsViewModel(preferences,subscriptionPreferences = subscriptionPreferences) as T
+                return SettingsViewModel(preferences,licensePreferences = licensePreferences) as T
             }
         }
     }

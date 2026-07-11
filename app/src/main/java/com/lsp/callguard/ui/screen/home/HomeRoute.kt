@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.lsp.callguard.data.local.database.CallGuardDatabase
 import com.lsp.callguard.data.local.preferences.SettingsPreferences
-import com.lsp.callguard.data.local.preferences.SubscriptionPreferences
+import com.lsp.callguard.data.local.preferences.LicensePreferences
 import com.lsp.callguard.data.local.preferences.appPreferencesDataStore
 import com.lsp.callguard.data.repository.WhitelistRepository
 
@@ -30,7 +30,7 @@ fun HomeRoute(
             val db = CallGuardDatabase.getInstance(context)
             val repository = WhitelistRepository(db.allowedNumberDao())
             val settingsPreferences = SettingsPreferences(context.appPreferencesDataStore)
-            val subscriptionPreferences = SubscriptionPreferences(context.appPreferencesDataStore)
+            val licensePreferences = LicensePreferences(context.appPreferencesDataStore)
             val deviceContactDao = db.deviceContactDao()
 
 
@@ -40,7 +40,7 @@ fun HomeRoute(
                     return HomeViewModel(
                         repository = repository,
                         settingsPreferences = settingsPreferences,
-                        subscriptionPreferences = subscriptionPreferences,
+                        licensePreferences = licensePreferences,
                         deviceContactDao = deviceContactDao
                     ) as T
                 }

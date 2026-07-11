@@ -4,29 +4,29 @@ package com.lsp.callguard.data.local.preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.lsp.callguard.domain.model.SubscriptionState
+import com.lsp.callguard.domain.model.LicenseState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class SubscriptionPreferences(
+class LicensePreferences(
     private val dataStore: androidx.datastore.core.DataStore<androidx.datastore.preferences.core.Preferences>
 ) {
     private object Keys {
-        val IS_SUBSCRIBED = booleanPreferencesKey("is_subscribed")
+        val IS_LICENSED = booleanPreferencesKey("is_licensed")
         val PLAN_NAME = stringPreferencesKey("plan_name")
     }
 
-    val subscriptionFlow: Flow<SubscriptionState> =
+    val licenseFlow: Flow<LicenseState> =
         dataStore.data.map { preferences ->
-            SubscriptionState(
-                isSubscribed = preferences[Keys.IS_SUBSCRIBED] ?: false,
+            LicenseState(
+                isLicensed = preferences[Keys.IS_LICENSED] ?: false,
                 planName = preferences[Keys.PLAN_NAME] ?: "Free"
             )
         }
 
-    suspend fun setMockSubscriptionActive(value: Boolean) {
+    suspend fun setMockLicenseActive(value: Boolean) {
         dataStore.edit { preferences ->
-            preferences[Keys.IS_SUBSCRIBED] = value
+            preferences[Keys.IS_LICENSED] = value
             preferences[Keys.PLAN_NAME] = if (value) "Premium" else "Free"
         }
     }

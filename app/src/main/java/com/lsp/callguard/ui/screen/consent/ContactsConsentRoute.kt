@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lsp.callguard.data.local.preferences.SettingsPreferences
-import com.lsp.callguard.data.local.preferences.SubscriptionPreferences
+import com.lsp.callguard.data.local.preferences.LicensePreferences
 import com.lsp.callguard.data.local.preferences.appPreferencesDataStore
 
 @Composable
@@ -40,7 +40,7 @@ fun ContactsConsentRoute(
                 dataStore = context.appPreferencesDataStore
             )
 
-            val subscriptionPreferences = SubscriptionPreferences(
+            val licensePreferences = LicensePreferences(
                 dataStore = context.appPreferencesDataStore
             )
 
@@ -49,7 +49,7 @@ fun ContactsConsentRoute(
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
                     return ContactsConsentViewModel(
                         settingsPreferences = settingsPreferences,
-                        subscriptionPreferences = subscriptionPreferences
+                        licensePreferences = licensePreferences
                     ) as T
                 }
             }

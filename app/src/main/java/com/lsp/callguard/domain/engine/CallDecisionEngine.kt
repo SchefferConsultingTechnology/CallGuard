@@ -16,7 +16,7 @@ class CallDecisionEngine(
     suspend fun evaluate(
         phone: String?,
         settings: AppSettings,
-        isSubscribed: Boolean
+        isLicensed: Boolean
     ): CallDecision {
         return withContext(Dispatchers.IO) {
             if (phone.isNullOrBlank()) {
@@ -48,7 +48,7 @@ class CallDecisionEngine(
                     }
 
                     val canUseContacts =
-                        isSubscribed && settings.useContactsAutomatically
+                        isLicensed && settings.useContactsAutomatically
 
                     if (canUseContacts) {
                         val existsInContacts =
@@ -75,12 +75,12 @@ class CallDecisionEngine(
     suspend fun shouldAllowCall(
         phone: String?,
         settings: AppSettings,
-        isSubscribed: Boolean
+        isLicensed: Boolean
     ): Boolean {
         return evaluate(
             phone = phone,
             settings = settings,
-            isSubscribed = isSubscribed
+            isLicensed = isLicensed
         ).allow
     }
 }

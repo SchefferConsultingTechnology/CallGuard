@@ -1,6 +1,6 @@
 package com.lsp.callguard.domain.model
 
-data class SubscriptionState(
-    val isSubscribed: Boolean = false,
+data class LicenseState(
+    val isLicensed: Boolean = false,
     val planName: String = "Free"
 )

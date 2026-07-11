@@ -1,40 +1,192 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="app_name">CallGuard</string>
-<string name="language_selection_title">Selecione o idioma</string>
-<string name="language_selection_subtitle">Escolha o idioma que deseja usar no CallGuard.</string>
-<string name="confirm">Confirmar</string>
-<string name="language_change_later">Você poderá alterar o idioma depois nas configurações.</string>
-<string name="onboarding_title">Proteja suas chamadas</string>
-<string name="onboarding_description">O CallGuard ajuda a bloquear chamadas de números que não estejam nos seus contatos ou na sua lista de permitidos.</string>
-<string name="continue_text">Continuar</string>
-<string name="onboarding_feature_1_title">Permita números confiáveis</string>
-<string name="onboarding_feature_1_description">Mantenha seus números permitidos organizados e sob seu controle.</string>
 
-<string name="onboarding_feature_2_title">Bloqueie números desconhecidos</string>
-<string name="onboarding_feature_2_description">Reduza interrupções de chamadas que você não reconhece.</string>
+    <string name="app_name">CallGuard</string>
 
-<string name="onboarding_feature_3_title">Assine para proteção completa</string>
-<string name="onboarding_feature_3_description">O Premium libera integração com contatos e whitelist ilimitada.</string>
+    <string name="language_selection_title">Selecione o idioma</string>
+    <string name="language_selection_subtitle">Escolha o idioma que deseja usar no CallGuard.</string>
+    <string name="confirm">Confirmar</string>
+    <string name="language_change_later">Você poderá alterar o idioma depois nas configurações.</string>
 
-<string name="paywallscreen_header_title">Proteção completa de chamadas</string>
-<string name="paywallscreen_header_description">Controle quem pode falar com você, com mais privacidade e sem anúncios.</string>
-<string name="paywallscreen_premium_title">Premium sem publicidade</string>
-<string name="paywallscreen_premium_description">CallGuard é sustentado por assinatura. Isso significa uma experiência limpa, sem anúncios e sem monetização baseada nos seus dados.</string>
-<string name="paywallscreen_bottom_bar_premium">Assinar CallGuard Premium</string>
-<string name="paywallscreen_bottom_bar_free">Continuar com versão gratuita</string>
-<string name="paywallscreen_bottom_bar_footer">A versão gratuita permite uso básico com whitelist limitada. O acesso aos contatos só é solicitado após assinatura.</string>
-<string name="paywallscreen_body_title">O que você desbloqueia com a assinatura</string>
-<string name="paywallscreen_body_item1_title">Contatos automáticos</string>
-<string name="paywallscreen_body_item1_description"> Use sua lista de contatos como permitidos automaticamente.</string>
-<string name="paywallscreen_body_item2_title">Whitelist ilimitada</string>
-<string name="paywallscreen_body_item2_description">Adicione quantos números quiser à sua lista manual.</string>
-<string name="paywallscreen_body_item3_title">Sem anúncios, nunca</string>
-<string name="paywallscreen_body_item3_description">Seu app continua limpo, sem publicidade e sem rastreamento.</string>
-<string name="paywallscreen_body_item4_title">Backup e restauração</string>
-<string name="paywallscreen_body_item4_description">Recupere suas configurações ao trocar de smartphone.</string>
-<string name="paywallscreen_free_version_title">Versão gratuita</string>
-<string name="paywallscreen_free_version_description">Você pode instalar e usar o app gratuitamente com recursos básicos.</string>
-<string name="paywallscreen_free_version_list">• whitelist manual limitada\n• sem acesso aos contatos\n• sem solicitação de permissão de contatos\n• sem anúncios</string>
+    <string name="onboarding_title">Proteja suas chamadas</string>
+    <string name="onboarding_description">O CallGuard ajuda a bloquear chamadas de números que não estejam nos seus contatos ou na sua lista de permitidos.</string>
+    <string name="continue_text">Continuar</string>
+
+    <string name="onboarding_feature_1_title">Permita números confiáveis</string>
+    <string name="onboarding_feature_1_description">Mantenha seus números permitidos organizados e sob seu controle.</string>
+
+    <string name="onboarding_feature_2_title">Bloqueie chamadas desconhecidas</string>
+    <string name="onboarding_feature_2_description">Reduza interrupções de chamadas que você não reconhece.</string>
+
+    <string name="onboarding_feature_3_title">Assine para proteção completa</string>
+    <string name="onboarding_feature_3_description">O Premium libera integração com contatos e whitelist ilimitada.</string>
+
+    <string name="home_description">Proteja suas chamadas com mais privacidade.</string>
+    <string name="settings">Configurações</string>
+    <string name="back">Voltar</string>
+    <string name="protection_status_active">Proteção ativa</string>
+    <string name="protection_status_not_configured">Proteção ainda não configurada</string>
+    <string name="protection_whitelist_prompt">Configure sua whitelist para começar a controlar chamadas.</string>
+    <string name="activate_protection">Ativar proteção</string>
+    <string name="plan_premium">Plano Premium</string>
+    <string name="plan_free">Plano gratuito</string>
+    <string name="plan_description_premium">Todos os recursos estão ativos.</string>
+    <string name="plan_description_free">Você está usando a versão gratuita com recursos limitados.</string>
+    <string name="view_premium">Ver Premium</string>
+    <string name="whitelist_title">Lista de permitidos</string>
+    <string name="whitelist_usage">%1$d de %2$d números usados na versão gratuita.</string>
+    <string name="manage_whitelist">Gerenciar whitelist</string>
+    <string name="contacts_automatic">Contatos automáticos</string>
+    <string name="unlock_with_premium">Desbloquear com Premium</string>
+    <string name="enable_auto_contacts">Usar contatos automaticamente</string>
+    <string name="update_contacts">Atualizar contatos</string>
+    <string name="privacy_title">Sem anúncios, sempre</string>
+    <string name="privacy_description">Mesmo na versão gratuita, o CallGuard não exibe anúncios nem monetiza seus dados.</string>
+    <string name="history_recent">Histórico recente</string>
+    <string name="history_title">Histórico de chamadas</string>
+    <string name="history_subtitle">Veja chamadas analisadas pelo CallGuard.</string>
+    <string name="view_history">Ver histórico</string>
+
+    <string name="add">Adicionar</string>
+    <string name="remove">Remover</string>
+
+    <string name="section_account">Conta e licença</string>
+    <string name="section_protection">Proteção de chamadas</string>
+    <string name="section_whitelist_contacts">Whitelist e contatos</string>
+    <string name="section_privacy">Privacidade</string>
+    <string name="section_app">App</string>
+    <string name="settings_subtitle">Controle privacidade, proteção e licença.</string>
+    <string name="license_active">Sua licença está ativa.</string>
+    <string name="license_free">Você está usando recursos básicos com limite de whitelist.</string>
+    <string name="subscription_benefits">Uma licença desbloqueia contatos automáticos, whitelist ilimitada e restauração futura.</string>
+    <string name="license_mock_mode">Modo de licença fictícia</string>
+    <string name="license_mock_mode_description">Ativa comportamento premium localmente para desenvolvimento.</string>
+    <string name="block_unknown_numbers">Bloquear números desconhecidos</string>
+    <string name="block_unknown_description">Bloquear chamadas não presentes nos contatos ou whitelist.</string>
+    <string name="block_private_numbers">Bloquear números privados</string>
+    <string name="block_private_description">Impedir chamadas ocultas ou não identificadas.</string>
+    <string name="settings_applied_when_enabled">Essas opções valem quando a proteção de chamadas estiver ativada.</string>
+    <string name="use_contacts_automatically">Usar contatos automaticamente</string>
+    <string name="contacts_auto_description_enabled">Permite tratar seus contatos como números confiáveis.</string>
+    <string name="contacts_auto_description_disabled">Disponível apenas no Premium. Nenhuma permissão de contatos é solicitada no plano gratuito.</string>
+    <string name="unlock_contacts_premium">Desbloquear contatos com Premium</string>
+    <string name="contacts_access_policy">O acesso a contatos é solicitado apenas após licença e consentimento explícito.</string>
+    <string name="privacy_first">Privacidade em primeiro lugar</string>
+    <string name="privacy_first_description">O CallGuard não exibe anúncios e não monetiza seus dados.</string>
+    <string name="terms_of_use">Termos de uso</string>
+    <string name="terms_description">Leia as regras de uso do aplicativo.</string>
+    <string name="privacy_policy">Política de privacidade</string>
+    <string name="privacy_policy_description">Entenda como seus dados e permissões são tratados.</string>
+    <string name="language">Idioma</string>
+    <string name="change_language">Alterar o idioma do app.</string>
+    <string name="no_ads">Sem anúncios</string>
+    <string name="app_version">Versão 1.0.0</string>
+
+    <string name="contacts_permission_title">Permissão de contatos</string>
+    <string name="contacts_permission_subtitle">Transparência antes de solicitar acesso.</string>
+    <string name="contact_permission_consent_note">A permissão de contatos é solicitada apenas após seu consentimento.</string>
+    <string name="why_access_contacts">Por que acessar seus contatos?</string>
+    <string name="why_access_contacts_description">Para tratar automaticamente seus contatos como números confiáveis e reduzir chamadas indesejadas.</string>
+    <string name="when_permission_requested">Quando a permissão será solicitada?</string>
+    <string name="when_permission_requested_description">Apenas após o Premium e depois que você aceitar os termos nesta tela.</string>
+    <string name="what_we_dont_do">O que não fazemos</string>
+    <string name="what_we_dont_do_description">O CallGuard não exibe anúncios, vende seus dados ou acessa contatos sem sua autorização.</string>
+    <string name="you_control_access">Você controla o acesso</string>
+    <string name="you_control_access_description">O CallGuard solicita acesso aos contatos somente quando precisar ativar recursos do Premium.</string>
+    <string name="consent_title">Consentimento</string>
+    <string name="accept_terms_text">Li e aceito os Termos de Uso</string>
+    <string name="open">Abrir</string>
+    <string name="accept_privacy_text">Li e aceito a Política de Privacidade</string>
+
+    <string name="contacts_import_title">Lendo seus contatos</string>
+    <string name="contacts_import_description">Estamos procurando números válidos em formato internacional.</string>
+    <string name="contacts_activated">Contatos ativados</string>
+    <string name="contacts_imported_count">%1$d números válidos foram encontrados e podem ser usados como permitidos.</string>
+    <string name="contacts_read_error">Não foi possível ler os contatos</string>
+
+    <string name="clear_history">Limpar histórico</string>
+    <string name="clear_history_dialog_title">Limpar histórico?</string>
+    <string name="clear_history_dialog_text">Isso removerá todos os registros locais de decisões de chamadas.</string>
+    <string name="clear">Limpar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="no_history_yet">Ainda sem registros</string>
+    <string name="no_history_subtitle">Quando o CallGuard analisar chamadas, os registros aparecerão aqui.</string>
+    <string name="recent_summary">Resumo recente</string>
+    <string name="allowed_count">%1$d permitidos</string>
+    <string name="blocked_count">%1$d bloqueados</string>
+    <string name="private_number">Número privado</string>
+    <string name="status_allowed">Permitido</string>
+    <string name="status_blocked">Bloqueado</string>
+    <string name="reason_whitelist">na whitelist</string>
+    <string name="reason_unknown_disabled">bloqueio de chamadas desconhecidas desativado</string>
+    <string name="reason_blocked_not_in_whitelist">não está na whitelist</string>
+    <string name="reason_blocked_private_number">número privado</string>
+    <string name="reason_private_disabled">bloqueio de números privados desativado</string>
+    <string name="reason_invalid_number">número inválido</string>
+    <string name="reason_allowed_by_contacts">nos contatos</string>
+
+    <string name="protection_setup_button">Abrir configurações do Android</string>
+    <string name="protection_setup_description">Ative o CallGuard como serviço de filtragem/bloqueio de chamadas nas configurações do telefone.</string>
+    <string name="activate_protection_title">Ativar proteção</string>
+    <string name="allow_filter_calls">Permita que o CallGuard filtre chamadas</string>
+    <string name="enable_filter_calls_description">Para bloquear chamadas desconhecidas, o Android precisa permitir que o CallGuard analise chamadas recebidas.</string>
+    <string name="protection_info_local">Decisão local e rápida</string>
+    <string name="protection_info_local_description">As chamadas são avaliadas usando sua whitelist armazenada no dispositivo.</string>
+    <string name="protection_info_no_internet">Sem internet obrigatória</string>
+    <string name="protection_info_no_internet_description">A proteção não depende de serviços backend para decidir se uma chamada deve ser permitida.</string>
+    <string name="protection_info_privacy_first">Privacidade em primeiro lugar</string>
+    <string name="protection_info_privacy_first_description">O CallGuard não envia seus contatos ou chamadas sem sua autorização.</string>
+
+    <string name="whitelist_add_number">Adicionar número</string>
+    <string name="limit_reached">Limite gratuito atingido</string>
+    <string name="limit_reached_text">A versão gratuita permite até %1$d números na whitelist. Assine o Premium para adicionar números ilimitados.</string>
+    <string name="now_no">Agora não</string>
+    <string name="whitelist_header_title">Whitelist</string>
+    <string name="whitelist_header_description">Gerencie números sempre permitidos.</string>
+    <string name="whitelist_unlimited">Whitelist ilimitada</string>
+    <string name="whitelist_free_version">Versão gratuita</string>
+    <string name="whitelist_premium_description">Assine o Premium para usar contatos automáticos e whitelist ilimitada.</string>
+    <string name="learn_premium">Saiba mais sobre o Premium</string>
+    <string name="no_numbers_yet">Nenhum número permitido ainda</string>
+    <string name="add_numbers_description">Adicione números que podem sempre contatar você.</string>
+    <string name="premium_automate_title">Quer automatizar sua lista?</string>
+    <string name="premium_automate_description">Com o Premium, seus contatos podem ser usados como números permitidos automaticamente.</string>
+    <string name="view_premium_benefits">Ver benefícios do Premium</string>
+    <string name="add_number_dialog_title">Adicionar número</string>
+    <string name="label_name_or_label">Nome ou etiqueta</string>
+    <string name="phone_international_format">Telefone em formato internacional</string>
+    <string name="phone_example">+5549999999999</string>
+    <string name="phone_e164_help">Use o formato E.164. Exemplo: +5549999999999</string>
+
+    <string name="paywallscreen_header_title">Proteção completa de chamadas</string>
+    <string name="paywallscreen_header_description">Controle quem pode falar com você, com mais privacidade e sem anúncios.</string>
+
+    <string name="paywallscreen_premium_title">Premium sem publicidade</string>
+    <string name="paywallscreen_premium_description">CallGuard é sustentado por licença. Isso significa uma experiência limpa, sem anúncios e sem monetizar seus dados.</string>
+    <string name="paywallscreen_bottom_bar_premium">Assine o CallGuard Premium</string>
+    <string name="paywallscreen_bottom_bar_free">Continuar com versão gratuita</string>
+    <string name="paywallscreen_bottom_bar_footer">A versão gratuita permite uso básico com whitelist limitada. O acesso aos contatos é solicitado apenas após a licença.</string>
+
+    <string name="paywallscreen_body_title">O que você desbloqueia com a licença</string>
+
+    <string name="paywallscreen_body_item1_title">Contatos automáticos</string>
+    <string name="paywallscreen_body_item1_description">Use sua lista de contatos como números permitidos automaticamente.</string>
+
+    <string name="paywallscreen_body_item2_title">Whitelist ilimitada</string>
+    <string name="paywallscreen_body_item2_description">Adicione quantos números quiser à sua lista manual.</string>
+
+    <string name="paywallscreen_body_item3_title">Sem anúncios, nunca</string>
+    <string name="paywallscreen_body_item3_description">Seu app permanece limpo, sem anúncios ou rastreamento.</string>
+
+    <string name="paywallscreen_body_item4_title">Backup e restauração</string>
+    <string name="paywallscreen_body_item4_description">Recupere suas configurações ao mudar de dispositivo.</string>
+
+    <string name="paywallscreen_free_version_title">Versão gratuita</string>
+    <string name="paywallscreen_free_version_description">Você pode instalar e usar o app gratuitamente com recursos básicos.</string>
+
+    <string name="paywallscreen_free_version_list">• whitelist manual limitada
+• sem acesso aos contatos
+• sem solicitação de permissão de contatos
+• sem anúncios</string>
 
 </resources>

@@ -3,7 +3,7 @@ package com.lsp.callguard.ui.screen.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lsp.callguard.data.local.preferences.SettingsPreferences
-import com.lsp.callguard.data.local.preferences.SubscriptionPreferences
+import com.lsp.callguard.data.local.preferences.LicensePreferences
 import com.lsp.callguard.domain.model.AppSettings
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -13,22 +13,22 @@ import kotlinx.coroutines.flow.combine
 
 data class SettingsUiState(
     val appSettings: AppSettings = AppSettings(),
-    val isSubscribed: Boolean = false
+    val isLicensed: Boolean = false
 )
 
 class SettingsViewModel(
     private val settingsPreferences: SettingsPreferences,
-    private val subscriptionPreferences: SubscriptionPreferences
+    private val licensePreferences: LicensePreferences
 ) : ViewModel() {
 
     val uiState: StateFlow<SettingsUiState> =
         combine(
             settingsPreferences.settingsFlow,
-            subscriptionPreferences.subscriptionFlow
-        ) { settings, subscription ->
+            licensePreferences.licenseFlow
+        ) { settings, license ->
             SettingsUiState(
                 appSettings = settings,
-                isSubscribed = subscription.isSubscribed
+                isLicensed = license.isLicensed
             )
         }.stateIn(
             scope = viewModelScope,
@@ -36,9 +36,9 @@ class SettingsViewModel(
             initialValue = SettingsUiState()
         )
 
-    fun setMockSubscriptionActive(value: Boolean) {
+    fun setMockLicenseActive(value: Boolean) {
         viewModelScope.launch {
-            subscriptionPreferences.setMockSubscriptionActive(value)
+            licensePreferences.setMockLicenseActive(value)
         }
     }
     fun setBlockUnknown(value: Boolean) {

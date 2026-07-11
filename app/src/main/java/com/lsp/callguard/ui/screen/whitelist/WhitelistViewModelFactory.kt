@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lsp.callguard.data.local.database.CallGuardDatabase
-import com.lsp.callguard.data.local.preferences.SubscriptionPreferences
+import com.lsp.callguard.data.local.preferences.LicensePreferences
 import com.lsp.callguard.data.local.preferences.appPreferencesDataStore
 import com.lsp.callguard.data.repository.WhitelistRepository
 
@@ -18,7 +18,7 @@ fun rememberWhitelistViewModel(): WhitelistViewModel {
     val factory = remember(context) {
         val database = CallGuardDatabase.getInstance(context)
         val repository = WhitelistRepository(database.allowedNumberDao())
-        val subscriptionPreferences = SubscriptionPreferences(
+        val licensePreferences = LicensePreferences(
             dataStore = context.appPreferencesDataStore
         )
 
@@ -26,7 +26,7 @@ fun rememberWhitelistViewModel(): WhitelistViewModel {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return WhitelistViewModel(repository,
-                    subscriptionPreferences = subscriptionPreferences
+                    licensePreferences = licensePreferences
                     ) as T
             }
         }

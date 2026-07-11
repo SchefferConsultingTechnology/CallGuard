@@ -45,10 +45,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.material3.Button
-import androidx.compose.material3.FilledTonalButton
+import com.lsp.callguard.R
 
 private const val FREE_WHITELIST_LIMIT = 5
 
@@ -63,7 +63,7 @@ fun HomeScreen(
     onOpenContactsConsent: () -> Unit
 
 ) {
-    val isSubscribed = false
+    val isLicensed = uiState.isLicensed
     val whitelistCount = uiState.whitelistCount
     val limit = uiState.whitelistLimit
     val progress = uiState.progress
@@ -98,7 +98,7 @@ fun HomeScreen(
             }
             item {
                 PlanStatusCard(
-                    isSubscribed = isSubscribed,
+                    isLicensed = isLicensed,
                     onOpenPaywall = onOpenPaywall
                 )
             }
@@ -114,7 +114,7 @@ fun HomeScreen(
 
             item {
                 LockedContactsCard(
-                    isSubscribed = uiState.isSubscribed,
+                    isLicensed = uiState.isLicensed,
                     useContactsAutomatically = uiState.useContactsAutomatically,
                     importedContactsCount = uiState.importedContactsCount,
                     onOpenPaywall = onOpenPaywall,
@@ -141,7 +141,7 @@ private fun HomeHeader(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = "CallGuard",
+                text = stringResource(R.string.app_name),
                 style = MaterialTheme.typography.headlineSmall.copy(
                     fontWeight = FontWeight.Bold
                 ),
@@ -151,7 +151,7 @@ private fun HomeHeader(
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = "Controle suas chamadas com mais privacidade.",
+                text = stringResource(R.string.home_description),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -160,7 +160,7 @@ private fun HomeHeader(
         IconButton(onClick = onOpenSettings) {
             Icon(
                 imageVector = Icons.Outlined.Settings,
-                contentDescription = "Configurações",
+                contentDescription = stringResource(R.string.settings),
                 tint = MaterialTheme.colorScheme.onSurface
             )
         }
@@ -211,10 +211,9 @@ private fun ProtectionStatusCard(
             ) {
                 Text(
                     text = if (isProtectionEnabled) {
-                        "Proteção ativa"
-
+                        stringResource(R.string.protection_status_active)
                     } else {
-                        "Proteção ainda não configurada"
+                        stringResource(R.string.protection_status_not_configured)
                     },
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.SemiBold
@@ -225,7 +224,7 @@ private fun ProtectionStatusCard(
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = "Configure sua whitelist para começar a controlar chamadas.",
+                    text = stringResource(R.string.protection_whitelist_prompt),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -238,9 +237,9 @@ private fun ProtectionStatusCard(
                 ) {
                     Text(
                         text = if (isProtectionEnabled) {
-                            "Proteção ativa"
+                            stringResource(R.string.protection_status_active)
                         } else {
-                            "Ativar proteção"
+                            stringResource(R.string.activate_protection)
                         }
                     )
                 }
@@ -253,7 +252,7 @@ private fun ProtectionStatusCard(
 
 @Composable
 private fun PlanStatusCard(
-    isSubscribed: Boolean,
+    isLicensed: Boolean,
     onOpenPaywall: () -> Unit
 ) {
     Card(
@@ -272,15 +271,15 @@ private fun PlanStatusCard(
         ) {
             HomeCardHeader(
                 icon = Icons.Outlined.CreditCard,
-                title = if (isSubscribed) "Plano Premium" else "Plano gratuito",
-                description = if (isSubscribed) {
-                    "Recursos completos ativos."
+                title = if (isLicensed) stringResource(R.string.plan_premium) else stringResource(R.string.plan_free),
+                description = if (isLicensed) {
+                    stringResource(R.string.plan_description_premium)
                 } else {
-                    "Você está usando a versão gratuita com recursos limitados."
+                    stringResource(R.string.plan_description_free)
                 }
             )
 
-            if (!isSubscribed) {
+            if (!isLicensed) {
                 Spacer(modifier = Modifier.height(14.dp))
 
                 Button(
@@ -288,7 +287,7 @@ private fun PlanStatusCard(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(14.dp)
                 ) {
-                    Text("Ver Premium")
+                    Text(stringResource(R.string.view_premium))
                 }
             }
         }
@@ -318,8 +317,8 @@ private fun WhitelistLimitCard(
         ) {
             HomeCardHeader(
                 icon = Icons.Outlined.PhoneLocked,
-                title = "Lista de permitidos",
-                description = "$count de $limit números usados na versão gratuita."
+                title = stringResource(R.string.whitelist_title),
+                description = stringResource(R.string.whitelist_usage, count, limit)
             )
 
             Spacer(modifier = Modifier.height(14.dp))
@@ -340,7 +339,7 @@ private fun WhitelistLimitCard(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(14.dp)
             ) {
-                Text("Gerenciar whitelist")
+                Text(stringResource(R.string.manage_whitelist))
             }
         }
     }
@@ -348,23 +347,23 @@ private fun WhitelistLimitCard(
 
 @Composable
 private fun LockedContactsCard(
-    isSubscribed: Boolean,
+    isLicensed: Boolean,
     useContactsAutomatically: Boolean,
     importedContactsCount: Int,
     onOpenPaywall: () -> Unit,
     onOpenContactsConsent: () -> Unit
 ) {
     val description = when {
-        !isSubscribed -> {
-            "Disponível no Premium. A permissão de contatos só será solicitada após assinatura."
+        !isLicensed -> {
+            stringResource(R.string.contacts_auto_description_disabled)
         }
 
         useContactsAutomatically -> {
-            "$importedContactsCount contatos válidos importados e ativos como permitidos."
+            stringResource(R.string.contacts_imported_count, importedContactsCount)
         }
 
         else -> {
-            "Premium ativo. Autorize o uso dos contatos para permitir números confiáveis automaticamente."
+            stringResource(R.string.contacts_auto_description_enabled)
         }
     }
 
@@ -384,14 +383,14 @@ private fun LockedContactsCard(
         ) {
             HomeCardHeader(
                 icon = Icons.Outlined.ContactPhone,
-                title = "Contatos automáticos",
+                title = stringResource(R.string.contacts_automatic),
                 description = description
             )
 
             Spacer(modifier = Modifier.height(14.dp))
 
             when {
-                !isSubscribed -> {
+                !isLicensed -> {
                     OutlinedButton(
                         onClick = onOpenPaywall,
                         modifier = Modifier.fillMaxWidth(),
@@ -409,7 +408,7 @@ private fun LockedContactsCard(
 
                         Spacer(modifier = Modifier.width(8.dp))
 
-                        Text("Desbloquear com Premium")
+                        Text(stringResource(R.string.unlock_with_premium))
                     }
                 }
 
@@ -427,7 +426,7 @@ private fun LockedContactsCard(
 
                         Spacer(modifier = Modifier.width(8.dp))
 
-                        Text("Ativar contatos automáticos")
+                        Text(stringResource(R.string.enable_auto_contacts))
                     }
                 }
 
@@ -437,7 +436,7 @@ private fun LockedContactsCard(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(14.dp)
                     ) {
-                        Text("Atualizar contatos")
+                        Text(stringResource(R.string.update_contacts))
                     }
                 }
             }
@@ -459,8 +458,8 @@ private fun PrivacyCard() {
         ) {
             HomeCardHeader(
                 icon = Icons.Outlined.VerifiedUser,
-                title = "Sem anúncios, sempre",
-                description = "Mesmo na versão gratuita, o CallGuard não exibe publicidade nem monetiza seus dados."
+                title = stringResource(R.string.privacy_title),
+                description = stringResource(R.string.privacy_description)
             )
         }
     }
@@ -558,7 +557,7 @@ private fun CallHistoryCard(
                     modifier = Modifier.weight(1f)
                 ) {
                     Text(
-                        text = "Histórico recente",
+                        text = stringResource(R.string.history_recent),
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.SemiBold
                         ),
@@ -568,7 +567,7 @@ private fun CallHistoryCard(
                     Spacer(modifier = Modifier.height(2.dp))
 
                     Text(
-                        text = "Veja chamadas analisadas pelo CallGuard.",
+                        text = stringResource(R.string.history_subtitle),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -582,7 +581,7 @@ private fun CallHistoryCard(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(14.dp)
             ) {
-                Text("Ver histórico")
+                Text(stringResource(R.string.view_history))
             }
         }
     }
