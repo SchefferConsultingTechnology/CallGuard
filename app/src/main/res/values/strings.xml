@@ -89,7 +89,7 @@
     <string name="why_access_contacts_description">To automatically treat your contacts as trusted numbers and reduce unwanted calls.</string>
     <string name="when_permission_requested">When will permission be requested?</string>
     <string name="when_permission_requested_description">Only after Premium and after you accept the terms on this screen.</string>
-    <string name="what_we_dont_do">What we don't do</string>
+    <string name="what_we_dont_do">What we don\'t do</string>
     <string name="what_we_dont_do_description">CallGuard does not show ads, sell your data, or access contacts without your authorization.</string>
     <string name="you_control_access">You control access</string>
     <string name="you_control_access_description">CallGuard only requests contact access when it is needed to enable Premium features.</string>
@@ -187,6 +187,6 @@
     <string name="paywallscreen_free_version_title">Free version</string>
     <string name="paywallscreen_free_version_description">You can install and use the app for free with basic features.</string>
 
-    <string name="paywallscreen_free_version_list">• limited manual whitelist\n• no access to contacts\n• no contact permission requested\n• no ads</string>
+    <string name="paywallscreen_free_version_list">• limited manual whitelist&#10;• no access to contacts&#10;• no contact permission requested&#10;• no ads</string>
 
 </resources>
