@@ -8,6 +8,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
+import com.lsp.callguard.R
 
 @Composable
 fun WhitelistRoute(
@@ -19,6 +21,7 @@ fun WhitelistRoute(
 
     val snackbarHostState = remember { SnackbarHostState() }
     var showLimitDialog by remember { mutableStateOf(false) }
+    val numberAlreadyExistsMessage = stringResource(R.string.whitelist_number_already_exists)
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
@@ -29,7 +32,7 @@ fun WhitelistRoute(
 
                 WhitelistEvent.NumberAlreadyExists -> {
                     snackbarHostState.showSnackbar(
-                        message = "Este número já está na whitelist."
+                        message = numberAlreadyExistsMessage
                     )
                 }
             }

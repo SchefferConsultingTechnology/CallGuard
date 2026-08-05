@@ -2,6 +2,7 @@ package com.lsp.callguard.data.repository
 
 import android.content.Context
 import android.provider.ContactsContract
+import com.lsp.callguard.R
 import com.lsp.callguard.domain.model.DeviceContact
 import com.lsp.callguard.domain.phone.PhoneNormalizationResult
 import com.lsp.callguard.domain.phone.PhoneNormalizer
@@ -52,7 +53,9 @@ class ContactsRepository(
                         contacts.add(
                             DeviceContact(
                                 id = contactId,
-                                displayName = displayName.ifBlank { "Sem nome" },
+                                displayName = displayName.ifBlank {
+                                context.getString(R.string.contact_no_name)
+                            },
                                 phoneE164 = normalized.phoneE164
                             )
                         )

@@ -75,12 +75,16 @@
     <string name="privacy_first_description">O CallGuard não exibe anúncios e não monetiza seus dados.</string>
     <string name="terms_of_use">Termos de uso</string>
     <string name="terms_description">Leia as regras de uso do aplicativo.</string>
+    <string name="terms_of_use_body">Ao usar o CallGuard, você concorda com estes termos.\n\nO CallGuard avalia chamadas recebidas comparando com uma lista de números que você escolhe permitir (sua whitelist) e, se você ativar como recurso Premium, com os contatos do seu aparelho. Toda essa avaliação acontece localmente no seu dispositivo; seu histórico de chamadas e sua whitelist nunca são enviados a nenhum servidor.\n\nO CallGuard não garante que toda chamada indesejada será bloqueada nem que toda chamada desejada será permitida — você é responsável por revisar e ajustar sua whitelist e configurações.\n\nSe você assinar o Premium, a compra é processada pelo Google Play Billing sob os próprios termos do Google; o CallGuard apenas lê o resultado dessa compra para liberar os recursos.\n\nVocê pode parar de usar o CallGuard e desinstalá-lo a qualquer momento, o que também remove todos os dados armazenados no seu dispositivo.\n\nEsta é uma versão preliminar dos nossos termos e pode ser atualizada conforme o app evolui.</string>
     <string name="privacy_policy">Política de privacidade</string>
     <string name="privacy_policy_description">Entenda como seus dados e permissões são tratados.</string>
+    <string name="privacy_policy_body">O CallGuard foi criado para manter seus dados no seu dispositivo.\n\nO que acessamos: com sua permissão, o CallGuard lê o número da chamada recebida apenas para decidir se ela deve ser permitida ou bloqueada e, como recurso Premium opcional, os contatos do seu aparelho, para permitir automaticamente chamadas de pessoas que você já conhece. Nenhum desses dados sai do seu dispositivo ou é enviado para nós ou para terceiros.\n\nO que armazenamos: sua whitelist, o histórico de decisões de chamadas e suas configurações ficam salvos localmente no armazenamento privado do app. Desinstalar o app apaga esses dados.\n\nCobrança: se você assinar o Premium, o Google Play Billing processa o pagamento; recebemos apenas a confirmação de que a assinatura está ativa, não os dados do seu pagamento.\n\nSem anúncios, sem análise de uso, sem rastreamento: o CallGuard não inclui SDKs de publicidade ou analytics e não vende nem compartilha seus dados.\n\nEsta é uma versão preliminar da nossa política de privacidade e pode ser atualizada conforme o app evolui.</string>
     <string name="language">Idioma</string>
     <string name="change_language">Alterar o idioma do app.</string>
     <string name="no_ads">Sem anúncios</string>
     <string name="app_version">Versão 1.0.0</string>
+    <string name="contact_no_name">Sem nome</string>
+    <string name="whitelist_number_already_exists">Este número já está na whitelist.</string>
 
     <string name="contacts_permission_title">Permissão de contatos</string>
     <string name="contacts_permission_subtitle">Transparência antes de solicitar acesso.</string>
@@ -103,6 +107,7 @@
     <string name="contacts_activated">Contatos ativados</string>
     <string name="contacts_imported_count">%1$d números válidos foram encontrados e podem ser usados como permitidos.</string>
     <string name="contacts_read_error">Não foi possível ler os contatos</string>
+    <string name="contacts_read_error_generic">Verifique a permissão de contatos e tente novamente.</string>
 
     <string name="clear_history">Limpar histórico</string>
     <string name="clear_history_dialog_title">Limpar histórico?</string>
@@ -126,6 +131,8 @@
     <string name="reason_allowed_by_contacts">nos contatos</string>
 
     <string name="protection_setup_button">Abrir configurações do Android</string>
+    <string name="protection_setup_button_grant">Conceder permissão</string>
+    <string name="protection_setup_active_description">O CallGuard já está definido como seu app de triagem de chamadas.</string>
     <string name="protection_setup_description">Ative o CallGuard como serviço de filtragem/bloqueio de chamadas nas configurações do telefone.</string>
     <string name="activate_protection_title">Ativar proteção</string>
     <string name="allow_filter_calls">Permita que o CallGuard filtre chamadas</string>

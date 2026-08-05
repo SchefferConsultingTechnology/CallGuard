@@ -8,7 +8,8 @@ import kotlinx.coroutines.flow.map
 import java.util.UUID
 
 class WhitelistRepository(
-    private val dao: AllowedNumberDao
+    private val dao: AllowedNumberDao,
+    private val fallbackLabel: String
 ) {
     fun observeAllowedNumbers(): Flow<List<AllowedNumber>> {
         return dao.observeAll().map { list ->
@@ -41,7 +42,7 @@ class WhitelistRepository(
         dao.insert(
             AllowedNumberEntity(
                 id = UUID.randomUUID().toString(),
-                label = label.ifBlank { "Sem nome" },
+                label = label.ifBlank { fallbackLabel },
                 phoneE164 = phoneE164,
                 createdAt = now,
                 updatedAt = now

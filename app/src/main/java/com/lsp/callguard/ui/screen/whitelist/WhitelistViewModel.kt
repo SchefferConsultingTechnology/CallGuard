@@ -6,6 +6,7 @@ import com.lsp.callguard.data.local.preferences.LicensePreferences
 import com.lsp.callguard.data.repository.AddAllowedNumberResult
 import com.lsp.callguard.data.repository.WhitelistRepository
 import com.lsp.callguard.domain.model.AllowedNumber
+import com.lsp.callguard.domain.model.FREE_WHITELIST_LIMIT
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -14,8 +15,6 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-
-private const val FREE_WHITELIST_LIMIT = 5
 
 data class WhitelistUiState(
     val numbers: List<AllowedNumber> = emptyList(),

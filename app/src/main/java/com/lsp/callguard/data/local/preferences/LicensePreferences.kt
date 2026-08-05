@@ -24,10 +24,15 @@ class LicensePreferences(
             )
         }
 
-    suspend fun setMockLicenseActive(value: Boolean) {
+    suspend fun setLicenseActive(value: Boolean) {
         dataStore.edit { preferences ->
             preferences[Keys.IS_LICENSED] = value
             preferences[Keys.PLAN_NAME] = if (value) "Premium" else "Free"
         }
+    }
+
+    /** Debug-only override, kept separate so its intent is unambiguous at call sites. */
+    suspend fun setMockLicenseActive(value: Boolean) {
+        setLicenseActive(value)
     }
 }

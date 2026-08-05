@@ -17,5 +17,9 @@ sealed class Routes(val route: String) {
 
     data object ContactsImport : Routes("contacts_import")
 
+    data object Terms : Routes("terms")
+
+    data object PrivacyPolicy : Routes("privacy_policy")
+
 }
 

@@ -78,7 +78,7 @@ fun ContactsImportScreen(
                     ContactsImportLoading()
                 }
 
-                uiState.errorMessage != null -> {
+                uiState.hasError -> {
                     ContactsImportError(
                         message = uiState.errorMessage
                     )
@@ -193,7 +193,7 @@ private fun ContactsImportSuccess(
 
 @Composable
 private fun ContactsImportError(
-    message: String
+    message: String?
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -238,7 +238,8 @@ private fun ContactsImportError(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = message,
+                text = message?.takeIf { it.isNotBlank() }
+                    ?: stringResource(R.string.contacts_read_error_generic),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center

@@ -51,6 +51,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.lsp.callguard.BuildConfig
 import com.lsp.callguard.R
 
 @Composable
@@ -246,15 +247,17 @@ private fun LicenseCard(
             text = stringResource(R.string.subscription_benefits)
         )
 
-        SettingsDivider()
+        if (BuildConfig.DEBUG) {
+            SettingsDivider()
 
-        SettingsSwitchRow(
-            icon = Icons.Outlined.WorkspacePremium,
-            title = stringResource(R.string.license_mock_mode),
-            description = stringResource(R.string.license_mock_mode_description),
-            checked = isLicensed,
-            onCheckedChange = onMockLicenseChange
-        )
+            SettingsSwitchRow(
+                icon = Icons.Outlined.WorkspacePremium,
+                title = stringResource(R.string.license_mock_mode),
+                description = stringResource(R.string.license_mock_mode_description),
+                checked = isLicensed,
+                onCheckedChange = onMockLicenseChange
+            )
+        }
     }
 }
 

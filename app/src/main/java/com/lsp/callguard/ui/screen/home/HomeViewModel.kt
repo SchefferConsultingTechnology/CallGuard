@@ -6,12 +6,12 @@ import com.lsp.callguard.data.local.dao.DeviceContactDao
 import com.lsp.callguard.data.local.preferences.SettingsPreferences
 import com.lsp.callguard.data.local.preferences.LicensePreferences
 import com.lsp.callguard.data.repository.WhitelistRepository
+import com.lsp.callguard.domain.model.FREE_WHITELIST_LIMIT
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
-
-private const val FREE_WHITELIST_LIMIT = 5
+import kotlinx.coroutines.launch
 
 data class HomeUiState(
     val whitelistCount: Int = 0,
@@ -27,11 +27,17 @@ data class HomeUiState(
 
 class HomeViewModel(
     repository: WhitelistRepository,
-    settingsPreferences: SettingsPreferences,
+    private val settingsPreferences: SettingsPreferences,
     licensePreferences: LicensePreferences,
     deviceContactDao: DeviceContactDao
 
 ) : ViewModel() {
+
+    fun syncProtectionState(isHeld: Boolean) {
+        viewModelScope.launch {
+            settingsPreferences.setProtectionEnabled(isHeld)
+        }
+    }
 
     val uiState: StateFlow<HomeUiState> =
         combine(

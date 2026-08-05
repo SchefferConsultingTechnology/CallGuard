@@ -49,8 +49,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.lsp.callguard.R
-
-private const val FREE_WHITELIST_LIMIT = 5
+import com.lsp.callguard.domain.model.FREE_WHITELIST_LIMIT
 
 @Composable
 fun HomeScreen(

@@ -37,8 +37,20 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
+    }
+
+    sourceSets {
+        getByName("androidTest") {
+            assets.srcDirs("$projectDir/schemas")
+        }
     }
 }
+
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
 val roomVersion = "2.8.4"
 dependencies {
     implementation(libs.androidx.core.ktx)
@@ -55,12 +67,26 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
+    implementation(libs.billing.ktx)
     ksp(libs.androidx.room.compiler)
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation(libs.androidx.room.testing)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+}
+
+// The Compose BOM strictly pins kotlinx-serialization-core to 1.7.3, but Room 2.8.4's
+// bundled schema-bundle serializers were generated against >= 1.8.0 (GeneratedSerializer.
+// typeParametersSerializers()), so 1.7.3 crashes MigrationTestHelper at runtime with an
+// AbstractMethodError. Force a compatible version on the androidTest classpath only.
+configurations.matching { it.name.contains("AndroidTest") }.configureEach {
+    resolutionStrategy {
+        force("org.jetbrains.kotlinx:kotlinx-serialization-core:1.8.1")
+        force("org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.8.1")
+    }
 }

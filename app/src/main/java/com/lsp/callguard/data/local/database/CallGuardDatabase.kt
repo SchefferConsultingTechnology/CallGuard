@@ -38,7 +38,7 @@ abstract class CallGuardDatabase : RoomDatabase() {
                     context.applicationContext,
                     CallGuardDatabase::class.java,
                     "callguard.db"
-                ).fallbackToDestructiveMigration(dropAllTables=true)
+                ).fallbackToDestructiveMigrationOnDowngrade(dropAllTables = true)
                  .build().also { INSTANCE = it }
             }
         }

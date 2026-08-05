@@ -1,7 +1,10 @@
 package com.lsp.callguard.ui.screen.protection
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.provider.Settings
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -15,21 +18,59 @@ import androidx.compose.material.icons.outlined.PrivacyTip
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import com.lsp.callguard.R
+import com.lsp.callguard.domain.protection.CallScreeningRoleChecker
 
 @Composable
 fun ProtectionSetupScreen(
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onProtectionStateChanged: (Boolean) -> Unit
 ) {
     val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val currentOnProtectionStateChanged by rememberUpdatedState(onProtectionStateChanged)
+
+    var isProtectionActive by remember {
+        mutableStateOf(CallScreeningRoleChecker.isRoleHeld(context))
+    }
+
+    fun refreshRoleState() {
+        val isHeld = CallScreeningRoleChecker.isRoleHeld(context)
+        isProtectionActive = isHeld
+        currentOnProtectionStateChanged(isHeld)
+    }
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                refreshRoleState()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
+
+    val roleRequestLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) {
+        refreshRoleState()
+    }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -42,21 +83,41 @@ fun ProtectionSetupScreen(
             ) {
                 Button(
                     onClick = {
-                        val intent = Intent(Settings.ACTION_SETTINGS)
-                        context.startActivity(intent)
+                        val roleIntent = CallScreeningRoleChecker.createRequestRoleIntent(context)
+
+                        if (roleIntent != null) {
+                            roleRequestLauncher.launch(roleIntent)
+                        } else {
+                            try {
+                                context.startActivity(CallScreeningRoleChecker.createLegacyFallbackIntent())
+                            } catch (_: ActivityNotFoundException) {
+                                context.startActivity(Intent(Settings.ACTION_SETTINGS))
+                            }
+                        }
                     },
+                    enabled = !isProtectionActive,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(54.dp),
                     shape = RoundedCornerShape(16.dp)
                 ) {
-                    Text(stringResource(R.string.protection_setup_button))
+                    Text(
+                        if (isProtectionActive) {
+                            stringResource(R.string.protection_status_active)
+                        } else {
+                            stringResource(R.string.protection_setup_button_grant)
+                        }
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Text(
-                    text = stringResource(R.string.protection_setup_description),
+                    text = if (isProtectionActive) {
+                        stringResource(R.string.protection_setup_active_description)
+                    } else {
+                        stringResource(R.string.protection_setup_description)
+                    },
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,

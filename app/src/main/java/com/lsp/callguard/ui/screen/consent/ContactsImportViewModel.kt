@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 data class ContactsImportUiState(
     val isLoading: Boolean = false,
     val importedCount: Int = 0,
+    val hasError: Boolean = false,
     val errorMessage: String? = null
 )
 
@@ -45,7 +46,8 @@ class ContactsImportViewModel(
             } catch (error: Exception) {
                 _uiState.value = ContactsImportUiState(
                     isLoading = false,
-                    errorMessage = error.message ?: "Não foi possível ler os contatos."
+                    hasError = true,
+                    errorMessage = error.message
                 )
             }
         }

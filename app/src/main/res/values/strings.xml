@@ -75,12 +75,16 @@
     <string name="privacy_first_description">CallGuard does not show ads and does not monetize your data.</string>
     <string name="terms_of_use">Terms of use</string>
     <string name="terms_description">Read the app usage rules.</string>
+    <string name="terms_of_use_body">By using CallGuard you agree to these terms.\n\nCallGuard evaluates incoming calls against a list of numbers you choose to allow (your whitelist) and, if you enable it as a Premium feature, your device contacts. All of this evaluation happens locally on your device; your call history and whitelist are never uploaded to any server.\n\nCallGuard does not guarantee that every unwanted call will be blocked or that every wanted call will be allowed — you are responsible for reviewing and adjusting your whitelist and settings.\n\nIf you subscribe to Premium, the purchase is processed by Google Play Billing under Google’s own terms; CallGuard only reads the resulting entitlement to unlock features.\n\nYou may stop using CallGuard and remove it at any time, which also removes all of the data it stored on your device.\n\nThis is a preliminary version of our terms and may be updated as the app evolves.</string>
     <string name="privacy_policy">Privacy policy</string>
     <string name="privacy_policy_description">Understand how your data and permissions are handled.</string>
+    <string name="privacy_policy_body">CallGuard is built to keep your data on your device.\n\nWhat we access: with your permission, CallGuard reads incoming call numbers only to decide whether to allow or block a specific call, and — as an optional Premium feature — your device contacts, to automatically allow calls from people you already know. None of this data leaves your device or is sent to us or to any third party.\n\nWhat we store: your whitelist, call decision history and settings are stored locally in the app’s private storage. Uninstalling the app deletes this data.\n\nBilling: if you subscribe to Premium, Google Play Billing handles the payment; we only receive confirmation that your subscription is active, not your payment details.\n\nNo ads, no analytics, no tracking: CallGuard does not include advertising or analytics SDKs and does not sell or share your data.\n\nThis is a preliminary version of our privacy policy and may be updated as the app evolves.</string>
     <string name="language">Language</string>
     <string name="change_language">Change the app language.</string>
     <string name="no_ads">No ads</string>
     <string name="app_version">Version 1.0.0</string>
+    <string name="contact_no_name">No name</string>
+    <string name="whitelist_number_already_exists">This number is already in the whitelist.</string>
 
     <string name="contacts_permission_title">Contact permission</string>
     <string name="contacts_permission_subtitle">Transparency before requesting access.</string>
@@ -103,6 +107,7 @@
     <string name="contacts_activated">Contacts activated</string>
     <string name="contacts_imported_count">%1$d valid numbers were found and can be used as allowed.</string>
     <string name="contacts_read_error">Unable to read contacts</string>
+    <string name="contacts_read_error_generic">Please check the contacts permission and try again.</string>
 
     <string name="clear_history">Clear history</string>
     <string name="clear_history_dialog_title">Clear history?</string>
@@ -126,6 +131,8 @@
     <string name="reason_allowed_by_contacts">in contacts</string>
 
     <string name="protection_setup_button">Open Android settings</string>
+    <string name="protection_setup_button_grant">Grant permission</string>
+    <string name="protection_setup_active_description">CallGuard is already set as your call screening app.</string>
     <string name="protection_setup_description">Enable CallGuard as a call filtering/blocking service in phone settings.</string>
     <string name="activate_protection_title">Enable protection</string>
     <string name="allow_filter_calls">Allow CallGuard to filter calls</string>

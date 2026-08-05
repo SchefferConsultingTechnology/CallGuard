@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import com.lsp.callguard.R
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -11,14 +13,15 @@ import com.lsp.callguard.data.local.preferences.LanguagePreferences
 import com.lsp.callguard.ui.screen.language.LanguageSelectionScreen
 import com.lsp.callguard.ui.screen.language.rememberLanguageSelectionViewModel
 import com.lsp.callguard.ui.screen.onboarding.OnboardingScreen
-import com.lsp.callguard.ui.screen.paywall.PaywallScreen
+import com.lsp.callguard.ui.screen.paywall.PaywallRoute
 import com.lsp.callguard.core.language.LocaleManagerHelper
 import com.lsp.callguard.ui.screen.consent.ContactsConsentRoute
 import com.lsp.callguard.ui.screen.consent.ContactsConsentScreen
 import com.lsp.callguard.ui.screen.contacts.ContactsImportRoute
 import com.lsp.callguard.ui.screen.history.CallHistoryRoute
 import com.lsp.callguard.ui.screen.home.HomeRoute
-import com.lsp.callguard.ui.screen.protection.ProtectionSetupScreen
+import com.lsp.callguard.ui.screen.legal.LegalScreen
+import com.lsp.callguard.ui.screen.protection.ProtectionSetupRoute
 import com.lsp.callguard.ui.screen.settings.SettingsRoute
 import com.lsp.callguard.ui.screen.whitelist.WhitelistRoute
 
@@ -34,7 +37,7 @@ fun CallGuardNavHost( languagePreferences: LanguagePreferences) {
     ) {
 
         composable(Routes.ProtectionSetup.route) {
-            ProtectionSetupScreen(
+            ProtectionSetupRoute(
                 onBack = { navController.popBackStack() }
             )
         }
@@ -118,10 +121,10 @@ fun CallGuardNavHost( languagePreferences: LanguagePreferences) {
                     navController.navigate(Routes.Language.route)
                 },
                 onOpenTerms = {
-                    // depois
+                    navController.navigate(Routes.Terms.route)
                 },
                 onOpenPrivacyPolicy = {
-                    // depois
+                    navController.navigate(Routes.PrivacyPolicy.route)
                 },
                 {
                     // depois
@@ -130,11 +133,13 @@ fun CallGuardNavHost( languagePreferences: LanguagePreferences) {
         }
 
         composable(Routes.Paywall.route) {
-            PaywallScreen(
-                onSubscribeClick = {
-                    // depois entra a integração com billing
-                },
+            PaywallRoute(
                 onContinueFreeClick = {
+                    navController.navigate(Routes.Home.route) {
+                        popUpTo(Routes.Paywall.route) { inclusive = true }
+                    }
+                },
+                onPurchased = {
                     navController.navigate(Routes.Home.route) {
                         popUpTo(Routes.Paywall.route) { inclusive = true }
                     }
@@ -160,8 +165,12 @@ fun CallGuardNavHost( languagePreferences: LanguagePreferences) {
                 onOpenPaywall = {
                     navController.navigate(Routes.Paywall.route)
                 },
-                onOpenTerms = { },
-                onOpenPrivacyPolicy = { }
+                onOpenTerms = {
+                    navController.navigate(Routes.Terms.route)
+                },
+                onOpenPrivacyPolicy = {
+                    navController.navigate(Routes.PrivacyPolicy.route)
+                }
             )
         }
 
@@ -172,6 +181,22 @@ fun CallGuardNavHost( languagePreferences: LanguagePreferences) {
                         popUpTo(Routes.ContactsImport.route) { inclusive = true }
                     }
                 }
+            )
+        }
+
+        composable(Routes.Terms.route) {
+            LegalScreen(
+                title = stringResource(R.string.terms_of_use),
+                body = stringResource(R.string.terms_of_use_body),
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(Routes.PrivacyPolicy.route) {
+            LegalScreen(
+                title = stringResource(R.string.privacy_policy),
+                body = stringResource(R.string.privacy_policy_body),
+                onBack = { navController.popBackStack() }
             )
         }
 
