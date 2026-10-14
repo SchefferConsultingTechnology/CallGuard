@@ -119,7 +119,8 @@ fun CallHistoryScreen(
                 }
 
                 items(uiState.logs, key = { it.id }) { log ->
-                    CallHistoryItemCard(log = log)
+                    val displayPhone = uiState.displayPhones[log.id]
+                    CallHistoryItemCard(log = log, displayPhone = displayPhone)
                 }
             }
         }
@@ -318,9 +319,10 @@ private fun SummaryPill(
 
 @Composable
 private fun CallHistoryItemCard(
-    log: CallDecisionLog
+    log: CallDecisionLog,
+    displayPhone: String?
 ) {
-    val title = log.normalizedPhone ?: log.phone ?: stringResource(R.string.private_number)
+    val title = displayPhone?.takeIf { it.isNotBlank() } ?: stringResource(R.string.private_number)
     val statusText = if (log.allowed) stringResource(R.string.status_allowed) else stringResource(R.string.status_blocked)
     val icon = if (log.allowed) Icons.Outlined.Verified else Icons.Outlined.Block
 
@@ -397,8 +399,12 @@ private fun formatReason(reason: String): String {
         "BLOCKED_NOT_IN_WHITELIST" -> stringResource(R.string.reason_blocked_not_in_whitelist)
         "BLOCKED_PRIVATE_NUMBER" -> stringResource(R.string.reason_blocked_private_number)
         "ALLOWED_PRIVATE_NUMBER_DISABLED" -> stringResource(R.string.reason_private_disabled)
-        "INVALID_NUMBER" -> stringResource(R.string.reason_invalid_number)
         "ALLOWED_BY_CONTACTS" -> stringResource(R.string.reason_allowed_by_contacts)
+        "BLOCKED_UNKNOWN_UNPARSEABLE" -> stringResource(R.string.reason_unparseable_blocked)
+        "ALLOWED_UNPARSEABLE_UNKNOWN_DISABLED" -> stringResource(R.string.reason_unparseable_allowed)
+        "ALLOWED_NORMALIZATION_ERROR" -> stringResource(R.string.reason_normalization_error)
+        // legacy rows written before 001
+        "INVALID_NUMBER" -> stringResource(R.string.reason_invalid_number)
         else -> reason
     }
 }

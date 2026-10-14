@@ -21,7 +21,9 @@ fun WhitelistRoute(
 
     val snackbarHostState = remember { SnackbarHostState() }
     var showLimitDialog by remember { mutableStateOf(false) }
+    val phoneExample by viewModel.phoneExample.collectAsState()
     val numberAlreadyExistsMessage = stringResource(R.string.whitelist_number_already_exists)
+    val invalidNumberMessage = stringResource(R.string.phone_invalid_help)
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
@@ -33,6 +35,12 @@ fun WhitelistRoute(
                 WhitelistEvent.NumberAlreadyExists -> {
                     snackbarHostState.showSnackbar(
                         message = numberAlreadyExistsMessage
+                    )
+                }
+
+                WhitelistEvent.InvalidNumber -> {
+                    snackbarHostState.showSnackbar(
+                        message = invalidNumberMessage
                     )
                 }
             }
@@ -48,6 +56,8 @@ fun WhitelistRoute(
         },
         onBack = onBack,
         onOpenPaywall = onOpenPaywall,
+        phoneExample = phoneExample,
+        previewFor = viewModel::previewFor,
         onAddNumber = viewModel::addNumber,
         onDeleteNumber = viewModel::deleteNumber
     )

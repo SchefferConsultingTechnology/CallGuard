@@ -3,6 +3,7 @@ package com.lsp.callguard.telecom.screening
 import android.telecom.Call
 import android.telecom.CallScreeningService
 import android.util.Log
+import com.lsp.callguard.core.phone.PhoneServices
 import com.lsp.callguard.data.local.database.CallGuardDatabase
 import com.lsp.callguard.data.local.preferences.SettingsPreferences
 import com.lsp.callguard.data.local.preferences.appPreferencesDataStore
@@ -54,24 +55,30 @@ class AppCallScreeningService : CallScreeningService() {
 
         val license = licensePreferences.licenseFlow.first()
 
+        val defaultRegion = PhoneServices.regionProvider(applicationContext).defaultRegion()
+
         val engine = CallDecisionEngine(
             allowedNumberDao = database.allowedNumberDao(),
-            deviceContactDao = database.deviceContactDao()
+            deviceContactDao = database.deviceContactDao(),
+            normalizer = PhoneServices.normalizer
         )
 
         val decision = engine.evaluate(
             phone = phoneNumber,
             settings = settings,
-            isLicensed = license.isLicensed
+            isLicensed = license.isLicensed,
+            defaultRegion = defaultRegion
         )
 
         val logRepository = CallDecisionLogRepository(
-            dao = database.callDecisionLogDao()
+            dao = database.callDecisionLogDao(),
+            normalizer = PhoneServices.normalizer
         )
 
         logRepository.logDecision(
             originalPhone = phoneNumber,
-            decision = decision
+            decision = decision,
+            defaultRegion = defaultRegion
         )
 
         Log.d(

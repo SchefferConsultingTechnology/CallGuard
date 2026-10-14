@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import com.lsp.callguard.data.local.entity.DeviceContactEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -24,5 +25,12 @@ interface DeviceContactDao {
 
     @Query("DELETE FROM device_contacts")
     suspend fun clear()
+
+    /** Swaps the whole cache atomically so call screening never sees it empty. */
+    @Transaction
+    suspend fun replaceAll(contacts: List<DeviceContactEntity>) {
+        clear()
+        insertAll(contacts)
+    }
 }
 

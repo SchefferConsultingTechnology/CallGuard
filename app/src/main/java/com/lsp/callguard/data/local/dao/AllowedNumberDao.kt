@@ -28,4 +28,10 @@ interface AllowedNumberDao {
 
     @Query("DELETE FROM allowed_numbers WHERE id = :id")
     suspend fun deleteById(id: String)
+
+    @Query("SELECT * FROM allowed_numbers")
+    suspend fun getAll(): List<AllowedNumberEntity>
+
+    @Query("UPDATE allowed_numbers SET phoneE164 = :phoneE164, updatedAt = :updatedAt WHERE id = :id")
+    suspend fun updatePhone(id: String, phoneE164: String, updatedAt: Long)
 }

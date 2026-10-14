@@ -10,9 +10,7 @@ class DeviceContactCacheRepository(
     suspend fun replaceAll(contacts: List<DeviceContact>) {
         val now = System.currentTimeMillis()
 
-        dao.clear()
-
-        dao.insertAll(
+        dao.replaceAll(
             contacts.map {
                 DeviceContactEntity(
                     id = "${it.id}_${it.phoneE164}",
@@ -22,6 +20,10 @@ class DeviceContactCacheRepository(
                 )
             }
         )
+    }
+
+    suspend fun clear() {
+        dao.clear()
     }
 
     suspend fun countByPhone(phoneE164: String): Int {

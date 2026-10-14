@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.lsp.callguard.core.phone.PhoneServices
 import com.lsp.callguard.data.local.database.CallGuardDatabase
 import com.lsp.callguard.data.local.preferences.SettingsPreferences
 import com.lsp.callguard.data.local.preferences.appPreferencesDataStore
@@ -24,7 +25,10 @@ fun ContactsImportRoute(
 
     val viewModel: ContactsImportViewModel = viewModel(
         factory = remember(context) {
-            val contactsRepository = ContactsRepository(context)
+            val contactsRepository = ContactsRepository(
+                context = context,
+                regionProvider = PhoneServices.regionProvider(context)
+            )
             val settingsPreferences = SettingsPreferences(context.appPreferencesDataStore)
             val database = CallGuardDatabase.getInstance(context)
 

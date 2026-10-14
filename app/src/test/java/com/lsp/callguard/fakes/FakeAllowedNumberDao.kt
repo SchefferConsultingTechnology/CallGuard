@@ -31,4 +31,15 @@ class FakeAllowedNumberDao(
     override suspend fun deleteById(id: String) {
         state.value = state.value.filterNot { it.id == id }
     }
+
+    override suspend fun getAll(): List<AllowedNumberEntity> = state.value
+
+    override suspend fun updatePhone(id: String, phoneE164: String, updatedAt: Long) {
+        state.value = state.value.map {
+            if (it.id == id) it.copy(phoneE164 = phoneE164, updatedAt = updatedAt) else it
+        }
+    }
+
+    val current: List<AllowedNumberEntity>
+        get() = state.value
 }

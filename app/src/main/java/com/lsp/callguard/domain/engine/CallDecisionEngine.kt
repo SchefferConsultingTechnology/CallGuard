@@ -3,6 +3,7 @@ package com.lsp.callguard.domain.engine
 import com.lsp.callguard.data.local.dao.AllowedNumberDao
 import com.lsp.callguard.data.local.dao.DeviceContactDao
 import com.lsp.callguard.domain.model.AppSettings
+import com.lsp.callguard.domain.phone.PhoneNormalizationError
 import com.lsp.callguard.domain.phone.PhoneNormalizationResult
 import com.lsp.callguard.domain.phone.PhoneNormalizer
 import kotlinx.coroutines.Dispatchers
@@ -10,13 +11,15 @@ import kotlinx.coroutines.withContext
 
 class CallDecisionEngine(
     private val allowedNumberDao: AllowedNumberDao,
-    private val deviceContactDao: DeviceContactDao
+    private val deviceContactDao: DeviceContactDao,
+    private val normalizer: PhoneNormalizer
 ) {
 
     suspend fun evaluate(
         phone: String?,
         settings: AppSettings,
-        isLicensed: Boolean
+        isLicensed: Boolean,
+        defaultRegion: String?
     ): CallDecision {
         return withContext(Dispatchers.IO) {
             if (phone.isNullOrBlank()) {
@@ -27,11 +30,23 @@ class CallDecisionEngine(
                 }
             }
 
-            val normalized = PhoneNormalizer.normalize(phone)
+            val normalized = normalizer.normalize(phone, defaultRegion)
 
             when (normalized) {
-                is PhoneNormalizationResult.Invalid -> {
-                    CallDecision(false, CallDecisionReason.INVALID_NUMBER)
+                is PhoneNormalizationResult.Invalid -> when {
+                    // Fail-open: a bug while reading the number must never block a call.
+                    normalized.reason == PhoneNormalizationError.INTERNAL_ERROR -> {
+                        CallDecision(true, CallDecisionReason.ALLOWED_NORMALIZATION_ERROR)
+                    }
+
+                    // An unreadable number is just an unknown caller, never blocked for its format.
+                    settings.blockUnknown -> {
+                        CallDecision(false, CallDecisionReason.BLOCKED_UNKNOWN_UNPARSEABLE)
+                    }
+
+                    else -> {
+                        CallDecision(true, CallDecisionReason.ALLOWED_UNPARSEABLE_UNKNOWN_DISABLED)
+                    }
                 }
 
                 is PhoneNormalizationResult.Valid -> {
@@ -75,12 +90,14 @@ class CallDecisionEngine(
     suspend fun shouldAllowCall(
         phone: String?,
         settings: AppSettings,
-        isLicensed: Boolean
+        isLicensed: Boolean,
+        defaultRegion: String?
     ): Boolean {
         return evaluate(
             phone = phone,
             settings = settings,
-            isLicensed = isLicensed
+            isLicensed = isLicensed,
+            defaultRegion = defaultRegion
         ).allow
     }
 }

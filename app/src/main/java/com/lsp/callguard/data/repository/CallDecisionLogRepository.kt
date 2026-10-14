@@ -11,7 +11,8 @@ import kotlinx.coroutines.flow.map
 import java.util.UUID
 
 class CallDecisionLogRepository(
-    private val dao: CallDecisionLogDao
+    private val dao: CallDecisionLogDao,
+    private val normalizer: PhoneNormalizer
 ) {
     fun observeLatestLogs(limit: Int = 100): Flow<List<CallDecisionLog>> {
         return dao.observeLatest(limit).map { list ->
@@ -30,9 +31,10 @@ class CallDecisionLogRepository(
 
     suspend fun logDecision(
         originalPhone: String?,
-        decision: CallDecision
+        decision: CallDecision,
+        defaultRegion: String?
     ) {
-        val normalized = when (val result = PhoneNormalizer.normalize(originalPhone)) {
+        val normalized = when (val result = normalizer.normalize(originalPhone, defaultRegion)) {
             is PhoneNormalizationResult.Valid -> result.phoneE164
             is PhoneNormalizationResult.Invalid -> null
         }

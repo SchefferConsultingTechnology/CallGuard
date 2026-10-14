@@ -103,7 +103,7 @@
     <string name="accept_privacy_text">I have read and accept the Privacy Policy</string>
 
     <string name="contacts_import_title">Reading your contacts</string>
-    <string name="contacts_import_description">We are searching for valid numbers in international format.</string>
+    <string name="contacts_import_description">We are looking for valid numbers in your contacts.</string>
     <string name="contacts_activated">Contacts activated</string>
     <string name="contacts_imported_count">%1$d valid numbers were found and can be used as allowed.</string>
     <string name="contacts_read_error">Unable to read contacts</string>
@@ -129,6 +129,9 @@
     <string name="reason_private_disabled">private number blocking disabled</string>
     <string name="reason_invalid_number">invalid number</string>
     <string name="reason_allowed_by_contacts">in contacts</string>
+    <string name="reason_unparseable_blocked">unrecognized number — unknown calls blocked</string>
+    <string name="reason_unparseable_allowed">unrecognized number — unknown call blocking disabled</string>
+    <string name="reason_normalization_error">could not read the number — allowed for safety</string>
 
     <string name="protection_setup_button">Open Android settings</string>
     <string name="protection_setup_button_grant">Grant permission</string>
@@ -161,9 +164,9 @@
     <string name="view_premium_benefits">View Premium benefits</string>
     <string name="add_number_dialog_title">Add number</string>
     <string name="label_name_or_label">Name or label</string>
-    <string name="phone_international_format">Phone in international format</string>
-    <string name="phone_example">+5549999999999</string>
-    <string name="phone_e164_help">Use E.164 format. Example: +5549999999999</string>
+    <string name="phone_input_label">Phone number</string>
+    <string name="phone_preview">Will be saved as %1$s</string>
+    <string name="phone_invalid_help">Enter the number with area code, or with + and the country code for numbers from abroad.</string>
 
     <!-- PAYWALL -->
 

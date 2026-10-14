@@ -25,6 +25,7 @@ import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.Upgrade
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -51,11 +52,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.lsp.callguard.domain.model.AllowedNumber
-import com.lsp.callguard.domain.phone.PhoneNormalizationResult
 import com.lsp.callguard.R
-import com.lsp.callguard.domain.phone.PhoneNormalizer
 import androidx.compose.ui.res.stringResource
 
 private const val FREE_WHITELIST_LIMIT = 5
@@ -74,7 +73,9 @@ fun WhitelistScreen(
     onDismissLimitDialog: () -> Unit,
     onBack: () -> Unit,
     onOpenPaywall: () -> Unit,
-    onAddNumber: (label: String, phoneE164: String) -> Unit,
+    phoneExample: String?,
+    previewFor: (String) -> PhoneInputPreview,
+    onAddNumber: (label: String, rawInput: String) -> Unit,
     onDeleteNumber: (id: String) -> Unit
 ){
 
@@ -174,6 +175,8 @@ fun WhitelistScreen(
 
     if (showAddDialog) {
         AddWhitelistNumberDialog(
+            phoneExample = phoneExample,
+            previewFor = previewFor,
             onDismiss = { showAddDialog = false },
             onConfirm = { label, phone ->
                 onAddNumber(label, phone)
@@ -385,7 +388,7 @@ private fun EmptyWhitelistCard() {
 
 @Composable
 private fun WhitelistNumberCard(
-    item: AllowedNumber,
+    item: WhitelistItemUi,
     onDelete: () -> Unit
 ) {
     Card(
@@ -436,7 +439,7 @@ private fun WhitelistNumberCard(
                 Spacer(modifier = Modifier.height(3.dp))
 
                 Text(
-                    text = item.phoneE164,
+                    text = item.displayPhone,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -490,23 +493,16 @@ private fun PremiumHintCard(
     }
 }
 
-private fun isValidE164(phone: String): Boolean {
-    return Regex("^\\+[1-9]\\d{7,14}$").matches(phone)
-}
-
-
 @Composable
 private fun AddWhitelistNumberDialog(
+    phoneExample: String?,
+    previewFor: (String) -> PhoneInputPreview,
     onDismiss: () -> Unit,
     onConfirm: (label: String, phone: String) -> Unit
 ) {
     var label by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("") }
-    val normalizedPhone = phone.trim()
-    val normalizedResult = PhoneNormalizer.normalize(phone)
-    val isPhoneValid = normalizedResult is PhoneNormalizationResult.Valid
-
-
+    val preview = previewFor(phone)
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -528,14 +524,23 @@ private fun AddWhitelistNumberDialog(
                 OutlinedTextField(
                     value = phone,
                     onValueChange = { phone = it },
-                    label = { Text(stringResource(R.string.phone_international_format)) },
-                    placeholder = { Text(stringResource(R.string.phone_example)) },
+                    label = { Text(stringResource(R.string.phone_input_label)) },
+                    placeholder = phoneExample?.let { example -> { Text(example) } },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
-                    isError = phone.isNotBlank() && !isPhoneValid,
+                    isError = preview is PhoneInputPreview.Invalid,
                     supportingText = {
-                        if (phone.isNotBlank() && !isPhoneValid) {
-                            Text(stringResource(R.string.phone_e164_help))
+                        when (preview) {
+                            is PhoneInputPreview.Valid -> {
+                                Text(stringResource(R.string.phone_preview, preview.display))
+                            }
+
+                            PhoneInputPreview.Invalid -> {
+                                Text(stringResource(R.string.phone_invalid_help))
+                            }
+
+                            PhoneInputPreview.Empty -> Unit
                         }
                     }
                 )
@@ -543,14 +548,8 @@ private fun AddWhitelistNumberDialog(
         },
         confirmButton = {
             TextButton(
-                onClick = {
-                    val result = PhoneNormalizer.normalize(phone)
-
-                    if (result is PhoneNormalizationResult.Valid) {
-                        onConfirm(label, result.phoneE164)
-                    }
-                },
-                enabled = isPhoneValid
+                onClick = { onConfirm(label, phone) },
+                enabled = preview is PhoneInputPreview.Valid
             ) {
                 Text(stringResource(R.string.add))
             }

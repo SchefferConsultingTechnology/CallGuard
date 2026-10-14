@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lsp.callguard.R
+import com.lsp.callguard.core.phone.PhoneServices
 import com.lsp.callguard.data.local.database.CallGuardDatabase
 import com.lsp.callguard.data.local.preferences.LicensePreferences
 import com.lsp.callguard.data.local.preferences.appPreferencesDataStore
@@ -28,9 +29,13 @@ fun rememberWhitelistViewModel(): WhitelistViewModel {
         object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return WhitelistViewModel(repository,
-                    licensePreferences = licensePreferences
-                    ) as T
+                return WhitelistViewModel(
+                    repository = repository,
+                    licensePreferences = licensePreferences,
+                    normalizer = PhoneServices.normalizer,
+                    formatter = PhoneServices.formatter,
+                    regionProvider = PhoneServices.regionProvider(context)
+                ) as T
             }
         }
     }

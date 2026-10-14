@@ -25,6 +25,23 @@ class FakeDeviceContactDao(
     }
 
     override suspend fun clear() {
+        clearCalls++
         state.value = emptyList()
     }
+
+    /** Mirrors the Room @Transaction: readers never observe an intermediate empty cache. */
+    override suspend fun replaceAll(contacts: List<DeviceContactEntity>) {
+        replaceAllCalls++
+        state.value = contacts
+    }
+
+    /** Standalone clear() calls (outside replaceAll). */
+    var clearCalls = 0
+        private set
+
+    var replaceAllCalls = 0
+        private set
+
+    val current: List<DeviceContactEntity>
+        get() = state.value
 }

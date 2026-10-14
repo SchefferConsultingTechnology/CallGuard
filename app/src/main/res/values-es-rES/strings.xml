@@ -103,7 +103,7 @@
     <string name="accept_privacy_text">He leído y acepto la Política de Privacidad</string>
 
     <string name="contacts_import_title">Leyendo tus contactos</string>
-    <string name="contacts_import_description">Estamos buscando números válidos en formato internacional.</string>
+    <string name="contacts_import_description">Estamos buscando números válidos en tus contactos.</string>
     <string name="contacts_activated">Contactos activados</string>
     <string name="contacts_imported_count">%1$d números válidos fueron encontrados y pueden usarse como permitidos.</string>
     <string name="contacts_read_error">No se pueden leer los contactos</string>
@@ -129,6 +129,9 @@
     <string name="reason_private_disabled">bloqueo de números privados deshabilitado</string>
     <string name="reason_invalid_number">número inválido</string>
     <string name="reason_allowed_by_contacts">en contactos</string>
+    <string name="reason_unparseable_blocked">número no reconocido — llamadas desconocidas bloqueadas</string>
+    <string name="reason_unparseable_allowed">número no reconocido — bloqueo de desconocidos desactivado</string>
+    <string name="reason_normalization_error">no se pudo leer el número — permitida por seguridad</string>
 
     <string name="protection_setup_button">Abrir configuración de Android</string>
     <string name="protection_setup_button_grant">Conceder permiso</string>
@@ -161,9 +164,9 @@
     <string name="view_premium_benefits">Ver beneficios de Premium</string>
     <string name="add_number_dialog_title">Agregar número</string>
     <string name="label_name_or_label">Nombre o etiqueta</string>
-    <string name="phone_international_format">Teléfono en formato internacional</string>
-    <string name="phone_example">+5549999999999</string>
-    <string name="phone_e164_help">Usa el formato E.164. Ejemplo: +5549999999999</string>
+    <string name="phone_input_label">Teléfono</string>
+    <string name="phone_preview">Se guardará como %1$s</string>
+    <string name="phone_invalid_help">Introduce el número con el prefijo de zona, o con + y el código del país para números del extranjero.</string>
 
     <string name="paywallscreen_header_title">Protección completa de llamadas</string>
     <string name="paywallscreen_header_description">Controla quién puede comunicarse contigo, con más privacidad y sin anuncios.</string>
