@@ -3,7 +3,6 @@ package com.lsp.callguard.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.lsp.callguard.R
 import androidx.navigation.compose.NavHost
@@ -28,7 +27,6 @@ import com.lsp.callguard.ui.screen.whitelist.WhitelistRoute
 @Composable
 fun CallGuardNavHost( languagePreferences: LanguagePreferences) {
     val navController = rememberNavController()
-    val context = LocalContext.current
 
     NavHost(
         navController = navController,
@@ -69,7 +67,7 @@ fun CallGuardNavHost( languagePreferences: LanguagePreferences) {
                         navController.navigate(Routes.Onboarding.route) {
                             popUpTo(Routes.Language.route) { inclusive = true }
                         }
-                        LocaleManagerHelper.applyLanguage(context, selectedLanguage)
+                        LocaleManagerHelper.applyLanguage(selectedLanguage)
                     }
                 }
             )

@@ -40,7 +40,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -61,7 +60,6 @@ fun OnboardingScreen(
         AppLanguage.EN_US,
         AppLanguage.ES_ES
     )
-    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
     val persistedLanguage by languagePreferences.selectedLanguageFlow.collectAsState(initial = null)
@@ -177,7 +175,7 @@ fun OnboardingScreen(
                                     localSelection = language
                                     coroutineScope.launch {
                                         languagePreferences.saveSelectedLanguage(language)
-                                        LocaleManagerHelper.applyLanguage(context, language)
+                                        LocaleManagerHelper.applyLanguage(language)
                                     }
                                 }
                             )

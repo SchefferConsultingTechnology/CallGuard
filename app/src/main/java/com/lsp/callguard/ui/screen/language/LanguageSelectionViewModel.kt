@@ -3,6 +3,7 @@ package com.lsp.callguard.ui.screen.language
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lsp.callguard.core.language.AppLanguage
+import com.lsp.callguard.core.language.LocaleManagerHelper
 import com.lsp.callguard.data.local.preferences.LanguagePreferences
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +19,9 @@ class LanguageSelectionViewModel(
     private val languagePreferences: LanguagePreferences
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(LanguageSelectionUiState())
+    private val _uiState = MutableStateFlow(
+        LanguageSelectionUiState(selectedLanguage = LocaleManagerHelper.currentLanguage())
+    )
     val uiState: StateFlow<LanguageSelectionUiState> = _uiState.asStateFlow()
 
     fun onLanguageSelected(language: AppLanguage) {

@@ -1,8 +1,8 @@
 package com.lsp.callguard
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.lsp.callguard.core.language.LocaleManagerHelper
 import com.lsp.callguard.core.theme.CallGuardTheme
@@ -11,7 +11,8 @@ import com.lsp.callguard.data.local.preferences.appPreferencesDataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class MainActivity : ComponentActivity() {
+// AppCompatActivity (not ComponentActivity) is required for per-app language; see LocaleManagerHelper.
+class MainActivity : AppCompatActivity() {
 
     private val languagePreferences by lazy {
         LanguagePreferences(applicationContext.appPreferencesDataStore)
@@ -21,11 +22,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         lifecycleScope.launch {
-            val savedLanguage = languagePreferences.selectedLanguageFlow.first()
-
-            if (savedLanguage != null) {
-                LocaleManagerHelper.applyLanguage(savedLanguage)
-            }
+            LocaleManagerHelper.restoreIfMissing(languagePreferences.selectedLanguageFlow.first())
 
             setContent {
                 CallGuardTheme {
