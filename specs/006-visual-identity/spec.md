@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-15
 
-**Status**: Draft
+**Status**: Implemented (1.7.3)
 
 **Input**: User description: "A imagem em destaque é a escolhida como logo da aplicação. Desenvolver um
 esquema de cores para a aplicação: fundo, cards, botões, botões desabilitados, fonte de textos, textos

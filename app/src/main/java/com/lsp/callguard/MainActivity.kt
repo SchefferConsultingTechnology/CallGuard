@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.lsp.callguard.core.language.LocaleManagerHelper
 import com.lsp.callguard.core.theme.CallGuardTheme
@@ -42,7 +43,14 @@ class MainActivity : AppCompatActivity() {
         AppearancePreferences(applicationContext.appPreferencesDataStore)
     }
 
+    /** Null until the first screen is decided; the splash screen stays up until then. */
+    @Volatile
+    private var startDestination: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Before super.onCreate: swaps Theme.CallGuard.Starting for Theme.CallGuard (spec 006).
+        installSplashScreen().setKeepOnScreenCondition { startDestination == null }
+
         // Theme is read here and never in CallGuardApplication: the call screening service also
         // starts the process, and nothing may delay the call response (constitution I).
         if (savedInstanceState == null && Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
@@ -57,17 +65,18 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             LocaleManagerHelper.restoreIfMissing(languagePreferences.selectedLanguageFlow.first())
 
-            val startDestination = resolveStartRoute()
+            val route = resolveStartRoute()
 
             setContent {
                 CallGuardTheme {
                     CallGuardApp(
                         languagePreferences = languagePreferences,
                         onboardingPreferences = onboardingPreferences,
-                        startDestination = startDestination
+                        startDestination = route
                     )
                 }
             }
+            startDestination = route
         }
     }
 

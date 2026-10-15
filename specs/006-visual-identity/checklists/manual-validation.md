@@ -50,3 +50,24 @@
   para Claro, importado → volta ao Escuro, depois do aviso "Importação concluída".
 - [ ] **Android 8–11 (API 26–30)**: sem emulador dessa versão; a leitura antes de `super.onCreate` e o
   `enableEdgeToEdge` nessas versões não foram vistos em aparelho.
+
+## US1 — Ícone, abertura e logo (2026-10-15, versão 1.7.3)
+
+- [x] **Aprovação (T028)**: símbolo da prévia (`assets/symbol-preview.png`) aprovado para uso pelo
+  responsável ("Vamos testar com a imagem de preview que gerou").
+- [x] **Ícone (SC-002)**: no launcher do Pixel (máscara redonda), o símbolo aparece inteiro sobre navy,
+  sem cortes. Máscaras quadrado arredondado e gota conferidas nas prévias geradas (`symbol-preview.png`).
+  Os `.webp` legados foram removidos (não usados com minSdk 26).
+- [ ] **Ícones temáticos**: a versão monocromática (`ic_launcher_monochrome`) existe e está declarada no
+  adaptive icon, mas a opção do launcher não foi ligada no emulador. Prévia em `assets/mono-preview.png`
+  (gerador).
+- [x] **Abertura sem flash (US1-4)**: gravação a 20 qps de aberturas a frio:
+  - tema escuro: símbolo sobre fundo escuro (brilho ~21) de ~1,25 s a ~3,0 s, sem nenhum quadro branco;
+  - tema claro: símbolo sobre fundo claro.
+  - O símbolo fica direto sobre o fundo, sem círculo (U4).
+- [x] **Apresentação (FR-004)**: símbolo + "Call**Guard**" ("Guard" na cor primária) + tagline em caixa
+  alta, em pt-BR ("PRIVACIDADE EM CADA CHAMADA"), en ("PRIVACY IN EVERY CALL") e es ("PRIVACIDAD EN
+  CADA LLAMADA"), nos temas claro e escuro.
+- [x] **Ficha da Play**: `assets/play-icon-512.png` (512×512, navy, sem texto), gerado do mesmo desenho.
+- [x] **Gates**: 165 testes, lint 0 erros (38 avisos), `assembleRelease` OK. Triagem: desconhecido
+  rejeitado.

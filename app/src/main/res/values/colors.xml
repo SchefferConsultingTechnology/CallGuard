@@ -2,8 +2,6 @@
 <resources>
     <!-- Brand (specs/006-visual-identity). Compose colours live in core/theme/CallGuardPalette. -->
     <color name="brand_navy">#FF0B1F3B</color>
-    <color name="brand_blue">#FF2563EB</color>
-    <color name="brand_cyan">#FF22D3EE</color>
 
     <!-- Window and splash background; values-night overrides it. -->
     <color name="window_background">#FFF5F7FB</color>

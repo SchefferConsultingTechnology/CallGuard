@@ -97,15 +97,15 @@ depende de aprovação do desenho do símbolo (R7), e US2/US3 não dependem dela
 **Independent Test**: quickstart §2 e §3.
 
 - [X] T027 [US1] Desenhar `specs/006-visual-identity/assets/callguard-symbol.svg` (viewBox 108×108, conteúdo dentro do círculo seguro de 66 no centro): hexágono em fita formando o "G" como na prancha, gradiente linear `#2563EB → #22D3EE`; gerar prévia PNG lado a lado com `assets/logo-board.png` (ex.: `rsvg-convert`/Inkscape/Python) e incluir prévia nas máscaras círculo/quadrado/gota
-- [ ] T028 [US1] ⛔ **Ponto de aprovação**: apresentar a prévia à pessoa responsável; iterar T027 até aprovação explícita. Não seguir para T029+ sem aprovação
-- [ ] T029 [P] [US1] Converter o SVG aprovado em `app/src/main/res/drawable/ic_launcher_foreground.xml` (vector 108dp, gradiente via `aapt:attr`), `ic_launcher_background.xml` (navy `@color/brand_navy` sólido), `ic_launcher_monochrome.xml` (mesmo traçado, cor sólida única) e `ic_brand_symbol.xml` (símbolo recortado sem margem do adaptive icon, para uso na UI)
-- [ ] T030 [US1] `app/src/main/res/mipmap-anydpi/ic_launcher.xml` e `ic_launcher_round.xml`: `<monochrome android:drawable="@drawable/ic_launcher_monochrome"/>`; remover `app/src/main/res/mipmap-{m,h,xh,xxh,xxxh}dpi/*.webp` (não usados com minSdk 26) e conferir que nada referencia esses arquivos
-- [ ] T031 [US1] Exportar `specs/006-visual-identity/assets/play-icon-512.png` (512×512, fundo navy, símbolo, sem transparência e sem texto) do SVG aprovado
-- [ ] T032 [US1] Abertura: em `app/src/main/res/values/themes.xml` criar `Theme.CallGuard.Starting` (parent `Theme.SplashScreen`, `windowSplashScreenBackground=@color/window_background`, `windowSplashScreenAnimatedIcon=@drawable/ic_launcher_foreground`, `postSplashScreenTheme=@style/Theme.CallGuard`); aplicar em `<activity .MainActivity android:theme>` no `AndroidManifest.xml`; em `…/MainActivity.kt` chamar `installSplashScreen()` antes de `super.onCreate` e `setKeepOnScreenCondition { startDestination == null }` até a rota inicial ser decidida, com `@Volatile private var startDestination: String? = null` na Activity preenchido pela coroutine que já decide a rota; símbolo direto sobre o fundo do tema, **sem** `windowSplashScreenIconBackgroundColor`
-- [ ] T033 [P] [US1] String `brand_tagline` nos 3 `strings.xml` (contrato appearance-settings)
-- [ ] T034 [US1] Criar `…/ui/components/BrandLogo.kt`: `Image(painterResource(R.drawable.ic_brand_symbol))` + wordmark `buildAnnotatedString` de `stringResource(R.string.app_name)` com "Call" em `onBackground` e "Guard" em `primary` (dividir pelo sufixo "Guard"; se `app_name` não terminar assim, cor única) + tagline em `onSurfaceVariant`, caixa alta com `uppercase(Locale.current)`, `letterSpacing`; `contentDescription` = app_name
-- [ ] T035 [US1] Em `…/ui/screen/onboarding/OnboardingScreen.kt`: substituir o ícone `PhoneLocked` do topo por `BrandLogo`; conferir rolagem em telas pequenas e fonte 200%
-- [ ] T036 [US1] Validar quickstart §2 (máscaras, ícone temático) e §3 (abertura no escuro sem flash, apresentação nos 3 idiomas); registrar em `checklists/manual-validation.md`
+- [X] T028 [US1] ⛔ **Ponto de aprovação**: apresentar a prévia à pessoa responsável; iterar T027 até aprovação explícita. Não seguir para T029+ sem aprovação
+- [X] T029 [P] [US1] Converter o SVG aprovado em `app/src/main/res/drawable/ic_launcher_foreground.xml` (vector 108dp, gradiente via `aapt:attr`), `ic_launcher_background.xml` (navy `@color/brand_navy` sólido), `ic_launcher_monochrome.xml` (mesmo traçado, cor sólida única) e `ic_brand_symbol.xml` (símbolo recortado sem margem do adaptive icon, para uso na UI)
+- [X] T030 [US1] `app/src/main/res/mipmap-anydpi/ic_launcher.xml` e `ic_launcher_round.xml`: `<monochrome android:drawable="@drawable/ic_launcher_monochrome"/>`; remover `app/src/main/res/mipmap-{m,h,xh,xxh,xxxh}dpi/*.webp` (não usados com minSdk 26) e conferir que nada referencia esses arquivos
+- [X] T031 [US1] Exportar `specs/006-visual-identity/assets/play-icon-512.png` (512×512, fundo navy, símbolo, sem transparência e sem texto) do SVG aprovado
+- [X] T032 [US1] Abertura: em `app/src/main/res/values/themes.xml` criar `Theme.CallGuard.Starting` (parent `Theme.SplashScreen`, `windowSplashScreenBackground=@color/window_background`, `windowSplashScreenAnimatedIcon=@drawable/ic_launcher_foreground`, `postSplashScreenTheme=@style/Theme.CallGuard`); aplicar em `<activity .MainActivity android:theme>` no `AndroidManifest.xml`; em `…/MainActivity.kt` chamar `installSplashScreen()` antes de `super.onCreate` e `setKeepOnScreenCondition { startDestination == null }` até a rota inicial ser decidida, com `@Volatile private var startDestination: String? = null` na Activity preenchido pela coroutine que já decide a rota; símbolo direto sobre o fundo do tema, **sem** `windowSplashScreenIconBackgroundColor`
+- [X] T033 [P] [US1] String `brand_tagline` nos 3 `strings.xml` (contrato appearance-settings)
+- [X] T034 [US1] Criar `…/ui/components/BrandLogo.kt`: `Image(painterResource(R.drawable.ic_brand_symbol))` + wordmark `buildAnnotatedString` de `stringResource(R.string.app_name)` com "Call" em `onBackground` e "Guard" em `primary` (dividir pelo sufixo "Guard"; se `app_name` não terminar assim, cor única) + tagline em `onSurfaceVariant`, caixa alta com `uppercase(Locale.current)`, `letterSpacing`; `contentDescription` = app_name
+- [X] T035 [US1] Em `…/ui/screen/onboarding/OnboardingScreen.kt`: substituir o ícone `PhoneLocked` do topo por `BrandLogo`; conferir rolagem em telas pequenas e fonte 200%
+- [X] T036 [US1] Validar quickstart §2 (máscaras, ícone temático) e §3 (abertura no escuro sem flash, apresentação nos 3 idiomas); registrar em `checklists/manual-validation.md`
 
 **Checkpoint**: identidade completa.
 
@@ -113,9 +113,9 @@ depende de aprovação do desenho do símbolo (R7), e US2/US3 não dependem dela
 
 ## Phase 6: Polish & Cross-Cutting
 
-- [ ] T037 Gates: `JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64 ./gradlew --no-daemon -Porg.gradle.java.installations.auto-detect=false :app:testDebugUnitTest :app:lintDebug :app:assembleRelease`; lint sem erros novos; `app/schemas/` inalterado
-- [ ] T038 [P] Não regressão (quickstart §7): `adb emu gsm call` de desconhecido (bloqueado) e de número da whitelist (permitido) com o papel de triagem concedido
-- [ ] T039 [P] Atualizar `specs/006-visual-identity/spec.md` (Status: Implemented) e o guia da Play Console (memória/artefato) com o caminho de `assets/play-icon-512.png`
+- [X] T037 Gates: `JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64 ./gradlew --no-daemon -Porg.gradle.java.installations.auto-detect=false :app:testDebugUnitTest :app:lintDebug :app:assembleRelease`; lint sem erros novos; `app/schemas/` inalterado
+- [X] T038 [P] Não regressão (quickstart §7): `adb emu gsm call` de desconhecido (bloqueado) e de número da whitelist (permitido) com o papel de triagem concedido
+- [X] T039 [P] Atualizar `specs/006-visual-identity/spec.md` (Status: Implemented) e o guia da Play Console (memória/artefato) com o caminho de `assets/play-icon-512.png`
 
 ---
 
