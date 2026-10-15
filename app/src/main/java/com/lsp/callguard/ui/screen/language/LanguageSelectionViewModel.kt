@@ -11,8 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 data class LanguageSelectionUiState(
-    val selectedLanguage: AppLanguage? = null,
-    val isSaving: Boolean = false
+    val selectedLanguage: AppLanguage? = null
 )
 
 class LanguageSelectionViewModel(
@@ -20,23 +19,17 @@ class LanguageSelectionViewModel(
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
-        LanguageSelectionUiState(selectedLanguage = LocaleManagerHelper.currentLanguage())
+        LanguageSelectionUiState(selectedLanguage = LocaleManagerHelper.displayedLanguage())
     )
     val uiState: StateFlow<LanguageSelectionUiState> = _uiState.asStateFlow()
 
+    /** Applies on tap, like the onboarding; the activity is recreated in the new language. */
     fun onLanguageSelected(language: AppLanguage) {
         _uiState.value = _uiState.value.copy(selectedLanguage = language)
-    }
-
-    fun onConfirm(onSaved: () -> Unit) {
-        val language = _uiState.value.selectedLanguage ?: return
 
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isSaving = true)
             languagePreferences.saveSelectedLanguage(language)
-            _uiState.value = _uiState.value.copy(isSaving = false)
-            onSaved()
+            LocaleManagerHelper.applyLanguage(language)
         }
     }
 }
-

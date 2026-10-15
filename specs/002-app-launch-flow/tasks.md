@@ -28,7 +28,7 @@ navegação validada ponta a ponta no emulador (quickstart).
 
 ## Phase 1: Setup
 
-- [ ] T001 Confirmar a linha de base: `./gradlew testDebugUnitTest assembleDebug` verde antes de
+- [X] T001 Confirmar a linha de base: `./gradlew testDebugUnitTest assembleDebug` verde antes de
   qualquer mudança (com as flags acima)
 
 ---
@@ -39,36 +39,36 @@ navegação validada ponta a ponta no emulador (quickstart).
 
 **⚠️ CRITICAL**: Nenhuma user story começa antes desta fase terminar.
 
-- [ ] T002 [P] Criar `enum class OnboardingProgress { NOT_STARTED, ONBOARDING_DONE, COMPLETED }`
+- [X] T002 [P] Criar `enum class OnboardingProgress { NOT_STARTED, ONBOARDING_DONE, COMPLETED }`
   em `main/domain/model/OnboardingProgress.kt` (ordem do enum = ordem de avanço)
-- [ ] T003 [P] Criar `test/core/language/AppLanguageTest.kt`: `forLocale(Locale("pt","BR"))`,
+- [X] T003 [P] Criar `test/core/language/AppLanguageTest.kt`: `forLocale(Locale("pt","BR"))`,
   `Locale("pt","PT")` → `PT_BR`; `Locale("es","MX")` → `ES_ES`; `Locale.US`, `Locale.UK` →
   `EN_US`; `Locale.FRENCH` → `null`
-- [ ] T004 Adicionar em `main/core/language/AppLanguage.kt` (companion)
+- [X] T004 Adicionar em `main/core/language/AppLanguage.kt` (companion)
   `fun forLocale(locale: Locale): AppLanguage?` mapeando por `locale.language` (`pt`, `es`, `en`).
   T003 deve passar
-- [ ] T005 [P] Criar `test/data/local/preferences/OnboardingPreferencesTest.kt` com DataStore em
+- [X] T005 [P] Criar `test/data/local/preferences/OnboardingPreferencesTest.kt` com DataStore em
   `File(tempFolder.root, "onboarding.preferences_pb")`: chave ausente → `progress() == null`;
   `advanceTo(ONBOARDING_DONE)` → lido de volta; `advanceTo(NOT_STARTED)` depois de
   `ONBOARDING_DONE` é ignorado (não regride); `advanceTo(COMPLETED)` final; valor corrompido
   (string desconhecida gravada direto) → `null`
-- [ ] T006 Criar `class OnboardingPreferences(dataStore)` em
+- [X] T006 Criar `class OnboardingPreferences(dataStore)` em
   `main/data/local/preferences/OnboardingPreferences.kt` com
   `stringPreferencesKey("onboarding_progress")`, `suspend fun progress(): OnboardingProgress?`
   (`runCatching { valueOf }`) e `suspend fun advanceTo(progress)` dentro de um único
   `dataStore.edit` que só grava se `progress.ordinal > atual.ordinal` (ou atual ausente).
   T005 deve passar
-- [ ] T007 Em `main/ui/navigation/Routes.kt` trocar `Paywall` para rota com argumento:
+- [X] T007 Em `main/ui/navigation/Routes.kt` trocar `Paywall` para rota com argumento:
   `data object Paywall : Routes("paywall?firstRun={firstRun}") { const val ARG_FIRST_RUN = "firstRun"; fun create(firstRun: Boolean) = "paywall?firstRun=$firstRun" }`
-- [ ] T008 [P] Criar `test/ui/navigation/StartDestinationTest.kt` cobrindo 1:1 as 7 linhas da
+- [X] T008 [P] Criar `test/ui/navigation/StartDestinationTest.kt` cobrindo 1:1 as 7 linhas da
   tabela `resolveStartDestination` em
   `specs/002-app-launch-flow/contracts/launch-navigation.md` (rota e `progressToPersist`)
-- [ ] T009 Criar `main/ui/navigation/StartDestination.kt` com `data class LegacySignals`,
+- [X] T009 Criar `main/ui/navigation/StartDestination.kt` com `data class LegacySignals`,
   `data class StartResolution(route: String, progressToPersist: OnboardingProgress?)` e
   `fun resolveStartDestination(progress, legacy): StartResolution` conforme o contrato (Home =
   `Routes.Home.route`, oferta = `Routes.Paywall.create(firstRun = true)`, apresentação =
   `Routes.Onboarding.route`). T008 deve passar
-- [ ] T010 Rodar `./gradlew testDebugUnitTest assembleDebug` — compila (a rota `Paywall` com
+- [X] T010 Rodar `./gradlew testDebugUnitTest assembleDebug` — compila (a rota `Paywall` com
   argumento ainda não é usada com `navArgument`; usos antigos de `Routes.Paywall.route` serão
   trocados em US1/US4) e testes verdes
 
@@ -85,7 +85,7 @@ reabrir 10× → Home sempre (quickstart §3); atualização de versão anterior
 
 ### Implementation for User Story 1
 
-- [ ] T011 [US1] Em `main/MainActivity.kt`, na coroutine antes do `setContent`: ler
+- [X] T011 [US1] Em `main/MainActivity.kt`, na coroutine antes do `setContent`: ler
   `OnboardingPreferences(appPreferencesDataStore).progress()` em `runCatching` (falha → `null`);
   se `null`, montar `LegacySignals` em `runCatching` (idioma salvo via
   `languagePreferences.selectedLanguageFlow.first() != null`, whitelist via
@@ -94,11 +94,11 @@ reabrir 10× → Home sempre (quickstart §3); atualização de versão anterior
   todos `false` e **não** persistir); chamar `resolveStartDestination`; se
   `progressToPersist != null` e não houve falha, `advanceTo(it)`; passar `resolution.route` para
   `CallGuardApp(startDestination = …)`
-- [ ] T012 [US1] Em `main/CallGuardApp.kt` e `main/ui/navigation/CallGuardNavHost.kt` adicionar o
+- [X] T012 [US1] Em `main/CallGuardApp.kt` e `main/ui/navigation/CallGuardNavHost.kt` adicionar o
   parâmetro `startDestination: String` e usá-lo no `NavHost` no lugar de `Routes.Language.route`;
   o `CallGuardNavHost` recebe também `onboardingPreferences: OnboardingPreferences` (criado em
   `MainActivity` e repassado por `CallGuardApp`)
-- [ ] T013 [US1] Em `main/ui/navigation/CallGuardNavHost.kt` substituir `composable(Routes.Paywall.route)`
+- [X] T013 [US1] Em `main/ui/navigation/CallGuardNavHost.kt` substituir `composable(Routes.Paywall.route)`
   por `composable(route = Routes.Paywall.route, arguments = listOf(navArgument(Routes.Paywall.ARG_FIRST_RUN) { type = NavType.BoolType; defaultValue = false }))`;
   ler `firstRun` do `backStackEntry.arguments`; com `firstRun = true`, `onContinueFreeClick` e
   `onPurchased` fazem, **nesta ordem e dentro da mesma coroutine**:
@@ -108,7 +108,7 @@ reabrir 10× → Home sempre (quickstart §3); atualização de versão anterior
   cliques repetidos enquanto grava (flag `remember { mutableStateOf(false) }`). Com
   `firstRun = false`, ambos fazem
   `navController.popBackStack()` (usado por US4)
-- [ ] T014 [US1] Gerar APK, instalar no emulador e executar quickstart §3 (10 aberturas → Home;
+- [X] T014 [US1] Gerar APK, instalar no emulador e executar quickstart §3 (10 aberturas → Home;
   "voltar" fecha) e §6 (atualização com dados → Home; sem dados → apresentação)
 
 **Checkpoint**: MVP — o incômodo diário (atravessar 3 telas a cada abertura) acabou.
@@ -126,11 +126,11 @@ idioma traduz na hora; "Continuar" → oferta; fechar/reabrir → oferta; "volta
 
 ### Implementation for User Story 2
 
-- [ ] T015 [US2] Em `main/ui/navigation/CallGuardNavHost.kt`, no `composable(Routes.Onboarding.route)`:
+- [X] T015 [US2] Em `main/ui/navigation/CallGuardNavHost.kt`, no `composable(Routes.Onboarding.route)`:
   `onContinue` faz `scope.launch { onboardingPreferences.advanceTo(ONBOARDING_DONE); navController.navigate(Routes.Paywall.create(firstRun = true)) }`
   — navegar só depois de gravar (análise U1) — **sem** `popUpTo` (voltar da oferta retorna à
   apresentação)
-- [ ] T016 [US2] Em `main/ui/screen/onboarding/OnboardingScreen.kt`: seleção inicial =
+- [X] T016 [US2] Em `main/ui/screen/onboarding/OnboardingScreen.kt`: seleção inicial =
   `remember { LocaleManagerHelper.currentLanguage() ?: AppLanguage.forLocale(Locale.getDefault()) ?: AppLanguage.EN_US }`
   (deixar de usar `persistedLanguage`/`collectAsState` do DataStore para isso);
   `localSelection ?: inicial` define o cartão marcado; botão "Continuar" sempre habilitado
@@ -140,11 +140,11 @@ idioma traduz na hora; "Continuar" → oferta; fechar/reabrir → oferta; "volta
   marcar o idioma pelo texto realmente exibido: comparar `stringResource(R.string.app_locale_tag)`
   (nova string com a tag de cada pasta: `en-US`/`pt-BR`/`es-ES`) em vez de `Locale.getDefault()`
   (análise U3)
-- [ ] T017 [US2] Em `main/ui/navigation/CallGuardNavHost.kt` remover do `composable(Routes.Language.route)`
+- [X] T017 [US2] Em `main/ui/navigation/CallGuardNavHost.kt` remover do `composable(Routes.Language.route)`
   a navegação para `Routes.Onboarding` (o destino inicial nunca mais é `Language`; o
   comportamento final da tela vem em US3) — garantir que nenhum caminho do primeiro uso leva à
   tela de idioma
-- [ ] T018 [US2] Instalar no emulador e executar quickstart §2 e §7
+- [X] T018 [US2] Instalar no emulador e executar quickstart §2 e §7
 
 **Checkpoint**: US1 + US2 entregam o fluxo de abertura completo.
 
@@ -159,22 +159,22 @@ idioma traduz na hora; "Continuar" → oferta; fechar/reabrir → oferta; "volta
 
 ### Implementation for User Story 3
 
-- [ ] T019 [US3] Em `main/ui/screen/language/LanguageSelectionViewModel.kt`: `onLanguageSelected`
+- [X] T019 [US3] Em `main/ui/screen/language/LanguageSelectionViewModel.kt`: `onLanguageSelected`
   atualiza o estado, grava em `languagePreferences.saveSelectedLanguage(language)` (em
   `viewModelScope`) e chama `LocaleManagerHelper.applyLanguage(language)`; remover `onConfirm` e
   `isSaving`
-- [ ] T020 [US3] Em `main/ui/screen/language/LanguageSelectionScreen.kt`: trocar o parâmetro
+- [X] T020 [US3] Em `main/ui/screen/language/LanguageSelectionScreen.kt`: trocar o parâmetro
   `onConfirm` por `onDone`; botão inferior com `stringResource(R.string.done)`, sempre habilitado,
   chamando `onDone`; remover o `Text(R.string.language_change_later)`
-- [ ] T021 [US3] Em `main/ui/navigation/CallGuardNavHost.kt`, no `composable(Routes.Language.route)`:
+- [X] T021 [US3] Em `main/ui/navigation/CallGuardNavHost.kt`, no `composable(Routes.Language.route)`:
   `onSelectLanguage = viewModel::onLanguageSelected`, `onDone = { navController.popBackStack() }`;
   remover a leitura de `uiState.selectedLanguage` para navegação e o uso de
   `LocaleManagerHelper` aqui
-- [ ] T022 [P] [US3] Adicionar `done` ("Done" / "Concluir" / "Listo") em `res/values/strings.xml`,
+- [X] T022 [P] [US3] Adicionar `done` ("Done" / "Concluir" / "Listo") em `res/values/strings.xml`,
   `res/values-pt-rBR/strings.xml` e `res/values-es-rES/strings.xml`; remover
   `language_change_later` dos três após `grep -rn language_change_later app/src` confirmar que
   não há outros usos
-- [ ] T023 [US3] Instalar no emulador e executar quickstart §4
+- [X] T023 [US3] Instalar no emulador e executar quickstart §4
 
 **Checkpoint**: US3 funciona sem afetar US1/US2.
 
@@ -189,13 +189,13 @@ idioma traduz na hora; "Continuar" → oferta; fechar/reabrir → oferta; "volta
 
 ### Implementation for User Story 4
 
-- [ ] T024 [US4] Em `main/ui/navigation/CallGuardNavHost.kt` trocar todas as chamadas
+- [X] T024 [US4] Em `main/ui/navigation/CallGuardNavHost.kt` trocar todas as chamadas
   `navController.navigate(Routes.Paywall.route)` dos atalhos internos (Home, Whitelist, Settings,
   ContactsConsent — hoje nas linhas ~85, ~105, ~116, ~164) por
   `navController.navigate(Routes.Paywall.create(firstRun = false))`; confirmar com
   `grep -n "Routes.Paywall.route" main/ui/navigation/CallGuardNavHost.kt` que só resta o uso no
   `composable(route = …)`
-- [ ] T025 [US4] Instalar no emulador e executar quickstart §5
+- [X] T025 [US4] Instalar no emulador e executar quickstart §5
 
 **Checkpoint**: Todas as stories completas.
 
@@ -203,18 +203,18 @@ idioma traduz na hora; "Continuar" → oferta; fechar/reabrir → oferta; "volta
 
 ## Phase 7: Polish & Cross-Cutting Concerns
 
-- [ ] T026 [P] Verificar recriação por troca de idioma em 3 telas (apresentação, oferta com
+- [X] T026 [P] Verificar recriação por troca de idioma em 3 telas (apresentação, oferta com
   `firstRun = true`, tela de idioma das Configurações): a tela atual é preservada (FR-011)
-- [ ] T027 [P] Conferir com `grep -rn "R.string.confirm" app/src/main/java` se `confirm` ainda é
+- [X] T027 [P] Conferir com `grep -rn "R.string.confirm" app/src/main/java` se `confirm` ainda é
   usado; se não, removê-lo dos 3 `strings.xml`
-- [ ] T028 Rodar os gates: `./gradlew testDebugUnitTest lintDebug assembleRelease` e
+- [X] T028 Rodar os gates: `./gradlew testDebugUnitTest lintDebug assembleRelease` e
   `git diff --exit-code app/schemas/`
-- [ ] T029 Executar a validação dos 3 idiomas ponta a ponta (instalação nova em cada idioma do
+- [X] T029 Executar a validação dos 3 idiomas ponta a ponta (instalação nova em cada idioma do
   aparelho/app, aberturas seguintes, troca pelas Configurações) e registrar todos os resultados
   do quickstart em `specs/002-app-launch-flow/checklists/manual-validation.md`, incluindo: fechar o
   app logo após "Continuar grátis" (U1), variante de idioma `pt-PT` (U3) e compra cancelada no
   primeiro uso permanece na oferta (C1)
-- [ ] T030 Atualizar `**Status**: Draft` → `**Status**: Implemented` em
+- [X] T030 Atualizar `**Status**: Draft` → `**Status**: Implemented` em
   `specs/002-app-launch-flow/spec.md`
 
 ---

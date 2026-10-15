@@ -7,7 +7,11 @@ sealed class Routes(val route: String) {
     data object Settings : Routes("settings")
     data object Language : Routes("language")
 
-    data object Paywall : Routes("paywall")
+    data object Paywall : Routes("paywall?firstRun={firstRun}") {
+        const val ARG_FIRST_RUN = "firstRun"
+
+        fun create(firstRun: Boolean) = "paywall?$ARG_FIRST_RUN=$firstRun"
+    }
 
     data object ProtectionSetup : Routes("protection_setup")
 

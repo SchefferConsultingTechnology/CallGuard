@@ -1,5 +1,7 @@
 package com.lsp.callguard.core.language
 
+import java.util.Locale
+
 enum class AppLanguage(
     val code: String,
     val title: String,
@@ -14,6 +16,16 @@ enum class AppLanguage(
 
         fun fromCode(code: String?): AppLanguage? {
             return entries.find { it.code == code }
+        }
+
+        /** Supported language for a device locale, matched by language only (pt-PT → PT_BR). */
+        fun forLocale(locale: Locale): AppLanguage? {
+            return when (locale.language) {
+                "pt" -> PT_BR
+                "es" -> ES_ES
+                "en" -> EN_US
+                else -> null
+            }
         }
 
     }

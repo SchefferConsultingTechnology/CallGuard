@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-14
 
-**Status**: Draft
+**Status**: Implemented
 
 **Input**: User description: "002, fluxo de abertura e idioma. O app sempre abre na tela de seleção
 de idioma; o primeiro uso pergunta o idioma duas vezes; a tela de idioma aberta pelas

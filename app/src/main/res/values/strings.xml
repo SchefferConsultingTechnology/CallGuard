@@ -5,8 +5,7 @@
 
     <string name="language_selection_title">Select your language</string>
     <string name="language_selection_subtitle">Choose the language you want to use in CallGuard.</string>
-    <string name="confirm">Confirm</string>
-    <string name="language_change_later">You can change the language later in settings.</string>
+    <string name="done">Done</string>
 
     <string name="onboarding_title">Protect your calls</string>
     <string name="onboarding_description">CallGuard helps block calls from numbers that are not in your contacts or allowed list.</string>

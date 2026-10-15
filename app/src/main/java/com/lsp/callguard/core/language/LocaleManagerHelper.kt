@@ -2,6 +2,7 @@ package com.lsp.callguard.core.language
 
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
+import java.util.Locale
 
 /**
  * Per-app language through AppCompat.
@@ -26,6 +27,16 @@ object LocaleManagerHelper {
         if (applied.isEmpty) return null
 
         return AppLanguage.fromCode(applied[0]?.toLanguageTag())
+    }
+
+    /**
+     * Language the UI is actually shown in: the app's choice, else the device's when supported,
+     * else English (the default resources).
+     */
+    fun displayedLanguage(): AppLanguage {
+        return currentLanguage()
+            ?: AppLanguage.forLocale(Locale.getDefault())
+            ?: AppLanguage.EN_US
     }
 
     /**
