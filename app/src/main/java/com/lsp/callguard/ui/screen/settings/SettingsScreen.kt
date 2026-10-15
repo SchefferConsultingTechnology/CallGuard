@@ -245,7 +245,7 @@ internal fun AppInfoCard() {
         SettingsItemHeader(
             icon = Icons.Outlined.Settings,
             title = stringResource(R.string.app_name),
-            description = stringResource(R.string.app_version)
+            description = stringResource(R.string.app_version, BuildConfig.VERSION_NAME)
         )
     }
 }
