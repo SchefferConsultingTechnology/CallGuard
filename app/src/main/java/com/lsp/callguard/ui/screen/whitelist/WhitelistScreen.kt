@@ -345,7 +345,7 @@ private fun EmptyWhitelistCard() {
         ) {
             Surface(
                 shape = CircleShape,
-                color = MaterialTheme.colorScheme.primaryContainer,
+                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(54.dp)
             ) {
                 androidx.compose.foundation.layout.Box(
@@ -354,7 +354,7 @@ private fun EmptyWhitelistCard() {
                     Icon(
                         imageVector = Icons.Outlined.Phone,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
+                        tint = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier.size(28.dp)
                     )
                 }
@@ -403,7 +403,7 @@ private fun WhitelistNumberCard(
         ) {
             Surface(
                 shape = CircleShape,
-                color = MaterialTheme.colorScheme.primaryContainer,
+                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(42.dp)
             ) {
                 androidx.compose.foundation.layout.Box(
@@ -412,7 +412,7 @@ private fun WhitelistNumberCard(
                     Icon(
                         imageVector = Icons.Outlined.Phone,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
+                        tint = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier.size(22.dp)
                     )
                 }
@@ -568,7 +568,7 @@ private fun WhitelistCardHeader(
     ) {
         Surface(
             shape = CircleShape,
-            color = MaterialTheme.colorScheme.primaryContainer,
+            color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.size(38.dp)
         ) {
             androidx.compose.foundation.layout.Box(
@@ -577,7 +577,7 @@ private fun WhitelistCardHeader(
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
+                    tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier.size(21.dp)
                 )
             }

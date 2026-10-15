@@ -433,7 +433,7 @@ internal fun SettingsIcon(
 ) {
     Surface(
         shape = CircleShape,
-        color = MaterialTheme.colorScheme.primaryContainer,
+        color = MaterialTheme.colorScheme.primary,
         modifier = Modifier.size(38.dp)
     ) {
         androidx.compose.foundation.layout.Box(
@@ -442,7 +442,7 @@ internal fun SettingsIcon(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
+                tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.size(21.dp)
             )
         }

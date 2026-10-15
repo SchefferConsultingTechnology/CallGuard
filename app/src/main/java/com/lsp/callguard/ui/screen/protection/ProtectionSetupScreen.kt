@@ -158,7 +158,7 @@ fun ProtectionSetupScreen(
                 modifier = Modifier
                     .size(76.dp)
                     .background(
-                        color = MaterialTheme.colorScheme.primaryContainer,
+                        color = MaterialTheme.colorScheme.primary,
                         shape = CircleShape
                     )
                     .align(Alignment.CenterHorizontally),
@@ -167,7 +167,7 @@ fun ProtectionSetupScreen(
                 Icon(
                     imageVector = Icons.Outlined.PhoneLocked,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
+                    tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier.size(38.dp)
                 )
             }
@@ -244,14 +244,14 @@ private fun ProtectionInfoCard(
         ) {
             Surface(
                 shape = CircleShape,
-                color = MaterialTheme.colorScheme.primaryContainer,
+                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(38.dp)
             ) {
                 Box(contentAlignment = Alignment.Center) {
                     Icon(
                         imageVector = icon,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
+                        tint = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier.size(21.dp)
                     )
                 }

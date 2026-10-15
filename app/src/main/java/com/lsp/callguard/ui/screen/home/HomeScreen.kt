@@ -312,14 +312,14 @@ private fun HomeCardHeader(
     ) {
         Surface(
             shape = CircleShape,
-            color = MaterialTheme.colorScheme.primaryContainer,
+            color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.size(38.dp)
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
+                    tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier.size(21.dp)
                 )
             }

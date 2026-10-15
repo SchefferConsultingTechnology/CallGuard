@@ -99,7 +99,7 @@ fun OnboardingScreen(
                         modifier = Modifier
                             .size(72.dp)
                             .background(
-                                color = MaterialTheme.colorScheme.primaryContainer,
+                                color = MaterialTheme.colorScheme.primary,
                                 shape = CircleShape
                             ),
                         contentAlignment = Alignment.Center
@@ -107,7 +107,7 @@ fun OnboardingScreen(
                         Icon(
                             imageVector = Icons.Outlined.PhoneLocked,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
+                            tint = MaterialTheme.colorScheme.onPrimary,
                             modifier = Modifier.size(34.dp)
                         )
                     }

@@ -183,7 +183,7 @@ private fun PaywallHeader() {
             modifier = Modifier
                 .size(60.dp)
                 .background(
-                    color = MaterialTheme.colorScheme.primaryContainer,
+                    color = MaterialTheme.colorScheme.primary,
                     shape = CircleShape
                 ),
             contentAlignment = Alignment.Center
@@ -191,7 +191,7 @@ private fun PaywallHeader() {
             Icon(
                 imageVector = Icons.Outlined.WorkspacePremium,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
+                tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.size(30.dp)
             )
         }

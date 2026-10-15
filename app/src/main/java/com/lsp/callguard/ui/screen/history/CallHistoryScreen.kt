@@ -272,7 +272,7 @@ private fun EmptyHistoryCard() {
         ) {
             Surface(
                 shape = CircleShape,
-                color = MaterialTheme.colorScheme.primaryContainer,
+                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(58.dp)
             ) {
                 androidx.compose.foundation.layout.Box(
@@ -281,7 +281,7 @@ private fun EmptyHistoryCard() {
                     Icon(
                         imageVector = Icons.Outlined.History,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
+                        tint = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier.size(30.dp)
                     )
                 }
