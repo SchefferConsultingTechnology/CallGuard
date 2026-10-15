@@ -12,8 +12,12 @@ interface CallDecisionLogDao {
     @Insert
     suspend fun insert(entity: CallDecisionLogEntity)
 
-    @Query("SELECT * FROM call_decision_logs ORDER BY createdAt DESC LIMIT :limit")
-    fun observeLatest(limit: Int = 100): Flow<List<CallDecisionLogEntity>>
+    /** Volume is bounded by the tier's retention (see deleteOlderThan), not by a row cap. */
+    @Query("SELECT * FROM call_decision_logs ORDER BY createdAt DESC")
+    fun observeLatest(): Flow<List<CallDecisionLogEntity>>
+
+    @Query("DELETE FROM call_decision_logs WHERE createdAt < :cutoff")
+    suspend fun deleteOlderThan(cutoff: Long)
 
     @Query("DELETE FROM call_decision_logs")
     suspend fun clear()

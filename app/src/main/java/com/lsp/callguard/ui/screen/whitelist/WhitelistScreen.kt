@@ -57,14 +57,6 @@ import androidx.compose.ui.unit.dp
 import com.lsp.callguard.R
 import androidx.compose.ui.res.stringResource
 
-private const val FREE_WHITELIST_LIMIT = 5
-
-data class WhitelistNumberUi(
-    val id: String,
-    val label: String,
-    val phoneNumber: String
-)
-
 @Composable
 fun WhitelistScreen(
     uiState: WhitelistUiState,
@@ -83,9 +75,9 @@ fun WhitelistScreen(
     var showAddDialog by remember { mutableStateOf(false) }
 
     val count = uiState.count
-    val limit = uiState.limit
+    val limit = uiState.limit ?: 0
     val progress = uiState.progress.coerceIn(0f, 1f)
-    val isLicensed = uiState.isLicensed
+    val hasPaidPlan = uiState.hasPaidPlan
     val reachedLimit = uiState.reachedLimit
     val numbers = uiState.numbers
 
@@ -143,7 +135,7 @@ fun WhitelistScreen(
                     count = count,
                     limit = limit,
                     progress = progress,
-                    isLicensed = isLicensed,
+                    hasPaidPlan = hasPaidPlan,
                     onOpenPaywall = onOpenPaywall
                 )
             }
@@ -163,7 +155,7 @@ fun WhitelistScreen(
                 }
             }
 
-            if (!isLicensed) {
+            if (!hasPaidPlan) {
                 item {
                     PremiumHintCard(
                         onOpenPaywall = onOpenPaywall
@@ -185,14 +177,14 @@ fun WhitelistScreen(
         )
     }
 
-    if (showLimitDialog && !isLicensed) {
+    if (showLimitDialog && !hasPaidPlan) {
         AlertDialog(
             onDismissRequest = onDismissLimitDialog,
             title = {
                 Text(stringResource(R.string.limit_reached))
             },
             text = {
-                Text(stringResource(R.string.limit_reached_text, uiState.limit))
+                Text(stringResource(R.string.limit_reached_text, uiState.limit ?: 0))
             },
             confirmButton = {
                 TextButton(
@@ -255,7 +247,7 @@ private fun WhitelistUsageCard(
     count: Int,
     limit: Int,
     progress: Float,
-    isLicensed: Boolean,
+    hasPaidPlan: Boolean,
     onOpenPaywall: () -> Unit
 ) {
     Card(
@@ -273,16 +265,16 @@ private fun WhitelistUsageCard(
             modifier = Modifier.padding(18.dp)
         ) {
             WhitelistCardHeader(
-                icon = if (isLicensed) Icons.Outlined.Star else Icons.Outlined.Lock,
-                title = if (isLicensed) stringResource(R.string.whitelist_unlimited) else stringResource(R.string.whitelist_free_version),
-                description = if (isLicensed) {
+                icon = if (hasPaidPlan) Icons.Outlined.Star else Icons.Outlined.Lock,
+                title = if (hasPaidPlan) stringResource(R.string.whitelist_unlimited) else stringResource(R.string.whitelist_free_version),
+                description = if (hasPaidPlan) {
                     stringResource(R.string.whitelist_premium_description)
                 } else {
                     stringResource(R.string.whitelist_usage, count, limit)
                 }
             )
 
-            if (!isLicensed) {
+            if (!hasPaidPlan) {
                 Spacer(modifier = Modifier.height(14.dp))
 
                 LinearProgressIndicator(

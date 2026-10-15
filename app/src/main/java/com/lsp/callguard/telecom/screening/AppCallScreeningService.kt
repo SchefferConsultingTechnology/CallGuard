@@ -66,7 +66,7 @@ class AppCallScreeningService : CallScreeningService() {
         val decision = engine.evaluate(
             phone = phoneNumber,
             settings = settings,
-            isLicensed = license.isLicensed,
+            contactsAllowed = license.features.contactsAllowed,
             defaultRegion = defaultRegion
         )
 
@@ -80,6 +80,7 @@ class AppCallScreeningService : CallScreeningService() {
             decision = decision,
             defaultRegion = defaultRegion
         )
+        runCatching { logRepository.purge(license.tier) }
 
         Log.d(
             "CallGuardScreening",

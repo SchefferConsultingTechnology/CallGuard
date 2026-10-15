@@ -18,7 +18,7 @@
     <string name="onboarding_feature_2_description">Reduza interrupções de chamadas que você não reconhece.</string>
 
     <string name="onboarding_feature_3_title">Assine para proteção completa</string>
-    <string name="onboarding_feature_3_description">O Premium libera integração com contatos e whitelist ilimitada.</string>
+    <string name="onboarding_feature_3_description">O Plus libera integração com contatos e whitelist ilimitada.</string>
 
     <string name="home_description">Proteja suas chamadas com mais privacidade.</string>
     <string name="settings">Configurações</string>
@@ -27,16 +27,18 @@
     <string name="protection_status_not_configured">Proteção ainda não configurada</string>
     <string name="protection_whitelist_prompt">Configure sua whitelist para começar a controlar chamadas.</string>
     <string name="activate_protection">Ativar proteção</string>
-    <string name="plan_premium">Plano Premium</string>
-    <string name="plan_free">Plano gratuito</string>
+    <string name="plan_tier_free">Grátis</string>
+    <string name="plan_tier_plus">Plus</string>
+    <string name="plan_tier_pro">Pro</string>
+    <string name="plan_current">Plano: %1$s</string>
     <string name="plan_description_premium">Todos os recursos estão ativos.</string>
     <string name="plan_description_free">Você está usando a versão gratuita com recursos limitados.</string>
-    <string name="view_premium">Ver Premium</string>
+    <string name="view_premium">Ver planos</string>
     <string name="whitelist_title">Lista de permitidos</string>
     <string name="whitelist_usage">%1$d de %2$d números usados na versão gratuita.</string>
     <string name="manage_whitelist">Gerenciar whitelist</string>
     <string name="contacts_automatic">Contatos automáticos</string>
-    <string name="unlock_with_premium">Desbloquear com Premium</string>
+    <string name="unlock_with_premium">Desbloquear com Plus</string>
     <string name="enable_auto_contacts">Usar contatos automaticamente</string>
     <string name="update_contacts">Atualizar contatos</string>
     <string name="privacy_title">Sem anúncios, sempre</string>
@@ -58,8 +60,8 @@
     <string name="license_active">Sua licença está ativa.</string>
     <string name="license_free">Você está usando recursos básicos com limite de whitelist.</string>
     <string name="subscription_benefits">Uma licença desbloqueia contatos automáticos, whitelist ilimitada e restauração futura.</string>
-    <string name="license_mock_mode">Modo de licença fictícia</string>
-    <string name="license_mock_mode_description">Ativa comportamento premium localmente para desenvolvimento.</string>
+    <string name="license_mock_mode">Plano simulado (desenvolvimento)</string>
+    <string name="license_mock_mode_description">Escolha um plano localmente para testar o app sem a Google Play.</string>
     <string name="block_unknown_numbers">Bloquear números desconhecidos</string>
     <string name="block_unknown_description">Bloquear chamadas não presentes nos contatos ou whitelist.</string>
     <string name="block_private_numbers">Bloquear números privados</string>
@@ -67,17 +69,17 @@
     <string name="settings_applied_when_enabled">Essas opções valem quando a proteção de chamadas estiver ativada.</string>
     <string name="use_contacts_automatically">Usar contatos automaticamente</string>
     <string name="contacts_auto_description_enabled">Permite tratar seus contatos como números confiáveis.</string>
-    <string name="contacts_auto_description_disabled">Disponível apenas no Premium. Nenhuma permissão de contatos é solicitada no plano gratuito.</string>
-    <string name="unlock_contacts_premium">Desbloquear contatos com Premium</string>
+    <string name="contacts_auto_description_disabled">Disponível no Plus e no Pro. Nenhuma permissão de contatos é solicitada no plano Grátis.</string>
+    <string name="unlock_contacts_premium">Desbloquear contatos com Plus</string>
     <string name="contacts_access_policy">O acesso a contatos é solicitado apenas após licença e consentimento explícito.</string>
     <string name="privacy_first">Privacidade em primeiro lugar</string>
     <string name="privacy_first_description">O CallGuard não exibe anúncios e não monetiza seus dados.</string>
     <string name="terms_of_use">Termos de uso</string>
     <string name="terms_description">Leia as regras de uso do aplicativo.</string>
-    <string name="terms_of_use_body">Ao usar o CallGuard, você concorda com estes termos.\n\nO CallGuard avalia chamadas recebidas comparando com uma lista de números que você escolhe permitir (sua whitelist) e, se você ativar como recurso Premium, com os contatos do seu aparelho. Toda essa avaliação acontece localmente no seu dispositivo; seu histórico de chamadas e sua whitelist nunca são enviados a nenhum servidor.\n\nO CallGuard não garante que toda chamada indesejada será bloqueada nem que toda chamada desejada será permitida — você é responsável por revisar e ajustar sua whitelist e configurações.\n\nSe você assinar o Premium, a compra é processada pelo Google Play Billing sob os próprios termos do Google; o CallGuard apenas lê o resultado dessa compra para liberar os recursos.\n\nVocê pode parar de usar o CallGuard e desinstalá-lo a qualquer momento, o que também remove todos os dados armazenados no seu dispositivo.\n\nEsta é uma versão preliminar dos nossos termos e pode ser atualizada conforme o app evolui.</string>
+    <string name="terms_of_use_body">Ao usar o CallGuard, você concorda com estes termos.\n\nO CallGuard avalia as chamadas recebidas comparando com os números que você escolhe permitir (sua whitelist) e, nos planos Plus e Pro, com os contatos do seu aparelho. Essa avaliação acontece somente no seu dispositivo.\n\nO CallGuard não garante que toda chamada indesejada será bloqueada nem que toda chamada desejada será permitida; você é responsável por revisar sua whitelist e suas configurações.\n\nPlanos: Grátis, Plus e Pro. Plus e Pro são vendidos pela Google Play como assinaturas mensais ou anuais; o Plus também existe como compra única vitalícia. As assinaturas renovam automaticamente até você cancelá-las na Google Play; depois de cancelar, o plano continua ativo até o fim do período já pago. Preços, períodos de teste e reembolsos seguem os termos da Google Play.\n\nSe um plano terminar, todos os números que já estão na sua whitelist continuam permitidos. Os recursos do plano superior deixam de funcionar e o histórico de chamadas passa a guardar apenas o que o plano atual permite (7 dias no Grátis, 90 no Plus, 365 no Pro).\n\nVocê pode parar de usar o CallGuard e desinstalá-lo a qualquer momento, o que também remove os dados armazenados no seu dispositivo.\n\nEstes termos podem ser atualizados conforme o app evolui.</string>
     <string name="privacy_policy">Política de privacidade</string>
     <string name="privacy_policy_description">Entenda como seus dados e permissões são tratados.</string>
-    <string name="privacy_policy_body">O CallGuard foi criado para manter seus dados no seu dispositivo.\n\nO que acessamos: com sua permissão, o CallGuard lê o número da chamada recebida apenas para decidir se ela deve ser permitida ou bloqueada e, como recurso Premium opcional, os contatos do seu aparelho, para permitir automaticamente chamadas de pessoas que você já conhece. Nenhum desses dados sai do seu dispositivo ou é enviado para nós ou para terceiros.\n\nO que armazenamos: sua whitelist, o histórico de decisões de chamadas e suas configurações ficam salvos localmente no armazenamento privado do app. Desinstalar o app apaga esses dados.\n\nCobrança: se você assinar o Premium, o Google Play Billing processa o pagamento; recebemos apenas a confirmação de que a assinatura está ativa, não os dados do seu pagamento.\n\nSem anúncios, sem análise de uso, sem rastreamento: o CallGuard não inclui SDKs de publicidade ou analytics e não vende nem compartilha seus dados.\n\nEsta é uma versão preliminar da nossa política de privacidade e pode ser atualizada conforme o app evolui.</string>
+    <string name="privacy_policy_body">O CallGuard foi criado para manter seus dados no seu dispositivo.\n\nO que acessamos: o número de cada chamada recebida, apenas para decidir se ela deve ser permitida ou bloqueada, e, nos planos Plus e Pro e com sua permissão, os contatos do seu aparelho, para permitir quem você já conhece. Nada disso sai do seu dispositivo nem é enviado para nós ou para terceiros.\n\nO que armazenamos: sua whitelist, o histórico de decisões de chamadas e suas configurações ficam no armazenamento privado do app. O histórico é guardado por 7 dias no Grátis, 90 no Plus e 365 no Pro, e depois apagado automaticamente. Desinstalar o app apaga tudo.\n\nPagamentos: a Google Play processa as compras; o app recebe apenas qual plano está ativo, nunca os dados do seu pagamento.\n\nSem anúncios, sem análise de uso, sem rastreamento: o CallGuard não inclui SDKs de publicidade ou analytics e não vende nem compartilha seus dados.\n\nEsta política pode ser atualizada conforme o app evolui.</string>
     <string name="language">Idioma</string>
     <string name="change_language">Alterar o idioma do app.</string>
     <string name="no_ads">Sem anúncios</string>
@@ -91,11 +93,11 @@
     <string name="why_access_contacts">Por que acessar seus contatos?</string>
     <string name="why_access_contacts_description">Para tratar automaticamente seus contatos como números confiáveis e reduzir chamadas indesejadas.</string>
     <string name="when_permission_requested">Quando a permissão será solicitada?</string>
-    <string name="when_permission_requested_description">Apenas após o Premium e depois que você aceitar os termos nesta tela.</string>
+    <string name="when_permission_requested_description">Apenas no Plus ou no Pro e depois que você aceitar os termos nesta tela.</string>
     <string name="what_we_dont_do">O que não fazemos</string>
     <string name="what_we_dont_do_description">O CallGuard não exibe anúncios, vende seus dados ou acessa contatos sem sua autorização.</string>
     <string name="you_control_access">Você controla o acesso</string>
-    <string name="you_control_access_description">O CallGuard solicita acesso aos contatos somente quando precisar ativar recursos do Premium.</string>
+    <string name="you_control_access_description">O CallGuard solicita acesso aos contatos somente quando precisar ativar recursos do Plus ou do Pro.</string>
     <string name="consent_title">Consentimento</string>
     <string name="accept_terms_text">Li e aceito os Termos de Uso</string>
     <string name="open">Abrir</string>
@@ -148,19 +150,19 @@
 
     <string name="whitelist_add_number">Adicionar número</string>
     <string name="limit_reached">Limite gratuito atingido</string>
-    <string name="limit_reached_text">A versão gratuita permite até %1$d números na whitelist. Assine o Premium para adicionar números ilimitados.</string>
+    <string name="limit_reached_text">O plano Grátis permite até %1$d números na whitelist. Assine o Plus para ter números ilimitados.</string>
     <string name="now_no">Agora não</string>
     <string name="whitelist_header_title">Whitelist</string>
     <string name="whitelist_header_description">Gerencie números sempre permitidos.</string>
     <string name="whitelist_unlimited">Whitelist ilimitada</string>
     <string name="whitelist_free_version">Versão gratuita</string>
-    <string name="whitelist_premium_description">Assine o Premium para usar contatos automáticos e whitelist ilimitada.</string>
-    <string name="learn_premium">Saiba mais sobre o Premium</string>
+    <string name="whitelist_premium_description">Assine o Plus para usar contatos automáticos e whitelist ilimitada.</string>
+    <string name="learn_premium">Ver planos</string>
     <string name="no_numbers_yet">Nenhum número permitido ainda</string>
     <string name="add_numbers_description">Adicione números que podem sempre contatar você.</string>
     <string name="premium_automate_title">Quer automatizar sua lista?</string>
-    <string name="premium_automate_description">Com o Premium, seus contatos podem ser usados como números permitidos automaticamente.</string>
-    <string name="view_premium_benefits">Ver benefícios do Premium</string>
+    <string name="premium_automate_description">Com o Plus, seus contatos podem ser usados como números permitidos automaticamente.</string>
+    <string name="view_premium_benefits">Ver benefícios dos planos</string>
     <string name="add_number_dialog_title">Adicionar número</string>
     <string name="label_name_or_label">Nome ou etiqueta</string>
     <string name="phone_input_label">Telefone</string>
@@ -170,32 +172,51 @@
     <string name="paywallscreen_header_title">Proteção completa de chamadas</string>
     <string name="paywallscreen_header_description">Controle quem pode falar com você, com mais privacidade e sem anúncios.</string>
 
-    <string name="paywallscreen_premium_title">Premium sem publicidade</string>
-    <string name="paywallscreen_premium_description">CallGuard é sustentado por licença. Isso significa uma experiência limpa, sem anúncios e sem monetizar seus dados.</string>
-    <string name="paywallscreen_bottom_bar_premium">Assine o CallGuard Premium</string>
     <string name="paywallscreen_bottom_bar_free">Continuar com versão gratuita</string>
-    <string name="paywallscreen_bottom_bar_footer">A versão gratuita permite uso básico com whitelist limitada. O acesso aos contatos é solicitado apenas após a licença.</string>
 
-    <string name="paywallscreen_body_title">O que você desbloqueia com a licença</string>
 
-    <string name="paywallscreen_body_item1_title">Contatos automáticos</string>
-    <string name="paywallscreen_body_item1_description">Use sua lista de contatos como números permitidos automaticamente.</string>
 
-    <string name="paywallscreen_body_item2_title">Whitelist ilimitada</string>
-    <string name="paywallscreen_body_item2_description">Adicione quantos números quiser à sua lista manual.</string>
 
-    <string name="paywallscreen_body_item3_title">Sem anúncios, nunca</string>
-    <string name="paywallscreen_body_item3_description">Seu app permanece limpo, sem anúncios ou rastreamento.</string>
 
-    <string name="paywallscreen_body_item4_title">Backup e restauração</string>
-    <string name="paywallscreen_body_item4_description">Recupere suas configurações ao mudar de dispositivo.</string>
 
-    <string name="paywallscreen_free_version_title">Versão gratuita</string>
-    <string name="paywallscreen_free_version_description">Você pode instalar e usar o app gratuitamente com recursos básicos.</string>
 
-    <string name="paywallscreen_free_version_list">• whitelist manual limitada
-• sem acesso aos contatos
-• sem solicitação de permissão de contatos
-• sem anúncios</string>
 
+    <string name="paywall_period_monthly">Mensal</string>
+    <string name="paywall_period_annual">Anual</string>
+    <string name="paywall_per_month">%1$s/mês</string>
+    <string name="paywall_per_year">%1$s/ano</string>
+    <string name="paywall_free_price">Sempre grátis</string>
+    <string name="paywall_price_unavailable">Preço indisponível</string>
+    <string name="paywall_trial_badge">7 dias grátis</string>
+    <string name="paywall_current_plan">Plano atual</string>
+    <string name="paywall_coming_soon">Em breve</string>
+    <string name="paywall_subscribe">Assinar %1$s</string>
+    <string name="paywall_lifetime">Ou pague uma vez: %1$s (vitalício)</string>
+    <string name="paywall_store_unavailable">Não foi possível carregar os preços da Google Play.</string>
+    <string name="paywall_retry">Tentar de novo</string>
+    <string name="paywall_pending">Pagamento em processamento. O plano é liberado assim que a Google Play confirmar.</string>
+    <string name="paywall_restore">Restaurar compras</string>
+    <string name="paywall_restore_done">Plano %1$s restaurado.</string>
+    <string name="paywall_restore_none">Nenhuma compra encontrada nesta conta.</string>
+    <string name="paywall_common_title">Em todos os planos</string>
+    <string name="paywall_common_blocking">Bloqueio de números desconhecidos e ocultos</string>
+    <string name="paywall_common_no_ads">Sem anúncios e sem rastreamento</string>
+    <string name="feature_whitelist_limited">Whitelist com até %1$d números</string>
+    <string name="feature_whitelist_unlimited">Whitelist ilimitada</string>
+    <string name="feature_contacts">Seus contatos como números permitidos</string>
+    <string name="feature_history_days">Histórico de chamadas de %1$d dias</string>
+    <string name="feature_drive_backup">Backup automático no Google Drive e vários aparelhos</string>
+    <string name="paywall_terms">As assinaturas renovam automaticamente até serem canceladas na Google Play. Cancele quando quiser; o plano continua ativo até o fim do período pago.</string>
+    <string name="plan_not_renewing">Não renova: ativo até o fim do período pago.</string>
+    <string name="downgrade_title">Seu plano mudou de %1$s para %2$s</string>
+    <string name="downgrade_whitelist_kept">Todos os números que já estão na sua whitelist continuam permitidos.</string>
+    <string name="downgrade_contacts_off">Seus contatos deixaram de ser liberados automaticamente.</string>
+    <string name="downgrade_history_shorter">O histórico de chamadas agora guarda os últimos %1$d dias.</string>
+    <string name="downgrade_see_plans">Ver planos</string>
+    <string name="downgrade_dismiss">Entendi</string>
+    <string name="manage_subscription">Gerenciar assinatura</string>
+    <plurals name="whitelist_count_unlimited">
+        <item quantity="one">%1$d número na sua whitelist (ilimitada).</item>
+        <item quantity="other">%1$d números na sua whitelist (ilimitada).</item>
+    </plurals>
 </resources>

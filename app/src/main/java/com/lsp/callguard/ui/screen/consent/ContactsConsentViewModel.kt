@@ -21,7 +21,7 @@ class ContactsConsentViewModel(
         viewModelScope.launch {
             val license = licensePreferences.licenseFlow.first()
 
-            if (!license.isLicensed) {
+            if (!license.features.contactsAllowed) {
                 onEvent(ContactsConsentEvent.OpenPaywall)
                 return@launch
             }

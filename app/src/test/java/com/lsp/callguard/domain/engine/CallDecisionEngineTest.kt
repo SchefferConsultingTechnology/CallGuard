@@ -43,12 +43,12 @@ class CallDecisionEngineTest {
     private suspend fun CallDecisionEngine.decide(
         phone: String?,
         settings: AppSettings = AppSettings(),
-        isLicensed: Boolean = false,
+        contactsAllowed: Boolean = false,
         defaultRegion: String? = "BR"
     ) = evaluate(
         phone = phone,
         settings = settings,
-        isLicensed = isLicensed,
+        contactsAllowed = contactsAllowed,
         defaultRegion = defaultRegion
     )
 
@@ -79,19 +79,19 @@ class CallDecisionEngineTest {
     }
 
     @Test
-    fun `contact match allows call only when licensed and useContactsAutomatically is on`() = runTest {
+    fun `contact match allows call only when the plan allows contacts and the toggle is on`() = runTest {
         val settings = AppSettings(blockUnknown = true, useContactsAutomatically = true)
         val engine = engineWith(contacts = listOf(contact(brazilianMobile)))
 
         assertDecision(
             CallDecisionReason.ALLOWED_BY_CONTACTS,
             true,
-            engine.decide(brazilianMobile, settings, isLicensed = true)
+            engine.decide(brazilianMobile, settings, contactsAllowed = true)
         )
         assertDecision(
             CallDecisionReason.BLOCKED_NOT_IN_WHITELIST,
             false,
-            engine.decide(brazilianMobile, settings, isLicensed = false)
+            engine.decide(brazilianMobile, settings, contactsAllowed = false)
         )
     }
 
@@ -148,7 +148,7 @@ class CallDecisionEngineTest {
         val decision = engineWith(contacts = listOf(contact(brazilianMobile))).decide(
             "011987654321",
             AppSettings(blockUnknown = true, useContactsAutomatically = true),
-            isLicensed = true
+            contactsAllowed = true
         )
         assertDecision(CallDecisionReason.ALLOWED_BY_CONTACTS, true, decision)
     }

@@ -129,9 +129,6 @@ fun CallGuardNavHost(
                 },
                 onOpenPrivacyPolicy = {
                     navController.navigate(Routes.PrivacyPolicy.route)
-                },
-                {
-                    // depois
                 }
             )
         }

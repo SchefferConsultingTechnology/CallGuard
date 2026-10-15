@@ -12,13 +12,16 @@ import com.lsp.callguard.data.local.preferences.PhoneDataPreferences
 import com.lsp.callguard.data.local.preferences.SettingsPreferences
 import com.lsp.callguard.data.local.preferences.appPreferencesDataStore
 import com.lsp.callguard.data.migration.PhoneDataRenormalizer
+import com.lsp.callguard.data.repository.CallDecisionLogRepository
 import com.lsp.callguard.data.repository.ContactsRepository
 import com.lsp.callguard.data.repository.DeviceContactCacheRepository
 import com.lsp.callguard.domain.phone.RegionProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class CallGuardApplication : Application() {
@@ -40,6 +43,19 @@ class CallGuardApplication : Application() {
             }
 
             phoneDataRenormalizer(regionProvider).runIfNeeded()
+        }
+
+        // History follows the current tier's retention, at start and whenever the tier changes.
+        applicationScope.launch {
+            val logRepository = CallDecisionLogRepository(
+                dao = CallGuardDatabase.getInstance(this@CallGuardApplication).callDecisionLogDao(),
+                normalizer = PhoneServices.normalizer
+            )
+
+            licensePreferences.licenseFlow
+                .map { it.tier }
+                .distinctUntilChanged()
+                .collect { tier -> runCatching { logRepository.purge(tier) } }
         }
     }
 

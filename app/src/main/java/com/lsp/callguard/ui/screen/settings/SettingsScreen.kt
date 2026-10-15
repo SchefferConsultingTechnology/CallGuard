@@ -53,6 +53,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.lsp.callguard.BuildConfig
 import com.lsp.callguard.R
+import com.lsp.callguard.ui.components.tierDisplayName
+import com.lsp.callguard.domain.model.Tier
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.ui.platform.LocalUriHandler
+import com.lsp.callguard.data.billing.BillingRepository
 
 @Composable
 fun SettingsScreen(
@@ -65,15 +72,18 @@ fun SettingsScreen(
     onBlockUnknownChange: (Boolean) -> Unit,
     onBlockPrivateNumbersChange: (Boolean) -> Unit,
     onUseContactsAutomaticallyChange: (Boolean) -> Unit,
-    onMockLicenseChange: (Boolean) -> Unit
+    onMockTierChange: (Tier) -> Unit,
+    onRestorePurchases: () -> Unit,
+    snackbarHostState: SnackbarHostState
 ) {
-    val isLicensed = uiState.isLicensed
+    val hasPaidPlan = uiState.hasPaidPlan
     val blockUnknown = uiState.appSettings.blockUnknown
     val blockPrivateNumbers = uiState.appSettings.blockPrivateNumbers
     val useContactsAutomatically = uiState.appSettings.useContactsAutomatically
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = MaterialTheme.colorScheme.background,
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { innerPadding: PaddingValues ->
         LazyColumn(
             modifier = Modifier
@@ -94,9 +104,10 @@ fun SettingsScreen(
 
             item {
                 LicenseCard(
-                    isLicensed = isLicensed,
+                    tier = uiState.tier,
                     onOpenPaywall = onOpenPaywall,
-                    onMockLicenseChange = onMockLicenseChange
+                    onRestorePurchases = onRestorePurchases,
+                    onMockTierChange = onMockTierChange
                 )
             }
 
@@ -119,7 +130,7 @@ fun SettingsScreen(
 
             item {
                 ContactsSettingsCard(
-                    isLicensed = isLicensed,
+                    hasPaidPlan = hasPaidPlan,
                     useContactsAutomatically = useContactsAutomatically,
                     onUseContactsAutomaticallyChange = onUseContactsAutomaticallyChange,
                     onOpenPaywall = onOpenPaywall
@@ -205,22 +216,25 @@ private fun SettingsSectionTitle(
 
 @Composable
 private fun LicenseCard(
-    isLicensed: Boolean,
+    tier: Tier,
     onOpenPaywall: () -> Unit,
-    onMockLicenseChange: (Boolean) -> Unit
+    onRestorePurchases: () -> Unit,
+    onMockTierChange: (Tier) -> Unit
 ) {
+    val uriHandler = LocalUriHandler.current
+
     SettingsCard {
         SettingsItemHeader(
             icon = Icons.Outlined.WorkspacePremium,
-            title = if (isLicensed) stringResource(R.string.app_name) + " Premium" else stringResource(R.string.plan_free),
-            description = if (isLicensed) {
+            title = stringResource(R.string.plan_current, tierDisplayName(tier)),
+            description = if (tier != Tier.FREE) {
                 stringResource(R.string.license_active)
             } else {
                 stringResource(R.string.license_free)
             }
         )
 
-        if (!isLicensed) {
+        if (tier == Tier.FREE) {
             Spacer(modifier = Modifier.height(14.dp))
 
             FilledTonalButton(
@@ -240,6 +254,18 @@ private fun LicenseCard(
             }
         }
 
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            TextButton(onClick = onRestorePurchases) {
+                Text(stringResource(R.string.paywall_restore))
+            }
+
+            if (tier != Tier.FREE) {
+                TextButton(onClick = { uriHandler.openUri(BillingRepository.manageSubscriptionUrl(null)) }) {
+                    Text(stringResource(R.string.manage_subscription))
+                }
+            }
+        }
+
         Spacer(modifier = Modifier.height(12.dp))
 
         SettingsInfoText(
@@ -250,13 +276,29 @@ private fun LicenseCard(
         if (BuildConfig.DEBUG) {
             SettingsDivider()
 
-            SettingsSwitchRow(
-                icon = Icons.Outlined.WorkspacePremium,
-                title = stringResource(R.string.license_mock_mode),
-                description = stringResource(R.string.license_mock_mode_description),
-                checked = isLicensed,
-                onCheckedChange = onMockLicenseChange
+            Text(
+                text = stringResource(R.string.license_mock_mode),
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface
             )
+
+            Text(
+                text = stringResource(R.string.license_mock_mode_description),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Tier.entries.forEach { option ->
+                    FilterChip(
+                        selected = option == tier,
+                        onClick = { onMockTierChange(option) },
+                        label = { Text(tierDisplayName(option)) }
+                    )
+                }
+            }
         }
     }
 }
@@ -298,7 +340,7 @@ private fun ProtectionSettingsCard(
 
 @Composable
 private fun ContactsSettingsCard(
-    isLicensed: Boolean,
+    hasPaidPlan: Boolean,
     useContactsAutomatically: Boolean,
     onUseContactsAutomaticallyChange: (Boolean) -> Unit,
     onOpenPaywall: () -> Unit
@@ -307,17 +349,17 @@ private fun ContactsSettingsCard(
         SettingsSwitchRow(
             icon = Icons.Outlined.Lock,
             title = stringResource(R.string.use_contacts_automatically),
-            description = if (isLicensed) {
+            description = if (hasPaidPlan) {
                 stringResource(R.string.contacts_auto_description_enabled)
             } else {
                 stringResource(R.string.contacts_auto_description_disabled)
             },
             checked = useContactsAutomatically,
-            enabled = isLicensed,
+            enabled = hasPaidPlan,
             onCheckedChange = onUseContactsAutomaticallyChange
         )
 
-        if (!isLicensed) {
+        if (!hasPaidPlan) {
             Spacer(modifier = Modifier.height(14.dp))
 
             OutlinedButton(

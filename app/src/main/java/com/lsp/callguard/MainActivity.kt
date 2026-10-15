@@ -11,6 +11,7 @@ import com.lsp.callguard.data.local.preferences.LanguagePreferences
 import com.lsp.callguard.data.local.preferences.LicensePreferences
 import com.lsp.callguard.data.local.preferences.OnboardingPreferences
 import com.lsp.callguard.data.local.preferences.appPreferencesDataStore
+import com.lsp.callguard.domain.model.Tier
 import com.lsp.callguard.ui.navigation.LegacyRead
 import com.lsp.callguard.ui.navigation.LegacySignals
 import com.lsp.callguard.ui.navigation.readLegacySignals
@@ -82,7 +83,7 @@ class MainActivity : AppCompatActivity() {
             },
             isLicensed = {
                 LicensePreferences(applicationContext.appPreferencesDataStore)
-                    .licenseFlow.first().isLicensed
+                    .licenseFlow.first().tier != Tier.FREE
             }
         )
     }

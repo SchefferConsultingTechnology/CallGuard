@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.lsp.callguard.data.local.preferences.LicensePreferences
 import com.lsp.callguard.data.repository.AddAllowedNumberResult
 import com.lsp.callguard.data.repository.WhitelistRepository
-import com.lsp.callguard.domain.model.FREE_WHITELIST_LIMIT
 import com.lsp.callguard.domain.phone.PhoneNormalizationResult
 import com.lsp.callguard.domain.phone.PhoneNormalizer
 import com.lsp.callguard.domain.phone.PhoneNumberDisplayFormatter
@@ -19,6 +18,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import com.lsp.callguard.domain.model.PlanFeatures
+import com.lsp.callguard.domain.model.Tier
 
 data class WhitelistItemUi(
     val id: String,
@@ -30,14 +31,20 @@ data class WhitelistItemUi(
 data class WhitelistUiState(
     val numbers: List<WhitelistItemUi> = emptyList(),
     val count: Int = 0,
-    val limit: Int = FREE_WHITELIST_LIMIT,
-    val isLicensed: Boolean = false
+    val tier: Tier = Tier.FREE
 ) {
+    val hasPaidPlan: Boolean
+        get() = tier != Tier.FREE
+
+    /** Null = unlimited. */
+    val limit: Int?
+        get() = PlanFeatures.of(tier).whitelistLimit
+
     val progress: Float
-        get() = count / limit.toFloat()
+        get() = limit?.let { count / it.toFloat() } ?: 0f
 
     val reachedLimit: Boolean
-        get() = !isLicensed && count >= limit
+        get() = limit?.let { count >= it } ?: false
 }
 
 sealed interface PhoneInputPreview {
@@ -86,7 +93,7 @@ class WhitelistViewModel(
                     )
                 },
                 count = count,
-                isLicensed = license.isLicensed
+                tier = license.tier
             )
         }.stateIn(
             scope = viewModelScope,

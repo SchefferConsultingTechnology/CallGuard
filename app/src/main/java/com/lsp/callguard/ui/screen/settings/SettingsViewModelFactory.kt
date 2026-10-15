@@ -9,6 +9,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lsp.callguard.data.local.preferences.SettingsPreferences
 import com.lsp.callguard.data.local.preferences.LicensePreferences
 import com.lsp.callguard.data.local.preferences.appPreferencesDataStore
+import com.lsp.callguard.data.billing.BillingRepository
 
 @Composable
 fun rememberSettingsViewModel(): SettingsViewModel {
@@ -22,7 +23,11 @@ fun rememberSettingsViewModel(): SettingsViewModel {
         object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return SettingsViewModel(preferences,licensePreferences = licensePreferences) as T
+                return SettingsViewModel(
+                    settingsPreferences = preferences,
+                    licensePreferences = licensePreferences,
+                    billingRepository = BillingRepository.getInstance(context, licensePreferences)
+                ) as T
             }
         }
     }

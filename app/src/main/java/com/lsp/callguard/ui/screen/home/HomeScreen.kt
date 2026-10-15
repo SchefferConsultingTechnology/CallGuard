@@ -28,6 +28,7 @@ import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilledTonalButton
@@ -40,16 +41,20 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.lsp.callguard.R
-import com.lsp.callguard.domain.model.FREE_WHITELIST_LIMIT
+import com.lsp.callguard.domain.billing.EntitlementStatus
+import com.lsp.callguard.domain.model.PlanFeatures
+import com.lsp.callguard.domain.model.Tier
+import com.lsp.callguard.ui.components.tierDisplayName
 
 @Composable
 fun HomeScreen(
@@ -59,10 +64,10 @@ fun HomeScreen(
     onOpenPaywall: () -> Unit,
     onOpenProtectionSetup: () -> Unit,
     onOpenCallHistory: () -> Unit,
-    onOpenContactsConsent: () -> Unit
-
+    onOpenContactsConsent: () -> Unit,
+    onDismissDowngradeNotice: () -> Unit
 ) {
-    val isLicensed = uiState.isLicensed
+    val hasPaidPlan = uiState.hasPaidPlan
     val whitelistCount = uiState.whitelistCount
     val limit = uiState.whitelistLimit
     val progress = uiState.progress
@@ -85,6 +90,17 @@ fun HomeScreen(
                 )
             }
 
+            uiState.downgradedFrom?.let { previousTier ->
+                item {
+                    DowngradeNoticeCard(
+                        previousTier = previousTier,
+                        currentTier = uiState.tier,
+                        onOpenPaywall = onOpenPaywall,
+                        onDismiss = onDismissDowngradeNotice
+                    )
+                }
+            }
+
             item {
                 ProtectionStatusCard(
                     isProtectionEnabled = uiState.isProtectionEnabled,
@@ -97,7 +113,9 @@ fun HomeScreen(
             }
             item {
                 PlanStatusCard(
-                    isLicensed = isLicensed,
+                    tier = uiState.tier,
+                    status = uiState.status,
+                    hasPendingPurchase = uiState.hasPendingPurchase,
                     onOpenPaywall = onOpenPaywall
                 )
             }
@@ -105,7 +123,7 @@ fun HomeScreen(
             item {
                 WhitelistLimitCard(
                     count = whitelistCount,
-                    limit = FREE_WHITELIST_LIMIT,
+                    limit = uiState.whitelistLimit,
                     progress = progress,
                     onOpenWhitelist = onOpenWhitelist
                 )
@@ -113,7 +131,7 @@ fun HomeScreen(
 
             item {
                 LockedContactsCard(
-                    isLicensed = uiState.isLicensed,
+                    hasPaidPlan = uiState.hasPaidPlan,
                     useContactsAutomatically = uiState.useContactsAutomatically,
                     importedContactsCount = uiState.importedContactsCount,
                     onOpenPaywall = onOpenPaywall,
@@ -251,7 +269,9 @@ private fun ProtectionStatusCard(
 
 @Composable
 private fun PlanStatusCard(
-    isLicensed: Boolean,
+    tier: Tier,
+    status: EntitlementStatus,
+    hasPendingPurchase: Boolean,
     onOpenPaywall: () -> Unit
 ) {
     Card(
@@ -270,15 +290,25 @@ private fun PlanStatusCard(
         ) {
             HomeCardHeader(
                 icon = Icons.Outlined.CreditCard,
-                title = if (isLicensed) stringResource(R.string.plan_premium) else stringResource(R.string.plan_free),
-                description = if (isLicensed) {
-                    stringResource(R.string.plan_description_premium)
-                } else {
-                    stringResource(R.string.plan_description_free)
+                title = stringResource(R.string.plan_current, tierDisplayName(tier)),
+                description = when {
+                    tier == Tier.FREE -> stringResource(R.string.plan_description_free)
+                    status == EntitlementStatus.CANCELED_ACTIVE -> stringResource(R.string.plan_not_renewing)
+                    else -> stringResource(R.string.plan_description_premium)
                 }
             )
 
-            if (!isLicensed) {
+            if (hasPendingPurchase) {
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Text(
+                    text = stringResource(R.string.paywall_pending),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            if (tier == Tier.FREE) {
                 Spacer(modifier = Modifier.height(14.dp))
 
                 Button(
@@ -294,9 +324,76 @@ private fun PlanStatusCard(
 }
 
 @Composable
+private fun DowngradeNoticeCard(
+    previousTier: Tier,
+    currentTier: Tier,
+    onOpenPaywall: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    val before = PlanFeatures.of(previousTier)
+    val now = PlanFeatures.of(currentTier)
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(22.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
+        )
+    ) {
+        Column(modifier = Modifier.padding(18.dp)) {
+            Text(
+                text = stringResource(
+                    R.string.downgrade_title,
+                    tierDisplayName(previousTier),
+                    tierDisplayName(currentTier)
+                ),
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = stringResource(R.string.downgrade_whitelist_kept),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
+            if (before.contactsAllowed && !now.contactsAllowed) {
+                Text(
+                    text = stringResource(R.string.downgrade_contacts_off),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            if (now.historyRetentionDays < before.historyRetentionDays) {
+                Text(
+                    text = stringResource(R.string.downgrade_history_shorter, now.historyRetentionDays),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Button(onClick = onOpenPaywall, shape = RoundedCornerShape(14.dp)) {
+                    Text(stringResource(R.string.downgrade_see_plans))
+                }
+                TextButton(onClick = onDismiss) {
+                    Text(stringResource(R.string.downgrade_dismiss))
+                }
+            }
+        }
+    }
+}
+
+@Composable
 private fun WhitelistLimitCard(
     count: Int,
-    limit: Int,
+    /** Null = unlimited plan. */
+    limit: Int?,
     progress: Float,
     onOpenWhitelist: () -> Unit
 ) {
@@ -317,19 +414,22 @@ private fun WhitelistLimitCard(
             HomeCardHeader(
                 icon = Icons.Outlined.PhoneLocked,
                 title = stringResource(R.string.whitelist_title),
-                description = stringResource(R.string.whitelist_usage, count, limit)
+                description = limit?.let { stringResource(R.string.whitelist_usage, count, it) }
+                    ?: pluralStringResource(R.plurals.whitelist_count_unlimited, count, count)
             )
 
-            Spacer(modifier = Modifier.height(14.dp))
+            if (limit != null) {
+                Spacer(modifier = Modifier.height(14.dp))
 
-            LinearProgressIndicator(
-                progress = { progress },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(8.dp),
-                color = MaterialTheme.colorScheme.primary,
-                trackColor = MaterialTheme.colorScheme.surfaceVariant
-            )
+                LinearProgressIndicator(
+                    progress = { progress },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(8.dp),
+                    color = MaterialTheme.colorScheme.primary,
+                    trackColor = MaterialTheme.colorScheme.surfaceVariant
+                )
+            }
 
             Spacer(modifier = Modifier.height(14.dp))
 
@@ -346,14 +446,14 @@ private fun WhitelistLimitCard(
 
 @Composable
 private fun LockedContactsCard(
-    isLicensed: Boolean,
+    hasPaidPlan: Boolean,
     useContactsAutomatically: Boolean,
     importedContactsCount: Int,
     onOpenPaywall: () -> Unit,
     onOpenContactsConsent: () -> Unit
 ) {
     val description = when {
-        !isLicensed -> {
+        !hasPaidPlan -> {
             stringResource(R.string.contacts_auto_description_disabled)
         }
 
@@ -389,7 +489,7 @@ private fun LockedContactsCard(
             Spacer(modifier = Modifier.height(14.dp))
 
             when {
-                !isLicensed -> {
+                !hasPaidPlan -> {
                     OutlinedButton(
                         onClick = onOpenPaywall,
                         modifier = Modifier.fillMaxWidth(),

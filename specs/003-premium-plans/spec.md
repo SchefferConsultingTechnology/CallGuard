@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-14
 
-**Status**: Draft
+**Status**: Implemented — validação de compras pendente (Play Console na próxima etapa)
 
 **Input**: User description: "Níveis Grátis / Plus / Pro com os valores recomendados (Plus R$ 6,90/mês,
 R$ 49,90/ano, R$ 99,90 vitalício; Pro R$ 11,90/mês, R$ 89,90/ano), teste grátis de 7 dias no anual,

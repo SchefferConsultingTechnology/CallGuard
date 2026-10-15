@@ -10,16 +10,36 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.combine
+import com.lsp.callguard.BuildConfig
+import com.lsp.callguard.domain.model.Tier
+import com.lsp.callguard.data.billing.BillingRepository
+import com.lsp.callguard.data.billing.RestoreResult
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 
 data class SettingsUiState(
     val appSettings: AppSettings = AppSettings(),
-    val isLicensed: Boolean = false
-)
+    val tier: Tier = Tier.FREE
+) {
+    val hasPaidPlan: Boolean
+        get() = tier != Tier.FREE
+}
 
 class SettingsViewModel(
     private val settingsPreferences: SettingsPreferences,
-    private val licensePreferences: LicensePreferences
+    private val licensePreferences: LicensePreferences,
+    private val billingRepository: BillingRepository
 ) : ViewModel() {
+
+    private val _restoreResults = MutableSharedFlow<RestoreResult>()
+    val restoreResults = _restoreResults.asSharedFlow()
+
+    fun restorePurchases() {
+        viewModelScope.launch {
+            _restoreResults.emit(billingRepository.restorePurchases())
+        }
+    }
+
 
     val uiState: StateFlow<SettingsUiState> =
         combine(
@@ -28,7 +48,7 @@ class SettingsViewModel(
         ) { settings, license ->
             SettingsUiState(
                 appSettings = settings,
-                isLicensed = license.isLicensed
+                tier = license.tier
             )
         }.stateIn(
             scope = viewModelScope,
@@ -36,9 +56,11 @@ class SettingsViewModel(
             initialValue = SettingsUiState()
         )
 
-    fun setMockLicenseActive(value: Boolean) {
+    /** Debug builds only: lets the UI be exercised for each tier without the store. */
+    fun setMockTier(tier: Tier) {
+        if (!BuildConfig.DEBUG) return
         viewModelScope.launch {
-            licensePreferences.setMockLicenseActive(value)
+            licensePreferences.setMockTier(tier)
         }
     }
     fun setBlockUnknown(value: Boolean) {

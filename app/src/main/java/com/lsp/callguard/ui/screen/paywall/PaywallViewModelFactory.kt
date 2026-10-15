@@ -21,7 +21,7 @@ fun rememberPaywallViewModel(): PaywallViewModel {
         object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return PaywallViewModel(billingRepository) as T
+                return PaywallViewModel(billingRepository, licensePreferences) as T
             }
         }
     }
