@@ -55,6 +55,10 @@ class WhitelistRepository(
     suspend fun deleteNumber(id: String) {
         dao.deleteById(id)
     }
+
+    suspend fun deleteByPhone(phoneE164: String) {
+        dao.deleteByPhone(phoneE164)
+    }
 }
 
 sealed class AddAllowedNumberResult {

@@ -29,6 +29,9 @@ interface AllowedNumberDao {
     @Query("DELETE FROM allowed_numbers WHERE id = :id")
     suspend fun deleteById(id: String)
 
+    @Query("DELETE FROM allowed_numbers WHERE phoneE164 = :phoneE164")
+    suspend fun deleteByPhone(phoneE164: String)
+
     @Query("SELECT * FROM allowed_numbers")
     suspend fun getAll(): List<AllowedNumberEntity>
 

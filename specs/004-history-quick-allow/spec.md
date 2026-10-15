@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-14
 
-**Status**: Draft
+**Status**: Implemented
 
 **Input**: User description: "Na lista de histórico de números bloqueados, deve ter uma ação no
 número que permita adicioná-lo à whitelist."

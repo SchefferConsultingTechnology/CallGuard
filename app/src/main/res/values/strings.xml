@@ -222,4 +222,11 @@
         <item quantity="one">%1$d number in your whitelist (unlimited).</item>
         <item quantity="other">%1$d numbers in your whitelist (unlimited).</item>
     </plurals>
+    <string name="history_add_to_whitelist">Add to whitelist</string>
+    <string name="history_in_whitelist">In your whitelist</string>
+    <string name="history_add_dialog_title">Add to whitelist?</string>
+    <string name="history_add_name_optional">Name (optional)</string>
+    <string name="history_added">Added to your whitelist</string>
+    <string name="undo">Undo</string>
+    <string name="history_limit_text">Your plan\'s whitelist is full. Subscribe to Plus for unlimited numbers; this number will be added right after.</string>
 </resources>

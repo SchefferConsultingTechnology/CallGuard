@@ -170,7 +170,7 @@ fun CallGuardNavHost(
         composable(Routes.CallHistory.route) {
             CallHistoryRoute(
                 onBack = { navController.popBackStack() },
-
+                onOpenPaywall = { navController.navigate(Routes.Paywall.create(firstRun = false)) }
             )
         }
 

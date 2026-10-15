@@ -22,6 +22,7 @@ import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.DeleteSweep
 import androidx.compose.material.icons.outlined.History
+import androidx.compose.material.icons.outlined.PersonAdd
 import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.material3.AlertDialog
@@ -33,7 +34,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -45,6 +49,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.lsp.callguard.R
@@ -52,18 +57,21 @@ import com.lsp.callguard.domain.model.CallDecisionLog
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import androidx.compose.ui.res.stringResource
 
 @Composable
 fun CallHistoryScreen(
     uiState: CallHistoryUiState,
+    snackbarHostState: SnackbarHostState,
     onBack: () -> Unit,
-    onClearHistory: () -> Unit
+    onClearHistory: () -> Unit,
+    onConfirmAdd: (phoneE164: String, label: String) -> Unit
 ) {
     var showClearDialog by remember { mutableStateOf(false) }
+    var confirmAdd by remember { mutableStateOf<Pair<String, String?>?>(null) }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         bottomBar = {
             if (uiState.logs.isNotEmpty()) {
                 Column(
@@ -120,10 +128,28 @@ fun CallHistoryScreen(
 
                 items(uiState.logs, key = { it.id }) { log ->
                     val displayPhone = uiState.displayPhones[log.id]
-                    CallHistoryItemCard(log = log, displayPhone = displayPhone)
+                    CallHistoryItemCard(
+                        log = log,
+                        displayPhone = displayPhone,
+                        action = uiState.actions[log.id] ?: QuickAllowAction.NONE,
+                        onAdd = {
+                            uiState.canonicalPhones[log.id]?.let { phone -> confirmAdd = phone to displayPhone }
+                        }
+                    )
                 }
             }
         }
+    }
+
+    confirmAdd?.let { (phone, display) ->
+        AddToWhitelistDialog(
+            displayPhone = display ?: phone,
+            onDismiss = { confirmAdd = null },
+            onConfirm = { label ->
+                onConfirmAdd(phone, label)
+                confirmAdd = null
+            }
+        )
     }
 
     if (showClearDialog) {
@@ -150,6 +176,49 @@ fun CallHistoryScreen(
             }
         )
     }
+}
+
+@Composable
+private fun AddToWhitelistDialog(
+    displayPhone: String,
+    onDismiss: () -> Unit,
+    onConfirm: (label: String) -> Unit
+) {
+    var label by remember { mutableStateOf("") }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.history_add_dialog_title)) },
+        text = {
+            Column {
+                Text(
+                    text = displayPhone,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                OutlinedTextField(
+                    value = label,
+                    onValueChange = { label = it },
+                    label = { Text(stringResource(R.string.history_add_name_optional)) },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = { onConfirm(label) }) {
+                Text(stringResource(R.string.add))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(R.string.cancel))
+            }
+        }
+    )
 }
 
 @Composable
@@ -320,7 +389,9 @@ private fun SummaryPill(
 @Composable
 private fun CallHistoryItemCard(
     log: CallDecisionLog,
-    displayPhone: String?
+    displayPhone: String?,
+    action: QuickAllowAction,
+    onAdd: () -> Unit
 ) {
     val title = displayPhone?.takeIf { it.isNotBlank() } ?: stringResource(R.string.private_number)
     val statusText = if (log.allowed) stringResource(R.string.status_allowed) else stringResource(R.string.status_blocked)
@@ -386,6 +457,32 @@ private fun CallHistoryItemCard(
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+
+                when (action) {
+                    QuickAllowAction.ADD -> TextButton(
+                        onClick = onAdd,
+                        contentPadding = PaddingValues(horizontal = 0.dp, vertical = 4.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.PersonAdd,
+                            contentDescription = null,
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(stringResource(R.string.history_add_to_whitelist))
+                    }
+
+                    QuickAllowAction.IN_WHITELIST -> {
+                        Spacer(modifier = Modifier.height(6.dp))
+                        Text(
+                            text = stringResource(R.string.history_in_whitelist),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+
+                    QuickAllowAction.NONE -> Unit
+                }
             }
         }
     }

@@ -219,4 +219,11 @@
         <item quantity="one">%1$d número na sua whitelist (ilimitada).</item>
         <item quantity="other">%1$d números na sua whitelist (ilimitada).</item>
     </plurals>
+    <string name="history_add_to_whitelist">Adicionar à whitelist</string>
+    <string name="history_in_whitelist">Na sua whitelist</string>
+    <string name="history_add_dialog_title">Adicionar à whitelist?</string>
+    <string name="history_add_name_optional">Nome (opcional)</string>
+    <string name="history_added">Adicionado à sua whitelist</string>
+    <string name="undo">Desfazer</string>
+    <string name="history_limit_text">A whitelist do seu plano está cheia. Assine o Plus para ter números ilimitados; este número será adicionado logo em seguida.</string>
 </resources>
