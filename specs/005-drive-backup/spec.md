@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-14
 
-**Status**: Draft
+**Status**: Partially implemented — exportação/importação por arquivo (US4) concluída; Google Drive (US1–US3, US5) bloqueado até o projeto Google Cloud
 
 **Input**: User description: "Numa assinatura premium, armazenar os dados do banco local em um banco
 remoto que o usuário possa recuperar depois. Sem versão iOS: armazenar apenas no Google Drive."

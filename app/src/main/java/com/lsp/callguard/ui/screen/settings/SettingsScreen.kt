@@ -74,6 +74,8 @@ fun SettingsScreen(
     onUseContactsAutomaticallyChange: (Boolean) -> Unit,
     onMockTierChange: (Tier) -> Unit,
     onRestorePurchases: () -> Unit,
+    onExportBackup: () -> Unit,
+    onImportBackup: () -> Unit,
     snackbarHostState: SnackbarHostState
 ) {
     val hasPaidPlan = uiState.hasPaidPlan
@@ -135,6 +137,14 @@ fun SettingsScreen(
                     onUseContactsAutomaticallyChange = onUseContactsAutomaticallyChange,
                     onOpenPaywall = onOpenPaywall
                 )
+            }
+
+            item {
+                SettingsSectionTitle(stringResource(R.string.section_backup))
+            }
+
+            item {
+                BackupCard(onExport = onExportBackup, onImport = onImportBackup)
             }
 
             item {

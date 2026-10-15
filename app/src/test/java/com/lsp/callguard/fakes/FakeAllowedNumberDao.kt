@@ -32,6 +32,12 @@ class FakeAllowedNumberDao(
         state.value = state.value.filterNot { it.id == id }
     }
 
+    override suspend fun updateLabel(id: String, label: String, updatedAt: Long) {
+        state.value = state.value.map {
+            if (it.id == id) it.copy(label = label, updatedAt = updatedAt) else it
+        }
+    }
+
     override suspend fun deleteByPhone(phoneE164: String) {
         state.value = state.value.filterNot { it.phoneE164 == phoneE164 }
     }

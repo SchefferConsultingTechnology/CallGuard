@@ -79,7 +79,7 @@
     <string name="terms_of_use_body">Al usar CallGuard, aceptas estos términos.\n\nCallGuard evalúa las llamadas entrantes comparándolas con los números que eliges permitir (tu whitelist) y, en los planes Plus y Pro, con los contactos de tu dispositivo. Esta evaluación ocurre solo en tu dispositivo.\n\nCallGuard no garantiza que se bloquee toda llamada no deseada ni que se permita toda llamada deseada; eres responsable de revisar tu whitelist y tu configuración.\n\nPlanes: Gratis, Plus y Pro. Plus y Pro se venden a través de Google Play como suscripciones mensuales o anuales; Plus también existe como compra única de por vida. Las suscripciones se renuevan automáticamente hasta que las canceles en Google Play; después de cancelar, el plan sigue activo hasta el final del período ya pagado. Precios, pruebas y reembolsos siguen los términos de Google Play.\n\nSi un plan termina, todos los números que ya están en tu whitelist siguen permitidos. Las funciones del plan superior dejan de funcionar y el historial de llamadas guarda solo lo que permite el plan actual (7 días en Gratis, 90 en Plus, 365 en Pro).\n\nPuedes dejar de usar CallGuard y desinstalarlo en cualquier momento, lo que también elimina los datos guardados en tu dispositivo.\n\nEstos términos pueden actualizarse a medida que la app evolucione.</string>
     <string name="privacy_policy">Política de privacidad</string>
     <string name="privacy_policy_description">Entiende cómo se manejan tus datos y permisos.</string>
-    <string name="privacy_policy_body">CallGuard está hecho para mantener tus datos en tu dispositivo.\n\nQué accedemos: el número de cada llamada entrante, solo para decidir si se permite o se bloquea, y, en los planes Plus y Pro y con tu permiso, los contactos de tu dispositivo, para permitir a quienes ya conoces. Nada de esto sale de tu dispositivo ni se envía a nosotros ni a terceros.\n\nQué guardamos: tu whitelist, el historial de decisiones de llamadas y tu configuración se guardan en el almacenamiento privado de la app. El historial se guarda 7 días en Gratis, 90 en Plus y 365 en Pro, y después se elimina automáticamente. Desinstalar la app lo borra todo.\n\nPagos: Google Play procesa las compras; la app solo recibe qué plan está activo, nunca los datos de tu pago.\n\nSin anuncios, sin análisis de uso, sin rastreo: CallGuard no incluye SDKs de publicidad ni de analytics y no vende ni comparte tus datos.\n\nEsta política puede actualizarse a medida que la app evolucione.</string>
+    <string name="privacy_policy_body">CallGuard está hecho para mantener tus datos en tu dispositivo.\n\nQué accedemos: el número de cada llamada entrante, solo para decidir si se permite o se bloquea, y, en los planes Plus y Pro y con tu permiso, los contactos de tu dispositivo, para permitir a quienes ya conoces. Nada de esto sale de tu dispositivo ni se envía a nosotros ni a terceros.\n\nQué guardamos: tu whitelist, el historial de decisiones de llamadas y tu configuración se guardan en el almacenamiento privado de la app. El historial se guarda 7 días en Gratis, 90 en Plus y 365 en Pro, y después se elimina automáticamente. Desinstalar la app lo borra todo.\n\nCopia de seguridad: puedes exportar tu whitelist y tu configuración (y, si lo eliges, el historial) a un archivo protegido con contraseña, guardado solo donde tú elijas. CallGuard nunca recibe ese archivo.\n\nPagos: Google Play procesa las compras; la app solo recibe qué plan está activo, nunca los datos de tu pago.\n\nSin anuncios, sin análisis de uso, sin rastreo: CallGuard no incluye SDKs de publicidad ni de analytics y no vende ni comparte tus datos.\n\nEsta política puede actualizarse a medida que la app evolucione.</string>
     <string name="language">Idioma</string>
     <string name="change_language">Cambiar el idioma de la app.</string>
     <string name="no_ads">Sin anuncios</string>
@@ -226,4 +226,25 @@
     <string name="history_added">Agregado a tu whitelist</string>
     <string name="undo">Deshacer</string>
     <string name="history_limit_text">La whitelist de tu plan está llena. Suscríbete a Plus para tener números ilimitados; este número se agregará justo después.</string>
+    <string name="section_backup">Copia de seguridad</string>
+    <string name="backup_title">Archivo protegido con contraseña</string>
+    <string name="backup_description">Guarda tu whitelist y tu configuración en un archivo protegido con contraseña y restáuralos en otro teléfono. El archivo solo va donde tú elijas.</string>
+    <string name="backup_export">Exportar</string>
+    <string name="backup_import">Importar</string>
+    <string name="backup_export_title">Exportar copia</string>
+    <string name="backup_export_explanation">Elige una contraseña. Sin ella nadie, ni siquiera tú, puede abrir el archivo.</string>
+    <string name="backup_password">Contraseña</string>
+    <string name="backup_password_confirm">Confirma la contraseña</string>
+    <string name="backup_password_too_short">Usa al menos %1$d caracteres</string>
+    <string name="backup_password_mismatch">Las contraseñas no coinciden</string>
+    <string name="backup_include_history">Incluir historial de llamadas</string>
+    <string name="backup_export_choose_place">Elegir dónde guardar</string>
+    <string name="backup_import_title">Importar copia</string>
+    <string name="backup_import_explanation">Escribe la contraseña usada al exportar. Los números se agregan a tu whitelist; no se borra nada.</string>
+    <string name="backup_exported">Copia guardada.</string>
+    <string name="backup_export_failed">No se pudo guardar el archivo.</string>
+    <string name="backup_imported">Importación completada. Números nuevos: %1$d. Actualizados: %2$d. Registros de historial: %3$d.</string>
+    <string name="backup_wrong_password">Contraseña incorrecta o archivo dañado. No se cambió nada.</string>
+    <string name="backup_newer_format">Esta copia la hizo una versión más nueva de CallGuard. Actualiza la app primero.</string>
+    <string name="backup_unreadable">Este archivo no es una copia de CallGuard.</string>
 </resources>

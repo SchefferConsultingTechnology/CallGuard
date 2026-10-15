@@ -79,7 +79,7 @@
     <string name="terms_of_use_body">Ao usar o CallGuard, você concorda com estes termos.\n\nO CallGuard avalia as chamadas recebidas comparando com os números que você escolhe permitir (sua whitelist) e, nos planos Plus e Pro, com os contatos do seu aparelho. Essa avaliação acontece somente no seu dispositivo.\n\nO CallGuard não garante que toda chamada indesejada será bloqueada nem que toda chamada desejada será permitida; você é responsável por revisar sua whitelist e suas configurações.\n\nPlanos: Grátis, Plus e Pro. Plus e Pro são vendidos pela Google Play como assinaturas mensais ou anuais; o Plus também existe como compra única vitalícia. As assinaturas renovam automaticamente até você cancelá-las na Google Play; depois de cancelar, o plano continua ativo até o fim do período já pago. Preços, períodos de teste e reembolsos seguem os termos da Google Play.\n\nSe um plano terminar, todos os números que já estão na sua whitelist continuam permitidos. Os recursos do plano superior deixam de funcionar e o histórico de chamadas passa a guardar apenas o que o plano atual permite (7 dias no Grátis, 90 no Plus, 365 no Pro).\n\nVocê pode parar de usar o CallGuard e desinstalá-lo a qualquer momento, o que também remove os dados armazenados no seu dispositivo.\n\nEstes termos podem ser atualizados conforme o app evolui.</string>
     <string name="privacy_policy">Política de privacidade</string>
     <string name="privacy_policy_description">Entenda como seus dados e permissões são tratados.</string>
-    <string name="privacy_policy_body">O CallGuard foi criado para manter seus dados no seu dispositivo.\n\nO que acessamos: o número de cada chamada recebida, apenas para decidir se ela deve ser permitida ou bloqueada, e, nos planos Plus e Pro e com sua permissão, os contatos do seu aparelho, para permitir quem você já conhece. Nada disso sai do seu dispositivo nem é enviado para nós ou para terceiros.\n\nO que armazenamos: sua whitelist, o histórico de decisões de chamadas e suas configurações ficam no armazenamento privado do app. O histórico é guardado por 7 dias no Grátis, 90 no Plus e 365 no Pro, e depois apagado automaticamente. Desinstalar o app apaga tudo.\n\nPagamentos: a Google Play processa as compras; o app recebe apenas qual plano está ativo, nunca os dados do seu pagamento.\n\nSem anúncios, sem análise de uso, sem rastreamento: o CallGuard não inclui SDKs de publicidade ou analytics e não vende nem compartilha seus dados.\n\nEsta política pode ser atualizada conforme o app evolui.</string>
+    <string name="privacy_policy_body">O CallGuard foi criado para manter seus dados no seu dispositivo.\n\nO que acessamos: o número de cada chamada recebida, apenas para decidir se ela deve ser permitida ou bloqueada, e, nos planos Plus e Pro e com sua permissão, os contatos do seu aparelho, para permitir quem você já conhece. Nada disso sai do seu dispositivo nem é enviado para nós ou para terceiros.\n\nO que armazenamos: sua whitelist, o histórico de decisões de chamadas e suas configurações ficam no armazenamento privado do app. O histórico é guardado por 7 dias no Grátis, 90 no Plus e 365 no Pro, e depois apagado automaticamente. Desinstalar o app apaga tudo.\n\nCópia de segurança: você pode exportar sua whitelist e suas configurações (e, se escolher, o histórico) para um arquivo protegido por senha, salvo apenas onde você escolher. O CallGuard nunca recebe esse arquivo.\n\nPagamentos: a Google Play processa as compras; o app recebe apenas qual plano está ativo, nunca os dados do seu pagamento.\n\nSem anúncios, sem análise de uso, sem rastreamento: o CallGuard não inclui SDKs de publicidade ou analytics e não vende nem compartilha seus dados.\n\nEsta política pode ser atualizada conforme o app evolui.</string>
     <string name="language">Idioma</string>
     <string name="change_language">Alterar o idioma do app.</string>
     <string name="no_ads">Sem anúncios</string>
@@ -226,4 +226,25 @@
     <string name="history_added">Adicionado à sua whitelist</string>
     <string name="undo">Desfazer</string>
     <string name="history_limit_text">A whitelist do seu plano está cheia. Assine o Plus para ter números ilimitados; este número será adicionado logo em seguida.</string>
+    <string name="section_backup">Cópia de segurança</string>
+    <string name="backup_title">Arquivo protegido por senha</string>
+    <string name="backup_description">Salve sua whitelist e suas configurações num arquivo protegido por senha e restaure em outro celular. O arquivo só vai para onde você escolher.</string>
+    <string name="backup_export">Exportar</string>
+    <string name="backup_import">Importar</string>
+    <string name="backup_export_title">Exportar cópia</string>
+    <string name="backup_export_explanation">Escolha uma senha. Sem ela ninguém, nem você, consegue abrir o arquivo.</string>
+    <string name="backup_password">Senha</string>
+    <string name="backup_password_confirm">Confirme a senha</string>
+    <string name="backup_password_too_short">Use pelo menos %1$d caracteres</string>
+    <string name="backup_password_mismatch">As senhas não conferem</string>
+    <string name="backup_include_history">Incluir histórico de chamadas</string>
+    <string name="backup_export_choose_place">Escolher onde salvar</string>
+    <string name="backup_import_title">Importar cópia</string>
+    <string name="backup_import_explanation">Digite a senha usada ao exportar. Os números são adicionados à sua whitelist; nada é apagado.</string>
+    <string name="backup_exported">Cópia salva.</string>
+    <string name="backup_export_failed">Não foi possível salvar o arquivo.</string>
+    <string name="backup_imported">Importação concluída. Números novos: %1$d. Atualizados: %2$d. Registros de histórico: %3$d.</string>
+    <string name="backup_wrong_password">Senha errada ou arquivo danificado. Nada foi alterado.</string>
+    <string name="backup_newer_format">Esta cópia foi feita por uma versão mais nova do CallGuard. Atualize o app antes.</string>
+    <string name="backup_unreadable">Este arquivo não é uma cópia do CallGuard.</string>
 </resources>
