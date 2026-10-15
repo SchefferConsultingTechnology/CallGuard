@@ -14,10 +14,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import com.lsp.callguard.R
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 
 @Composable
 fun CallHistoryRoute(
-    onBack: () -> Unit,
+    reselection: Flow<Unit> = emptyFlow(),
     onOpenPaywall: () -> Unit
 ) {
     val viewModel = rememberCallHistoryViewModel()
@@ -51,7 +53,7 @@ fun CallHistoryRoute(
     CallHistoryScreen(
         uiState = uiState,
         snackbarHostState = snackbarHostState,
-        onBack = onBack,
+        reselection = reselection,
         onClearHistory = viewModel::clearHistory,
         onConfirmAdd = viewModel::addToWhitelist
     )

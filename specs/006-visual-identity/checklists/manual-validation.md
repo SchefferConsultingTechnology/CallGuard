@@ -46,8 +46,7 @@
   → claro (245), sem reabrir o app.
 - [x] **Fonte 200%**: telas legíveis. Achado e corrigido: "Sistema" era cortado ("Siste…") no seletor;
   removido o ícone de marcação e reduzido o padding do segmento — cabe em 100% e 200%.
-- [ ] **Backup no aparelho (§6)**: exportar com Escuro e importar com Claro pelo seletor de arquivos não
-  foi feito no emulador; coberto por `BackupRepositoryTest` (repositório) e pelo `SettingsRoute`, que
-  aplica `result.themeMode` como já faz com o idioma.
+- [x] **Backup no aparelho (§6)** (validado em 2026-10-15, durante a 007): exportado com Escuro, trocado
+  para Claro, importado → volta ao Escuro, depois do aviso "Importação concluída".
 - [ ] **Android 8–11 (API 26–30)**: sem emulador dessa versão; a leitura antes de `super.onCreate` e o
   `enableEdgeToEdge` nessas versões não foram vistos em aparelho.

@@ -5,7 +5,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.lsp.callguard.core.language.LocaleManagerHelper
 import com.lsp.callguard.core.phone.PhoneServices
 import com.lsp.callguard.core.theme.ThemeModeApplier
 import com.lsp.callguard.data.backup.BackupRepository
@@ -20,13 +22,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 @Composable
-fun rememberSettingsViewModel(): SettingsViewModel {
+/** [owner]: the Ajustes graph entry, so the list and its pages share one instance (feature 007). */
+fun rememberSettingsViewModel(owner: ViewModelStoreOwner): SettingsViewModel {
     val context = LocalContext.current.applicationContext
 
     val factory = remember(context) {
         val preferences = SettingsPreferences(context.appPreferencesDataStore)
         val licensePreferences = LicensePreferences(context.appPreferencesDataStore)
         val appearancePreferences = AppearancePreferences(context.appPreferencesDataStore)
+        val languagePreferences = LanguagePreferences(context.appPreferencesDataStore)
         val database = CallGuardDatabase.getInstance(context)
 
 
@@ -39,11 +43,12 @@ fun rememberSettingsViewModel(): SettingsViewModel {
                     billingRepository = BillingRepository.getInstance(context, licensePreferences),
                     appearancePreferences = appearancePreferences,
                     applyTheme = { mode -> ThemeModeApplier.apply(context, mode) },
+                    applyLanguage = LocaleManagerHelper::applyLanguage,
                     backupRepository = BackupRepository(
                         allowedNumberDao = database.allowedNumberDao(),
                         callDecisionLogDao = database.callDecisionLogDao(),
                         settingsPreferences = preferences,
-                        languagePreferences = LanguagePreferences(context.appPreferencesDataStore),
+                        languagePreferences = languagePreferences,
                         appearancePreferences = appearancePreferences,
                         licensePreferences = licensePreferences,
                         normalizer = PhoneServices.normalizer,
@@ -66,6 +71,6 @@ fun rememberSettingsViewModel(): SettingsViewModel {
         }
     }
 
-    return viewModel(factory = factory)
+    return viewModel(viewModelStoreOwner = owner, factory = factory)
 }
 

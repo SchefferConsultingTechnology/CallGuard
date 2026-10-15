@@ -10,10 +10,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import com.lsp.callguard.R
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 
 @Composable
 fun WhitelistRoute(
-    onBack: () -> Unit,
+    reselection: Flow<Unit> = emptyFlow(),
     onOpenPaywall: () -> Unit
 ) {
     val viewModel = rememberWhitelistViewModel()
@@ -54,7 +56,7 @@ fun WhitelistRoute(
         onDismissLimitDialog = {
             showLimitDialog = false
         },
-        onBack = onBack,
+        reselection = reselection,
         onOpenPaywall = onOpenPaywall,
         phoneExample = phoneExample,
         previewFor = viewModel::previewFor,

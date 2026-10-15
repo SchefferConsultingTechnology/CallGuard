@@ -2,12 +2,15 @@ package com.lsp.callguard.ui.screen.home
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,40 +19,36 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ContactPhone
+import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.CreditCard
-import androidx.compose.material.icons.outlined.History
-import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.PhoneLocked
 import androidx.compose.material.icons.outlined.Security
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.VerifiedUser
+import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.lsp.callguard.R
 import com.lsp.callguard.core.theme.CallGuardTheme
@@ -57,27 +56,36 @@ import com.lsp.callguard.domain.billing.EntitlementStatus
 import com.lsp.callguard.domain.model.PlanFeatures
 import com.lsp.callguard.domain.model.Tier
 import com.lsp.callguard.ui.components.tierDisplayName
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import java.util.Locale
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 
 @Composable
 fun HomeScreen(
     uiState: HomeUiState,
     onOpenWhitelist: () -> Unit,
-    onOpenSettings: () -> Unit,
     onOpenPaywall: () -> Unit,
     onOpenProtectionSetup: () -> Unit,
     onOpenCallHistory: () -> Unit,
-    onOpenContactsConsent: () -> Unit,
-    onDismissDowngradeNotice: () -> Unit
+    onDismissDowngradeNotice: () -> Unit,
+    reselection: Flow<Unit> = emptyFlow()
 ) {
-    val hasPaidPlan = uiState.hasPaidPlan
-    val whitelistCount = uiState.whitelistCount
-    val limit = uiState.whitelistLimit
-    val progress = uiState.progress
+    val listState = rememberLazyListState()
+    LaunchedEffect(reselection) {
+        reselection.collect { listState.animateScrollToItem(0) }
+    }
 
+    // Dashboard (feature 007): fits one screen; whitelist, history and settings are tabs.
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding: PaddingValues ->
         LazyColumn(
+            state = listState,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
@@ -87,9 +95,7 @@ fun HomeScreen(
             contentPadding = PaddingValues(top = 18.dp, bottom = 24.dp)
         ) {
             item {
-                HomeHeader(
-                    onOpenSettings = onOpenSettings
-                )
+                HomeHeader()
             }
 
             uiState.downgradedFrom?.let { previousTier ->
@@ -111,78 +117,61 @@ fun HomeScreen(
             }
 
             item {
-                CallHistoryCard(onOpenCallHistory)
-            }
-            item {
-                PlanStatusCard(
-                    tier = uiState.tier,
-                    status = uiState.status,
-                    hasPendingPurchase = uiState.hasPendingPurchase,
-                    onOpenPaywall = onOpenPaywall
-                )
-            }
-
-            item {
-                WhitelistLimitCard(
-                    count = whitelistCount,
-                    limit = uiState.whitelistLimit,
-                    progress = progress,
-                    onOpenWhitelist = onOpenWhitelist
-                )
-            }
-
-            item {
-                LockedContactsCard(
-                    hasPaidPlan = uiState.hasPaidPlan,
-                    useContactsAutomatically = uiState.useContactsAutomatically,
-                    importedContactsCount = uiState.importedContactsCount,
-                    onOpenPaywall = onOpenPaywall,
-                    onOpenContactsConsent = onOpenContactsConsent
-                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(IntrinsicSize.Min),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    WhitelistSummaryCard(
+                        count = uiState.whitelistCount,
+                        limit = uiState.whitelistLimit,
+                        progress = uiState.progress,
+                        onClick = onOpenWhitelist,
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                    )
+                    PlanSummaryCard(
+                        tier = uiState.tier,
+                        status = uiState.status,
+                        hasPendingPurchase = uiState.hasPendingPurchase,
+                        onClick = onOpenPaywall,
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                    )
+                }
             }
 
             item {
-                PrivacyCard()
+                RecentCallsCard(
+                    recentCalls = uiState.recentCalls,
+                    onOpenCallHistory = onOpenCallHistory
+                )
             }
         }
     }
 }
 
 @Composable
-private fun HomeHeader(
-    onOpenSettings: () -> Unit
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
-            Text(
-                text = stringResource(R.string.app_name),
-                style = MaterialTheme.typography.headlineSmall.copy(
-                    fontWeight = FontWeight.Bold
-                ),
-                color = MaterialTheme.colorScheme.onBackground
-            )
+private fun HomeHeader() {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = stringResource(R.string.app_name),
+            style = MaterialTheme.typography.headlineSmall.copy(
+                fontWeight = FontWeight.Bold
+            ),
+            color = MaterialTheme.colorScheme.onBackground
+        )
 
-            Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(4.dp))
 
-            Text(
-                text = stringResource(R.string.home_description),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-
-        IconButton(onClick = onOpenSettings) {
-            Icon(
-                imageVector = Icons.Outlined.Settings,
-                contentDescription = stringResource(R.string.settings),
-                tint = MaterialTheme.colorScheme.onSurface
-            )
-        }
+        Text(
+            text = stringResource(R.string.home_description),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 
@@ -230,62 +219,6 @@ private fun ProtectionStatusCard(
                         stringResource(R.string.activate_protection)
                     }
                 )
-            }
-        }
-    }
-}
-
-@Composable
-private fun PlanStatusCard(
-    tier: Tier,
-    status: EntitlementStatus,
-    hasPendingPurchase: Boolean,
-    onOpenPaywall: () -> Unit
-) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        ),
-        border = BorderStroke(
-            width = 1.dp,
-            color = MaterialTheme.colorScheme.outlineVariant
-        )
-    ) {
-        Column(
-            modifier = Modifier.padding(18.dp)
-        ) {
-            HomeCardHeader(
-                icon = Icons.Outlined.CreditCard,
-                title = stringResource(R.string.plan_current, tierDisplayName(tier)),
-                description = when {
-                    tier == Tier.FREE -> stringResource(R.string.plan_description_free)
-                    status == EntitlementStatus.CANCELED_ACTIVE -> stringResource(R.string.plan_not_renewing)
-                    else -> stringResource(R.string.plan_description_premium)
-                }
-            )
-
-            if (hasPendingPurchase) {
-                Spacer(modifier = Modifier.height(10.dp))
-
-                Text(
-                    text = stringResource(R.string.paywall_pending),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-
-            if (tier == Tier.FREE) {
-                Spacer(modifier = Modifier.height(14.dp))
-
-                Button(
-                    onClick = onOpenPaywall,
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(14.dp)
-                ) {
-                    Text(stringResource(R.string.view_premium))
-                }
             }
         }
     }
@@ -369,185 +302,6 @@ private fun DowngradeNoticeCard(
 }
 
 @Composable
-private fun WhitelistLimitCard(
-    count: Int,
-    /** Null = unlimited plan. */
-    limit: Int?,
-    progress: Float,
-    onOpenWhitelist: () -> Unit
-) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        ),
-        border = BorderStroke(
-            width = 1.dp,
-            color = MaterialTheme.colorScheme.outlineVariant
-        )
-    ) {
-        Column(
-            modifier = Modifier.padding(18.dp)
-        ) {
-            HomeCardHeader(
-                icon = Icons.Outlined.PhoneLocked,
-                title = stringResource(R.string.whitelist_title),
-                description = limit?.let { stringResource(R.string.whitelist_usage, count, it) }
-                    ?: pluralStringResource(R.plurals.whitelist_count_unlimited, count, count)
-            )
-
-            if (limit != null) {
-                Spacer(modifier = Modifier.height(14.dp))
-
-                LinearProgressIndicator(
-                    progress = { progress },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(8.dp),
-                    color = if (count >= limit) {
-                        CallGuardTheme.extendedColors.warning
-                    } else {
-                        MaterialTheme.colorScheme.primary
-                    },
-                    trackColor = MaterialTheme.colorScheme.surfaceVariant
-                )
-            }
-
-            Spacer(modifier = Modifier.height(14.dp))
-
-            FilledTonalButton(
-                onClick = onOpenWhitelist,
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(14.dp)
-            ) {
-                Text(stringResource(R.string.manage_whitelist))
-            }
-        }
-    }
-}
-
-@Composable
-private fun LockedContactsCard(
-    hasPaidPlan: Boolean,
-    useContactsAutomatically: Boolean,
-    importedContactsCount: Int,
-    onOpenPaywall: () -> Unit,
-    onOpenContactsConsent: () -> Unit
-) {
-    val description = when {
-        !hasPaidPlan -> {
-            stringResource(R.string.contacts_auto_description_disabled)
-        }
-
-        useContactsAutomatically -> {
-            stringResource(R.string.contacts_imported_count, importedContactsCount)
-        }
-
-        else -> {
-            stringResource(R.string.contacts_auto_description_enabled)
-        }
-    }
-
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        ),
-        border = BorderStroke(
-            width = 1.dp,
-            color = MaterialTheme.colorScheme.outlineVariant
-        )
-    ) {
-        Column(
-            modifier = Modifier.padding(18.dp)
-        ) {
-            HomeCardHeader(
-                icon = Icons.Outlined.ContactPhone,
-                title = stringResource(R.string.contacts_automatic),
-                description = description
-            )
-
-            Spacer(modifier = Modifier.height(14.dp))
-
-            when {
-                !hasPaidPlan -> {
-                    OutlinedButton(
-                        onClick = onOpenPaywall,
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(14.dp),
-                        border = BorderStroke(
-                            width = 1.dp,
-                            color = MaterialTheme.colorScheme.outline
-                        )
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.Lock,
-                            contentDescription = null,
-                            modifier = Modifier.size(18.dp)
-                        )
-
-                        Spacer(modifier = Modifier.width(8.dp))
-
-                        Text(stringResource(R.string.unlock_with_premium))
-                    }
-                }
-
-                !useContactsAutomatically -> {
-                    Button(
-                        onClick = onOpenContactsConsent,
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(14.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.ContactPhone,
-                            contentDescription = null,
-                            modifier = Modifier.size(18.dp)
-                        )
-
-                        Spacer(modifier = Modifier.width(8.dp))
-
-                        Text(stringResource(R.string.enable_auto_contacts))
-                    }
-                }
-
-                else -> {
-                    FilledTonalButton(
-                        onClick = onOpenContactsConsent,
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(14.dp)
-                    ) {
-                        Text(stringResource(R.string.update_contacts))
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun PrivacyCard() {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
-        )
-    ) {
-        Column(
-            modifier = Modifier.padding(18.dp)
-        ) {
-            HomeCardHeader(
-                icon = Icons.Outlined.VerifiedUser,
-                title = stringResource(R.string.privacy_title),
-                description = stringResource(R.string.privacy_description)
-            )
-        }
-    }
-}
-
-@Composable
 private fun HomeCardHeader(
     icon: ImageVector,
     title: String,
@@ -596,7 +350,128 @@ private fun HomeCardHeader(
 }
 
 @Composable
-private fun CallHistoryCard(
+private fun SummaryCard(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    Card(
+        onClick = onClick,
+        modifier = modifier,
+        shape = RoundedCornerShape(22.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        border = BorderStroke(
+            width = 1.dp,
+            color = MaterialTheme.colorScheme.outlineVariant
+        )
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            content()
+        }
+    }
+}
+
+@Composable
+private fun SummaryCardTitle(icon: ImageVector, title: String) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(20.dp)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+            color = MaterialTheme.colorScheme.onSurface,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
+}
+
+@Composable
+private fun WhitelistSummaryCard(
+    count: Int,
+    /** Null = unlimited plan. */
+    limit: Int?,
+    progress: Float,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    SummaryCard(onClick = onClick, modifier = modifier) {
+        SummaryCardTitle(icon = Icons.Outlined.PhoneLocked, title = stringResource(R.string.tab_whitelist))
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Text(
+            text = limit?.let { stringResource(R.string.home_whitelist_short, count, it) }
+                ?: pluralStringResource(R.plurals.home_whitelist_count_short, count, count),
+            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+            color = MaterialTheme.colorScheme.onSurface
+        )
+
+        if (limit != null) {
+            Spacer(modifier = Modifier.height(10.dp))
+
+            LinearProgressIndicator(
+                progress = { progress.coerceIn(0f, 1f) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(6.dp),
+                color = if (count >= limit) {
+                    CallGuardTheme.extendedColors.warning
+                } else {
+                    MaterialTheme.colorScheme.primary
+                },
+                trackColor = MaterialTheme.colorScheme.surfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
+private fun PlanSummaryCard(
+    tier: Tier,
+    status: EntitlementStatus,
+    hasPendingPurchase: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    SummaryCard(onClick = onClick, modifier = modifier) {
+        SummaryCardTitle(icon = Icons.Outlined.CreditCard, title = stringResource(R.string.home_plan_title))
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Text(
+            text = tierDisplayName(tier),
+            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+            color = MaterialTheme.colorScheme.onSurface
+        )
+
+        Spacer(modifier = Modifier.height(6.dp))
+
+        Text(
+            text = when {
+                hasPendingPurchase -> stringResource(R.string.home_plan_pending)
+                status == EntitlementStatus.CANCELED_ACTIVE -> stringResource(R.string.home_plan_not_renewing)
+                tier == Tier.FREE -> stringResource(R.string.view_premium) + " ›"
+                else -> stringResource(R.string.home_plan_manage) + " ›"
+            },
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
+}
+
+@Composable
+private fun RecentCallsCard(
+    recentCalls: List<RecentCall>,
     onOpenCallHistory: () -> Unit
 ) {
     Card(
@@ -610,61 +485,93 @@ private fun CallHistoryCard(
             color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
-        Column(
-            modifier = Modifier.padding(20.dp)
-        ) {
+        Column(modifier = Modifier.padding(vertical = 10.dp)) {
             Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 18.dp, end = 6.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Surface(
-                    shape = CircleShape,
-                    color = MaterialTheme.colorScheme.primaryContainer,
-                    modifier = Modifier.size(42.dp)
-                ) {
-                    Box(
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.History,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(22.dp)
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.width(12.dp))
-
-                Column(
+                Text(
+                    text = stringResource(R.string.home_recent_calls),
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                    color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.weight(1f)
-                ) {
-                    Text(
-                        text = stringResource(R.string.history_recent),
-                        style = MaterialTheme.typography.titleMedium.copy(
-                            fontWeight = FontWeight.SemiBold
-                        ),
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-
-                    Spacer(modifier = Modifier.height(2.dp))
-
-                    Text(
-                        text = stringResource(R.string.history_subtitle),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                )
+                TextButton(onClick = onOpenCallHistory) {
+                    Text(stringResource(R.string.home_see_all))
                 }
             }
 
-            Spacer(modifier = Modifier.height(18.dp))
-
-            FilledTonalButton(
-                onClick = onOpenCallHistory,
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(14.dp)
-            ) {
-                Text(stringResource(R.string.view_history))
+            if (recentCalls.isEmpty()) {
+                Text(
+                    text = stringResource(R.string.home_no_calls_yet),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(horizontal = 18.dp, vertical = 8.dp)
+                )
+            } else {
+                recentCalls.forEach { call ->
+                    RecentCallRow(call = call, onClick = onOpenCallHistory)
+                }
             }
         }
     }
 }
+
+@Composable
+private fun RecentCallRow(call: RecentCall, onClick: () -> Unit) {
+    // Colour is never the only signal: icon and status text differ too (spec 006, FR-008).
+    val statusColor = if (call.allowed) CallGuardTheme.extendedColors.success else MaterialTheme.colorScheme.error
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(horizontal = 18.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = if (call.allowed) Icons.Outlined.Verified else Icons.Outlined.Block,
+            contentDescription = null,
+            tint = statusColor,
+            modifier = Modifier.size(20.dp)
+        )
+
+        Spacer(modifier = Modifier.width(12.dp))
+
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = call.displayPhone?.takeIf { it.isNotBlank() } ?: stringResource(R.string.private_number),
+                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium),
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                text = stringResource(if (call.allowed) R.string.status_allowed else R.string.status_blocked),
+                style = MaterialTheme.typography.bodySmall,
+                color = statusColor
+            )
+        }
+
+        Text(
+            text = formatCallTime(call.createdAt),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+/** Today → time only; earlier → short date, both in the app's language. */
+private fun formatCallTime(createdAt: Long): String {
+    val zone = ZoneId.systemDefault()
+    val moment = Instant.ofEpochMilli(createdAt).atZone(zone)
+    val formatter = if (moment.toLocalDate() == LocalDate.now(zone)) {
+        DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
+    } else {
+        DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
+    }
+    return formatter.withLocale(Locale.getDefault()).format(moment)
+}
+

@@ -7,7 +7,8 @@ import com.lsp.callguard.data.repository.AddAllowedNumberResult
 import com.lsp.callguard.data.repository.CallDecisionLogRepository
 import com.lsp.callguard.data.repository.WhitelistRepository
 import com.lsp.callguard.domain.model.CallDecisionLog
-import com.lsp.callguard.domain.phone.PhoneNormalizationResult
+import com.lsp.callguard.domain.phone.canonicalOf
+import com.lsp.callguard.domain.phone.displayPhoneOf
 import com.lsp.callguard.domain.phone.PhoneNormalizer
 import com.lsp.callguard.domain.phone.PhoneNumberDisplayFormatter
 import com.lsp.callguard.domain.phone.RegionProvider
@@ -78,12 +79,12 @@ class CallHistoryViewModel(
             region
         ) { logs, allowedNumbers, userRegion ->
             val inWhitelist = allowedNumbers.mapTo(mutableSetOf()) { it.phoneE164 }
-            val canonical = logs.associate { log -> log.id to canonicalOf(log, userRegion) }
+            val canonical = logs.associate { log -> log.id to canonicalOf(log, userRegion, normalizer) }
 
             CallHistoryUiState(
                 logs = logs,
                 displayPhones = logs.associate { log ->
-                    log.id to formatter.formatOrRaw(canonical[log.id], log.phone, userRegion)
+                    log.id to displayPhoneOf(log, userRegion, normalizer, formatter)
                 },
                 actions = logs.associate { log ->
                     log.id to quickAllowAction(log.allowed, canonical[log.id], inWhitelist)
@@ -95,12 +96,6 @@ class CallHistoryViewModel(
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = CallHistoryUiState()
         )
-
-    /** Rows written before feature 001 may lack the canonical number; re-read with the same rule. */
-    private fun canonicalOf(log: CallDecisionLog, userRegion: String?): String? {
-        log.normalizedPhone?.let { return it }
-        return (normalizer.normalize(log.phone, userRegion) as? PhoneNormalizationResult.Valid)?.phoneE164
-    }
 
     fun addToWhitelist(phoneE164: String, label: String) {
         viewModelScope.launch {

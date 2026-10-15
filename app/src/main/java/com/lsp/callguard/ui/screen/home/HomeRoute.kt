@@ -16,22 +16,25 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lsp.callguard.R
+import com.lsp.callguard.core.phone.PhoneServices
 import com.lsp.callguard.data.billing.BillingRepository
 import com.lsp.callguard.data.local.database.CallGuardDatabase
 import com.lsp.callguard.data.local.preferences.LicensePreferences
 import com.lsp.callguard.data.local.preferences.SettingsPreferences
 import com.lsp.callguard.data.local.preferences.appPreferencesDataStore
+import com.lsp.callguard.data.repository.CallDecisionLogRepository
 import com.lsp.callguard.data.repository.WhitelistRepository
 import com.lsp.callguard.domain.protection.CallScreeningRoleChecker
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 
 @Composable
 fun HomeRoute(
     onOpenWhitelist: () -> Unit,
-    onOpenSettings: () -> Unit,
     onOpenPaywall: () -> Unit,
     onOpenProtectionSetup: () -> Unit,
     onOpenCallHistory: () -> Unit,
-    onOpenContactsConsent: () -> Unit
+    reselection: Flow<Unit> = emptyFlow()
 ) {
     val context = LocalContext.current.applicationContext
     val fallbackLabel = stringResource(R.string.contact_no_name)
@@ -42,7 +45,8 @@ fun HomeRoute(
             val repository = WhitelistRepository(db.allowedNumberDao(), fallbackLabel)
             val settingsPreferences = SettingsPreferences(context.appPreferencesDataStore)
             val licensePreferences = LicensePreferences(context.appPreferencesDataStore)
-            val deviceContactDao = db.deviceContactDao()
+            val callLogRepository = CallDecisionLogRepository(db.callDecisionLogDao(), PhoneServices.normalizer)
+            val regionProvider = PhoneServices.regionProvider(context)
 
 
             object : ViewModelProvider.Factory {
@@ -52,7 +56,10 @@ fun HomeRoute(
                         repository = repository,
                         settingsPreferences = settingsPreferences,
                         licensePreferences = licensePreferences,
-                        deviceContactDao = deviceContactDao
+                        callLogRepository = callLogRepository,
+                        normalizer = PhoneServices.normalizer,
+                        formatter = PhoneServices.formatter,
+                        regionProvider = regionProvider
                     ) as T
                 }
             }
@@ -85,12 +92,11 @@ fun HomeRoute(
     HomeScreen(
         uiState = uiState,
         onOpenWhitelist = onOpenWhitelist,
-        onOpenSettings = onOpenSettings,
         onOpenPaywall = onOpenPaywall,
         onOpenProtectionSetup = onOpenProtectionSetup,
         onOpenCallHistory = onOpenCallHistory,
-        onOpenContactsConsent = onOpenContactsConsent,
-        onDismissDowngradeNotice = viewModel::dismissDowngradeNotice
+        onDismissDowngradeNotice = viewModel::dismissDowngradeNotice,
+        reselection = reselection
     )
 }
 

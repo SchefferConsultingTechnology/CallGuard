@@ -15,12 +15,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Phone
@@ -44,6 +44,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -57,6 +58,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.lsp.callguard.R
 import com.lsp.callguard.core.theme.CallGuardTheme
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 
 @Composable
 fun WhitelistScreen(
@@ -64,7 +67,7 @@ fun WhitelistScreen(
     snackbarHostState: SnackbarHostState,
     showLimitDialog: Boolean,
     onDismissLimitDialog: () -> Unit,
-    onBack: () -> Unit,
+    reselection: Flow<Unit> = emptyFlow(),
     onOpenPaywall: () -> Unit,
     phoneExample: String?,
     previewFor: (String) -> PhoneInputPreview,
@@ -81,6 +84,11 @@ fun WhitelistScreen(
     val hasPaidPlan = uiState.hasPaidPlan
     val reachedLimit = uiState.reachedLimit
     val numbers = uiState.numbers
+
+    val listState = rememberLazyListState()
+    LaunchedEffect(reselection) {
+        reselection.collect { listState.animateScrollToItem(0) }
+    }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -118,6 +126,7 @@ fun WhitelistScreen(
     ) { innerPadding: PaddingValues ->
 
         LazyColumn(
+            state = listState,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
@@ -126,9 +135,7 @@ fun WhitelistScreen(
             contentPadding = PaddingValues(top = 16.dp, bottom = 20.dp)
         ) {
             item {
-                WhitelistHeader(
-                    onBack = onBack
-                )
+                WhitelistHeader()
             }
 
             item {
@@ -209,20 +216,11 @@ fun WhitelistScreen(
 }
 
 @Composable
-private fun WhitelistHeader(
-    onBack: () -> Unit
-) {
+private fun WhitelistHeader() {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(onClick = onBack) {
-            Icon(
-                imageVector = Icons.Outlined.ArrowBack,
-                contentDescription = stringResource(R.string.back)
-            )
-        }
-
         Column(
             modifier = Modifier.weight(1f)
         ) {

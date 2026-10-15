@@ -21,7 +21,6 @@
     <string name="onboarding_feature_3_description">O Plus libera integração com contatos e whitelist ilimitada.</string>
 
     <string name="home_description">Proteja suas chamadas com mais privacidade.</string>
-    <string name="settings">Configurações</string>
     <string name="back">Voltar</string>
     <string name="protection_status_active">Proteção ativa</string>
     <string name="protection_status_not_configured">Proteção ainda não configurada</string>
@@ -31,31 +30,14 @@
     <string name="plan_tier_plus">Plus</string>
     <string name="plan_tier_pro">Pro</string>
     <string name="plan_current">Plano: %1$s</string>
-    <string name="plan_description_premium">Todos os recursos estão ativos.</string>
-    <string name="plan_description_free">Você está usando a versão gratuita com recursos limitados.</string>
     <string name="view_premium">Ver planos</string>
-    <string name="whitelist_title">Lista de permitidos</string>
     <string name="whitelist_usage">%1$d de %2$d números usados na versão gratuita.</string>
-    <string name="manage_whitelist">Gerenciar whitelist</string>
-    <string name="contacts_automatic">Contatos automáticos</string>
-    <string name="unlock_with_premium">Desbloquear com Plus</string>
-    <string name="enable_auto_contacts">Usar contatos automaticamente</string>
-    <string name="update_contacts">Atualizar contatos</string>
-    <string name="privacy_title">Sem anúncios, sempre</string>
-    <string name="privacy_description">Mesmo na versão gratuita, o CallGuard não exibe anúncios nem monetiza seus dados.</string>
-    <string name="history_recent">Histórico recente</string>
     <string name="history_title">Histórico de chamadas</string>
     <string name="history_subtitle">Veja chamadas analisadas pelo CallGuard.</string>
-    <string name="view_history">Ver histórico</string>
 
     <string name="add">Adicionar</string>
     <string name="remove">Remover</string>
 
-    <string name="section_account">Conta e licença</string>
-    <string name="section_protection">Proteção de chamadas</string>
-    <string name="section_whitelist_contacts">Whitelist e contatos</string>
-    <string name="section_privacy">Privacidade</string>
-    <string name="section_app">App</string>
     <string name="settings_subtitle">Controle privacidade, proteção e licença.</string>
     <string name="license_active">Sua licença está ativa.</string>
     <string name="license_free">Você está usando recursos básicos com limite de whitelist.</string>
@@ -81,14 +63,12 @@
     <string name="privacy_policy_description">Entenda como seus dados e permissões são tratados.</string>
     <string name="privacy_policy_body">O CallGuard foi criado para manter seus dados no seu dispositivo.\n\nO que acessamos: o número de cada chamada recebida, apenas para decidir se ela deve ser permitida ou bloqueada, e, nos planos Plus e Pro e com sua permissão, os contatos do seu aparelho, para permitir quem você já conhece. Nada disso sai do seu dispositivo nem é enviado para nós ou para terceiros.\n\nO que armazenamos: sua whitelist, o histórico de decisões de chamadas e suas configurações ficam no armazenamento privado do app. O histórico é guardado por 7 dias no Grátis, 90 no Plus e 365 no Pro, e depois apagado automaticamente. Desinstalar o app apaga tudo.\n\nCópia de segurança: você pode exportar sua whitelist e suas configurações (e, se escolher, o histórico) para um arquivo protegido por senha, salvo apenas onde você escolher. O CallGuard nunca recebe esse arquivo.\n\nPagamentos: a Google Play processa as compras; o app recebe apenas qual plano está ativo, nunca os dados do seu pagamento.\n\nSem anúncios, sem análise de uso, sem rastreamento: o CallGuard não inclui SDKs de publicidade ou analytics e não vende nem compartilha seus dados.\n\nEsta política pode ser atualizada conforme o app evolui.</string>
     <string name="language">Idioma</string>
-    <string name="change_language">Alterar o idioma do app.</string>
     <string name="appearance_title">Aparência</string>
     <string name="appearance_description">Escolha entre tema claro e escuro.</string>
     <string name="theme_system">Sistema</string>
     <string name="theme_light">Claro</string>
     <string name="theme_dark">Escuro</string>
     <string name="brand_tagline">Privacidade em cada chamada</string>
-    <string name="no_ads">Sem anúncios</string>
     <string name="app_version">Versão 1.0.0</string>
     <string name="contact_no_name">Sem nome</string>
     <string name="whitelist_number_already_exists">Este número já está na whitelist.</string>
@@ -140,7 +120,6 @@
     <string name="reason_unparseable_allowed">número não reconhecido — bloqueio de desconhecidos desativado</string>
     <string name="reason_normalization_error">não foi possível ler o número — permitida por segurança</string>
 
-    <string name="protection_setup_button">Abrir configurações do Android</string>
     <string name="protection_setup_button_grant">Conceder permissão</string>
     <string name="protection_setup_active_description">O CallGuard já está definido como seu app de triagem de chamadas.</string>
     <string name="protection_setup_description">Ative o CallGuard como serviço de filtragem/bloqueio de chamadas nas configurações do telefone.</string>
@@ -213,7 +192,6 @@
     <string name="feature_history_days">Histórico de chamadas de %1$d dias</string>
     <string name="feature_drive_backup">Backup automático no Google Drive e vários aparelhos</string>
     <string name="paywall_terms">As assinaturas renovam automaticamente até serem canceladas na Google Play. Cancele quando quiser; o plano continua ativo até o fim do período pago.</string>
-    <string name="plan_not_renewing">Não renova: ativo até o fim do período pago.</string>
     <string name="downgrade_title">Seu plano mudou de %1$s para %2$s</string>
     <string name="downgrade_whitelist_kept">Todos os números que já estão na sua whitelist continuam permitidos.</string>
     <string name="downgrade_contacts_off">Seus contatos deixaram de ser liberados automaticamente.</string>
@@ -221,10 +199,6 @@
     <string name="downgrade_see_plans">Ver planos</string>
     <string name="downgrade_dismiss">Entendi</string>
     <string name="manage_subscription">Gerenciar assinatura</string>
-    <plurals name="whitelist_count_unlimited">
-        <item quantity="one">%1$d número na sua whitelist (ilimitada).</item>
-        <item quantity="other">%1$d números na sua whitelist (ilimitada).</item>
-    </plurals>
     <string name="history_add_to_whitelist">Adicionar à whitelist</string>
     <string name="history_in_whitelist">Na sua whitelist</string>
     <string name="history_add_dialog_title">Adicionar à whitelist?</string>
@@ -232,7 +206,6 @@
     <string name="history_added">Adicionado à sua whitelist</string>
     <string name="undo">Desfazer</string>
     <string name="history_limit_text">A whitelist do seu plano está cheia. Assine o Plus para ter números ilimitados; este número será adicionado logo em seguida.</string>
-    <string name="section_backup">Cópia de segurança</string>
     <string name="backup_title">Arquivo protegido por senha</string>
     <string name="backup_description">Salve sua whitelist e suas configurações num arquivo protegido por senha e restaure em outro celular. O arquivo só vai para onde você escolher.</string>
     <string name="backup_export">Exportar</string>
@@ -253,4 +226,39 @@
     <string name="backup_wrong_password">Senha errada ou arquivo danificado. Nada foi alterado.</string>
     <string name="backup_newer_format">Esta cópia foi feita por uma versão mais nova do CallGuard. Atualize o app antes.</string>
     <string name="backup_unreadable">Este arquivo não é uma cópia do CallGuard.</string>
+
+    <!-- 007 tabs -->
+    <string name="tab_home">Início</string>
+    <string name="tab_whitelist">Whitelist</string>
+    <string name="tab_history">Histórico</string>
+    <string name="tab_settings">Ajustes</string>
+    <string name="home_recent_calls">Últimas chamadas</string>
+    <string name="home_see_all">Ver tudo</string>
+    <string name="home_no_calls_yet">Nenhuma chamada analisada ainda.</string>
+    <string name="home_plan_manage">Gerenciar</string>
+    <string name="settings_category_plan">Plano e compras</string>
+    <string name="settings_category_protection">Proteção de chamadas</string>
+    <string name="settings_category_contacts">Contatos</string>
+    <string name="settings_category_backup">Cópia de segurança</string>
+    <string name="settings_category_appearance">Aparência e idioma</string>
+    <string name="settings_category_privacy">Privacidade e termos</string>
+    <string name="summary_block_both">Desconhecidos e privados bloqueados</string>
+    <string name="summary_block_unknown">Desconhecidos bloqueados</string>
+    <string name="summary_block_private">Privados bloqueados</string>
+    <string name="summary_block_none">Nenhum bloqueio ativo</string>
+    <string name="summary_contacts_locked">Disponível no Plus</string>
+    <string name="summary_on">Ativado</string>
+    <string name="summary_off">Desativado</string>
+    <string name="summary_backup">Arquivo protegido por senha</string>
+    <string name="summary_appearance">%1$s · %2$s</string>
+    <string name="summary_language_device">Idioma do aparelho</string>
+    <string name="summary_privacy">Sem anúncios, dados no aparelho</string>
+    <string name="home_whitelist_short">%1$d de %2$d</string>
+    <plurals name="home_whitelist_count_short">
+        <item quantity="one">%1$d número</item>
+        <item quantity="other">%1$d números</item>
+    </plurals>
+    <string name="home_plan_title">Plano</string>
+    <string name="home_plan_pending">Pagamento pendente</string>
+    <string name="home_plan_not_renewing">Não renova</string>
 </resources>

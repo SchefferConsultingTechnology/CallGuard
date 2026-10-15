@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lsp.callguard.BuildConfig
+import com.lsp.callguard.core.language.AppLanguage
 import com.lsp.callguard.data.backup.BackupRepository
 import com.lsp.callguard.data.backup.ImportResult
 import com.lsp.callguard.data.billing.BillingRepository
@@ -16,6 +17,7 @@ import com.lsp.callguard.domain.model.AppSettings
 import com.lsp.callguard.domain.model.ThemeMode
 import com.lsp.callguard.domain.model.Tier
 import kotlin.coroutines.cancellation.CancellationException
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -33,7 +35,12 @@ sealed interface BackupEvent {
 data class SettingsUiState(
     val appSettings: AppSettings = AppSettings(),
     val tier: Tier = Tier.FREE,
-    val themeMode: ThemeMode = ThemeMode.SYSTEM
+    val themeMode: ThemeMode = ThemeMode.SYSTEM,
+    /**
+     * Language applied to the app (null = follows the device). Filled by the UI from the app's
+     * locale, not from the saved preference: the system settings can change it too.
+     */
+    val language: AppLanguage? = null
 ) {
     val hasPaidPlan: Boolean
         get() = tier != Tier.FREE
@@ -47,6 +54,7 @@ class SettingsViewModel(
     private val appearancePreferences: AppearancePreferences,
     /** Applies the night mode; runs only after the choice is saved, so a recreate reads it back. */
     private val applyTheme: (ThemeMode) -> Unit,
+    private val applyLanguage: (AppLanguage) -> Unit = {},
     private val writeFile: suspend (Uri, ByteArray) -> Unit,
     private val readFile: suspend (Uri) -> ByteArray
 ) : ViewModel() {
@@ -87,6 +95,16 @@ class SettingsViewModel(
                 BackupEvent.Imported(ImportResult.Failed(BackupError.Unreadable))
             }
             _backupEvents.emit(event)
+
+            // Language and theme recreate the screen, which would drop the message at once: apply
+            // them after it had time to be read. Done here, not in the page, so leaving the page
+            // does not cancel it.
+            val imported = event.result as? ImportResult.Imported ?: return@launch
+            if (imported.language != null || imported.themeMode != null) {
+                delay(IMPORT_MESSAGE_READ_MS)
+                imported.language?.let(applyLanguage)
+                imported.themeMode?.let(applyTheme)
+            }
         }
     }
 
@@ -149,3 +167,5 @@ class SettingsViewModel(
         }
     }
 }
+
+private const val IMPORT_MESSAGE_READ_MS = 2_500L

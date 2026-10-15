@@ -11,32 +11,49 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.lsp.callguard.R
 import com.lsp.callguard.core.language.LocaleManagerHelper
-import com.lsp.callguard.core.theme.ThemeModeApplier
 import com.lsp.callguard.data.backup.ImportResult
 import com.lsp.callguard.data.billing.RestoreResult
 import com.lsp.callguard.domain.backup.BackupError
 import com.lsp.callguard.ui.components.tierDisplayName
 import java.time.LocalDate
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 
+/** Ajustes tab: list of categories (feature 007). */
 @Composable
-fun SettingsRoute(
+fun SettingsListRoute(
+    viewModel: SettingsViewModel,
+    onOpenCategory: (SettingsCategory) -> Unit,
+    reselection: Flow<Unit> = emptyFlow()
+) {
+    val state by viewModel.uiState.collectAsState()
+    val uiState = state.copy(language = LocaleManagerHelper.currentLanguage())
+
+    SettingsListScreen(
+        uiState = uiState,
+        onOpenCategory = onOpenCategory,
+        reselection = reselection
+    )
+}
+
+/** One Ajustes page. Launchers, dialogs and messages live on the page that owns them. */
+@Composable
+fun SettingsCategoryRoute(
+    category: SettingsCategory,
+    viewModel: SettingsViewModel,
     onBack: () -> Unit,
     onOpenPaywall: () -> Unit,
     onOpenLanguage: () -> Unit,
     onOpenTerms: () -> Unit,
-    onOpenPrivacyPolicy: () -> Unit) {
-    val viewModel = rememberSettingsViewModel()
-    val context = LocalContext.current
-    val uiState by viewModel.uiState.collectAsState()
+    onOpenPrivacyPolicy: () -> Unit,
+    onOpenContactsConsent: () -> Unit
+) {
+    val state by viewModel.uiState.collectAsState()
+    val uiState = state.copy(language = LocaleManagerHelper.currentLanguage())
     val snackbarHostState = remember { SnackbarHostState() }
-
-    val restoredMessage = stringResource(R.string.paywall_restore_done, tierDisplayName(uiState.tier))
-    val nothingMessage = stringResource(R.string.paywall_restore_none)
-    val unavailableMessage = stringResource(R.string.paywall_store_unavailable)
 
     var showExportDialog by remember { mutableStateOf(false) }
     var importUri by remember { mutableStateOf<Uri?>(null) }
@@ -49,63 +66,35 @@ fun SettingsRoute(
         ActivityResultContracts.OpenDocument()
     ) { uri -> importUri = uri }
 
-    val exportedMessage = stringResource(R.string.backup_exported)
-    val exportFailedMessage = stringResource(R.string.backup_export_failed)
-    val wrongPasswordMessage = stringResource(R.string.backup_wrong_password)
-    val newerMessage = stringResource(R.string.backup_newer_format)
-    val unreadableMessage = stringResource(R.string.backup_unreadable)
-    val importedTemplate = stringResource(R.string.backup_imported)
-
-    LaunchedEffect(Unit) {
-        viewModel.backupEvents.collect { event ->
-            val message = when (event) {
-                BackupEvent.Exported -> exportedMessage
-                BackupEvent.ExportFailed -> exportFailedMessage
-                is BackupEvent.Imported -> when (val result = event.result) {
-                    is ImportResult.Imported -> {
-                        result.language?.let(LocaleManagerHelper::applyLanguage)
-                        result.themeMode?.let { ThemeModeApplier.apply(context, it) }
-                        importedTemplate.format(result.added, result.updated, result.historyAdded)
-                    }
-                    is ImportResult.Failed -> when (result.error) {
-                        BackupError.WrongPasswordOrCorrupted -> wrongPasswordMessage
-                        BackupError.NewerFormat -> newerMessage
-                        BackupError.Unreadable -> unreadableMessage
-                    }
-                }
-            }
-            snackbarHostState.showSnackbar(message)
-        }
+    when (category) {
+        SettingsCategory.PLAN -> RestoreMessages(viewModel, uiState, snackbarHostState)
+        SettingsCategory.BACKUP -> BackupMessages(viewModel, snackbarHostState)
+        else -> Unit
     }
 
-    LaunchedEffect(Unit) {
-        viewModel.restoreResults.collect { result ->
-            snackbarHostState.showSnackbar(
-                when (result) {
-                    is RestoreResult.Restored -> restoredMessage
-                    RestoreResult.NothingFound -> nothingMessage
-                    RestoreResult.StoreUnavailable -> unavailableMessage
-                }
-            )
-        }
-    }
-
-    SettingsScreen(
+    SettingsCategoryScreen(
+        category = category,
         uiState = uiState,
         onBack = onBack,
-        onOpenPaywall = onOpenPaywall,
-        onOpenLanguage = onOpenLanguage,
-        onOpenTerms = onOpenTerms,
-        onOpenPrivacyPolicy = onOpenPrivacyPolicy,
-        onBlockUnknownChange = viewModel::setBlockUnknown,
-        onBlockPrivateNumbersChange = viewModel::setBlockPrivateNumbers,
-        onUseContactsAutomaticallyChange = viewModel::setUseContactsAutomatically,
-        onMockTierChange = viewModel::setMockTier,
-        onThemeModeChange = viewModel::setThemeMode,
-        onRestorePurchases = viewModel::restorePurchases,
-        onExportBackup = { showExportDialog = true },
-        onImportBackup = { importLauncher.launch(arrayOf("*/*")) },
-        snackbarHostState = snackbarHostState
+        snackbarHostState = snackbarHostState,
+        actions = SettingsCategoryActions(
+            onOpenPaywall = onOpenPaywall,
+            onOpenLanguage = onOpenLanguage,
+            onOpenTerms = onOpenTerms,
+            onOpenPrivacyPolicy = onOpenPrivacyPolicy,
+            onRestorePurchases = viewModel::restorePurchases,
+            onMockTierChange = viewModel::setMockTier,
+            onBlockUnknownChange = viewModel::setBlockUnknown,
+            onBlockPrivateNumbersChange = viewModel::setBlockPrivateNumbers,
+            // Turning contacts on always goes through consent and the permission (constitution II);
+            // turning them off is immediate.
+            onUseContactsAutomaticallyChange = { enabled ->
+                if (enabled) onOpenContactsConsent() else viewModel.setUseContactsAutomatically(false)
+            },
+            onExportBackup = { showExportDialog = true },
+            onImportBackup = { importLauncher.launch(arrayOf("*/*")) },
+            onThemeModeChange = viewModel::setThemeMode
+        )
     )
 
     if (showExportDialog) {
@@ -127,5 +116,61 @@ fun SettingsRoute(
                 viewModel.importFrom(uri, password)
             }
         )
+    }
+}
+
+@Composable
+private fun RestoreMessages(
+    viewModel: SettingsViewModel,
+    uiState: SettingsUiState,
+    snackbarHostState: SnackbarHostState
+) {
+    val restoredMessage = stringResource(R.string.paywall_restore_done, tierDisplayName(uiState.tier))
+    val nothingMessage = stringResource(R.string.paywall_restore_none)
+    val unavailableMessage = stringResource(R.string.paywall_store_unavailable)
+
+    LaunchedEffect(Unit) {
+        viewModel.restoreResults.collect { result ->
+            snackbarHostState.showSnackbar(
+                when (result) {
+                    is RestoreResult.Restored -> restoredMessage
+                    RestoreResult.NothingFound -> nothingMessage
+                    RestoreResult.StoreUnavailable -> unavailableMessage
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun BackupMessages(
+    viewModel: SettingsViewModel,
+    snackbarHostState: SnackbarHostState
+) {
+    val exportedMessage = stringResource(R.string.backup_exported)
+    val exportFailedMessage = stringResource(R.string.backup_export_failed)
+    val wrongPasswordMessage = stringResource(R.string.backup_wrong_password)
+    val newerMessage = stringResource(R.string.backup_newer_format)
+    val unreadableMessage = stringResource(R.string.backup_unreadable)
+    val importedTemplate = stringResource(R.string.backup_imported)
+
+    LaunchedEffect(Unit) {
+        viewModel.backupEvents.collect { event ->
+            val message = when (event) {
+                BackupEvent.Exported -> exportedMessage
+                BackupEvent.ExportFailed -> exportFailedMessage
+                is BackupEvent.Imported -> when (val result = event.result) {
+                    // Language and theme are applied by the view model once this was read.
+                    is ImportResult.Imported ->
+                        importedTemplate.format(result.added, result.updated, result.historyAdded)
+                    is ImportResult.Failed -> when (result.error) {
+                        BackupError.WrongPasswordOrCorrupted -> wrongPasswordMessage
+                        BackupError.NewerFormat -> newerMessage
+                        BackupError.Unreadable -> unreadableMessage
+                    }
+                }
+            }
+            snackbarHostState.showSnackbar(message)
+        }
     }
 }

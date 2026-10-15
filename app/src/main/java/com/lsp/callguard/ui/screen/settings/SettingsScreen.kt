@@ -6,24 +6,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.CreditCard
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material.icons.outlined.NotificationsOff
 import androidx.compose.material.icons.outlined.Policy
 import androidx.compose.material.icons.outlined.PrivacyTip
 import androidx.compose.material.icons.outlined.Security
@@ -36,11 +30,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -56,183 +46,11 @@ import androidx.compose.ui.unit.dp
 import com.lsp.callguard.BuildConfig
 import com.lsp.callguard.R
 import com.lsp.callguard.data.billing.BillingRepository
-import com.lsp.callguard.domain.model.ThemeMode
 import com.lsp.callguard.domain.model.Tier
 import com.lsp.callguard.ui.components.tierDisplayName
 
 @Composable
-fun SettingsScreen(
-    uiState: SettingsUiState,
-    onBack: () -> Unit,
-    onOpenPaywall: () -> Unit,
-    onOpenLanguage: () -> Unit,
-    onOpenTerms: () -> Unit,
-    onOpenPrivacyPolicy: () -> Unit,
-    onBlockUnknownChange: (Boolean) -> Unit,
-    onBlockPrivateNumbersChange: (Boolean) -> Unit,
-    onUseContactsAutomaticallyChange: (Boolean) -> Unit,
-    onMockTierChange: (Tier) -> Unit,
-    onThemeModeChange: (ThemeMode) -> Unit,
-    onRestorePurchases: () -> Unit,
-    onExportBackup: () -> Unit,
-    onImportBackup: () -> Unit,
-    snackbarHostState: SnackbarHostState
-) {
-    val hasPaidPlan = uiState.hasPaidPlan
-    val blockUnknown = uiState.appSettings.blockUnknown
-    val blockPrivateNumbers = uiState.appSettings.blockPrivateNumbers
-    val useContactsAutomatically = uiState.appSettings.useContactsAutomatically
-
-    Scaffold(
-        containerColor = MaterialTheme.colorScheme.background,
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
-    ) { innerPadding: PaddingValues ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .navigationBarsPadding()
-                .padding(horizontal = 20.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp),
-            contentPadding = PaddingValues(top = 16.dp, bottom = 24.dp)
-        ) {
-            item {
-                SettingsHeader(onBack = onBack)
-            }
-
-            item {
-                SettingsSectionTitle(stringResource(R.string.section_account))
-            }
-
-            item {
-                LicenseCard(
-                    tier = uiState.tier,
-                    onOpenPaywall = onOpenPaywall,
-                    onRestorePurchases = onRestorePurchases,
-                    onMockTierChange = onMockTierChange
-                )
-            }
-
-            item {
-                SettingsSectionTitle(stringResource(R.string.section_protection))
-            }
-
-            item {
-                ProtectionSettingsCard(
-                    blockUnknown = blockUnknown,
-                    onBlockUnknownChange = onBlockUnknownChange,
-                    blockPrivateNumbers = blockPrivateNumbers,
-                    onBlockPrivateNumbersChange = onBlockPrivateNumbersChange
-                )
-            }
-
-            item {
-                SettingsSectionTitle(stringResource(R.string.section_whitelist_contacts))
-            }
-
-            item {
-                ContactsSettingsCard(
-                    hasPaidPlan = hasPaidPlan,
-                    useContactsAutomatically = useContactsAutomatically,
-                    onUseContactsAutomaticallyChange = onUseContactsAutomaticallyChange,
-                    onOpenPaywall = onOpenPaywall
-                )
-            }
-
-            item {
-                SettingsSectionTitle(stringResource(R.string.section_backup))
-            }
-
-            item {
-                BackupCard(onExport = onExportBackup, onImport = onImportBackup)
-            }
-
-            item {
-                SettingsSectionTitle(stringResource(R.string.section_privacy))
-            }
-
-            item {
-                PrivacySettingsCard(
-                    onOpenTerms = onOpenTerms,
-                    onOpenPrivacyPolicy = onOpenPrivacyPolicy
-                )
-            }
-
-            item {
-                SettingsSectionTitle(stringResource(R.string.section_app))
-            }
-
-            item {
-                AppSettingsCard(
-                    onOpenLanguage = onOpenLanguage
-                )
-            }
-
-            item {
-                AppearanceCard(
-                    selected = uiState.themeMode,
-                    onSelect = onThemeModeChange
-                )
-            }
-
-            item {
-                AppInfoCard()
-            }
-        }
-    }
-}
-
-@Composable
-private fun SettingsHeader(
-    onBack: () -> Unit
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        IconButton(onClick = onBack) {
-            Icon(
-                imageVector = Icons.Outlined.ArrowBack,
-                contentDescription = stringResource(R.string.back)
-            )
-        }
-
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
-            Text(
-                text = stringResource(R.string.settings),
-                style = MaterialTheme.typography.headlineSmall.copy(
-                    fontWeight = FontWeight.Bold
-                ),
-                color = MaterialTheme.colorScheme.onBackground
-            )
-
-            Text(
-                text = stringResource(R.string.settings_subtitle),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
-}
-
-@Composable
-private fun SettingsSectionTitle(
-    title: String
-) {
-    Text(
-        text = title,
-        style = MaterialTheme.typography.titleSmall.copy(
-            fontWeight = FontWeight.SemiBold
-        ),
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-        modifier = Modifier.padding(top = 4.dp)
-    )
-}
-
-@Composable
-private fun LicenseCard(
+internal fun LicenseCard(
     tier: Tier,
     onOpenPaywall: () -> Unit,
     onRestorePurchases: () -> Unit,
@@ -313,7 +131,7 @@ private fun LicenseCard(
 }
 
 @Composable
-private fun ProtectionSettingsCard(
+internal fun ProtectionSettingsCard(
     blockUnknown: Boolean,
     onBlockUnknownChange: (Boolean) -> Unit,
     blockPrivateNumbers: Boolean,
@@ -348,7 +166,7 @@ private fun ProtectionSettingsCard(
 }
 
 @Composable
-private fun ContactsSettingsCard(
+internal fun ContactsSettingsCard(
     hasPaidPlan: Boolean,
     useContactsAutomatically: Boolean,
     onUseContactsAutomaticallyChange: (Boolean) -> Unit,
@@ -390,7 +208,7 @@ private fun ContactsSettingsCard(
 }
 
 @Composable
-private fun PrivacySettingsCard(
+internal fun PrivacySettingsCard(
     onOpenTerms: () -> Unit,
     onOpenPrivacyPolicy: () -> Unit
 ) {
@@ -422,29 +240,7 @@ private fun PrivacySettingsCard(
 }
 
 @Composable
-private fun AppSettingsCard(
-    onOpenLanguage: () -> Unit
-) {
-    SettingsCard {
-        SettingsActionRow(
-            icon = Icons.Outlined.Language,
-            title = stringResource(R.string.language),
-            description = stringResource(R.string.change_language),
-            onClick = onOpenLanguage
-        )
-
-        SettingsDivider()
-
-        SettingsItemHeader(
-            icon = Icons.Outlined.NotificationsOff,
-            title = stringResource(R.string.no_ads),
-            description = stringResource(R.string.privacy_description)
-        )
-    }
-}
-
-@Composable
-private fun AppInfoCard() {
+internal fun AppInfoCard() {
     SettingsCard {
         SettingsItemHeader(
             icon = Icons.Outlined.Settings,
@@ -528,7 +324,7 @@ private fun SettingsSwitchRow(
 }
 
 @Composable
-private fun SettingsActionRow(
+internal fun SettingsActionRow(
     icon: ImageVector,
     title: String,
     description: String,
@@ -607,7 +403,7 @@ internal fun SettingsItemHeader(
 }
 
 @Composable
-private fun SettingsInfoText(
+internal fun SettingsInfoText(
     icon: ImageVector,
     text: String
 ) {
@@ -632,7 +428,7 @@ private fun SettingsInfoText(
 }
 
 @Composable
-private fun SettingsIcon(
+internal fun SettingsIcon(
     icon: ImageVector
 ) {
     Surface(
@@ -654,7 +450,7 @@ private fun SettingsIcon(
 }
 
 @Composable
-private fun SettingsDivider() {
+internal fun SettingsDivider() {
     Spacer(modifier = Modifier.height(14.dp))
     HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
     Spacer(modifier = Modifier.height(14.dp))

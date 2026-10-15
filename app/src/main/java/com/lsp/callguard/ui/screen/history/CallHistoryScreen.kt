@@ -15,23 +15,19 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.DeleteSweep
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.PersonAdd
-import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -42,6 +38,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -62,17 +59,24 @@ import com.lsp.callguard.domain.model.CallDecisionLog
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 
 @Composable
 fun CallHistoryScreen(
     uiState: CallHistoryUiState,
     snackbarHostState: SnackbarHostState,
-    onBack: () -> Unit,
+    reselection: Flow<Unit> = emptyFlow(),
     onClearHistory: () -> Unit,
     onConfirmAdd: (phoneE164: String, label: String) -> Unit
 ) {
     var showClearDialog by remember { mutableStateOf(false) }
     var confirmAdd by remember { mutableStateOf<Pair<String, String?>?>(null) }
+
+    val listState = rememberLazyListState()
+    LaunchedEffect(reselection) {
+        reselection.collect { listState.animateScrollToItem(0) }
+    }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -111,6 +115,7 @@ fun CallHistoryScreen(
         }
     ) { innerPadding ->
         LazyColumn(
+            state = listState,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
@@ -119,7 +124,7 @@ fun CallHistoryScreen(
             contentPadding = PaddingValues(top = 16.dp, bottom = 24.dp)
         ) {
             item {
-                CallHistoryHeader(onBack = onBack)
+                CallHistoryHeader()
             }
 
             if (uiState.logs.isEmpty()) {
@@ -227,20 +232,11 @@ private fun AddToWhitelistDialog(
 }
 
 @Composable
-private fun CallHistoryHeader(
-    onBack: () -> Unit
-) {
+private fun CallHistoryHeader() {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(onClick = onBack) {
-            Icon(
-                imageVector = Icons.Outlined.ArrowBack,
-                contentDescription = stringResource(R.string.back)
-            )
-        }
-
         Column(
             modifier = Modifier.weight(1f)
         ) {

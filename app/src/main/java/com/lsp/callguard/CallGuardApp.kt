@@ -3,7 +3,7 @@ package com.lsp.callguard
 import androidx.compose.runtime.Composable
 import com.lsp.callguard.data.local.preferences.LanguagePreferences
 import com.lsp.callguard.data.local.preferences.OnboardingPreferences
-import com.lsp.callguard.ui.navigation.CallGuardNavHost
+import com.lsp.callguard.ui.navigation.CallGuardAppShell
 
 @Composable
 fun CallGuardApp(
@@ -11,7 +11,7 @@ fun CallGuardApp(
     onboardingPreferences: OnboardingPreferences,
     startDestination: String
 ) {
-    CallGuardNavHost(
+    CallGuardAppShell(
         languagePreferences = languagePreferences,
         onboardingPreferences = onboardingPreferences,
         startDestination = startDestination
