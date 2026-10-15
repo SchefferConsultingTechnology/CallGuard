@@ -1,4 +1,25 @@
 <!--
+Sync Impact Report (2.0.0)
+- Version change: 1.0.0 → 2.0.0 (MAJOR: redefinição do Princípio II)
+- Modified principles:
+  II. Privacidade Local-First (título mantido)
+    - Antes: "Não existe backend; nenhum dado pessoal é enviado a terceiros"; única rede = Play Billing.
+    - Agora: dados locais por padrão; única exceção é o backup opcional e explícito do plano Pro,
+      gravado exclusivamente na pasta privada do app no Google Drive do próprio usuário (sem
+      servidor do CallGuard). Rede permitida: Play Billing e, só para o backup, Google Sign-In/Drive.
+      Backup automático do Android continua proibido para dados sensíveis.
+  VI. Monetização Honesta
+    - Níveis Grátis / Plus / Pro; licença é um nível (não booleano); paywall só anuncia o que
+      existe e diferencia o que é de fato exclusivo de cada nível.
+- Added: em Restrições Técnicas, plataforma exclusivamente Android (sem iOS previsto) e
+  proibição de backend próprio enquanto isso valer.
+- Removed sections: nenhuma
+- Templates: leem a constituição em tempo de execução; nenhuma alteração necessária.
+- Código afetado: paywall atual anuncia "Backup e restauração" (inexistente) e "Sem anúncios"
+  como exclusivo do Premium (vale para todos) — corrigir na feature 003.
+- Origem: decisões de monetização de 2026-10-14.
+- Deferred TODOs: nenhum
+
 Sync Impact Report (1.0.0)
 - Version change: (template) → 1.0.0 (ratificação inicial)
 - Principles definidos:
@@ -45,12 +66,20 @@ pior defeito possível, pior do que deixar passar uma chamada indesejada.
 O app lida com contatos e histórico de chamadas — dados pessoais sensíveis (LGPD/GDPR).
 
 - Todos os dados (whitelist, cache de contatos, histórico de decisões, preferências) MUST ficar
-  exclusivamente no dispositivo. Não existe backend; nenhum dado pessoal é enviado a terceiros.
-  A única comunicação de rede permitida é a do Google Play Billing.
+  no dispositivo por padrão. O CallGuard não tem backend próprio e nenhum dado pessoal é enviado
+  a servidores do CallGuard ou de terceiros para processamento.
+- **Única exceção — backup do usuário**: cópia de segurança opcional, ativada explicitamente pelo
+  usuário, gravada exclusivamente na pasta privada do app no **Google Drive do próprio usuário**.
+  O backup MUST NOT incluir o cache de contatos do aparelho; o histórico só entra com escolha
+  explícita; o usuário MUST poder apagar o backup remoto pelo app. Exportação manual MUST ser um
+  arquivo criptografado.
+- Comunicação de rede permitida: Google Play Billing e, exclusivamente para o backup, Google
+  Sign-In e Google Drive. Qualquer outro destino exige emenda desta constituição.
 - Números de telefone e nomes de contatos MUST NOT aparecer em logs de builds release; logs de
   depuração com dados pessoais MUST ser condicionados a `BuildConfig.DEBUG` ou mascarados.
-- Dados sensíveis (banco Room, cache de contatos, histórico) MUST ser excluídos do backup em
-  nuvem e da transferência entre dispositivos via `data_extraction_rules`/`backup_rules`.
+- Dados sensíveis (banco Room, cache de contatos, histórico) MUST ser excluídos do backup
+  automático do Android e da transferência entre dispositivos via
+  `data_extraction_rules`/`backup_rules` — o único caminho de backup é o controlado pelo app.
 - Leitura de contatos MUST ser precedida de consentimento explícito no app (tela de consentimento)
   além da permissão de runtime; revogar consentimento MUST apagar o cache de contatos.
 - Permissões MUST ser as mínimas necessárias; toda nova permissão exige justificativa no plano.
@@ -87,10 +116,12 @@ O app lida com contatos e histórico de chamadas — dados pessoais sensíveis (
 
 ### VI. Monetização Honesta
 
-- O plano gratuito MUST ser útil por si só: whitelist manual até `FREE_WHITELIST_LIMIT` com
-  proteção real ativa.
-- Recursos Premium (ex.: liberar contatos automaticamente) são decididos no domínio a partir de
-  `LicenseState`; a UI apenas reflete esse estado.
+- Níveis: **Grátis**, **Plus** e **Pro**. O plano Grátis MUST ser útil por si só: whitelist
+  manual limitada com proteção real ativa.
+- A licença é um **nível** (não um booleano); recursos de cada nível são decididos no domínio a
+  partir desse nível; a UI apenas reflete o estado.
+- O paywall MUST anunciar apenas recursos que existem na versão publicada e MUST NOT apresentar
+  como exclusivo de um nível algo disponível também nos inferiores.
 - O Google Play Billing é a fonte da verdade da licença; o DataStore é apenas espelho/cache.
   Perda de licença MUST degradar para o comportamento gratuito sem bloquear números que o
   usuário adicionou manualmente (Princípio I).
@@ -100,7 +131,9 @@ O app lida com contatos e histórico de chamadas — dados pessoais sensíveis (
 
 ## Restrições Técnicas
 
-- Plataforma: Android nativo, Kotlin, Jetpack Compose (Material 3), Navigation Compose.
+- Plataforma: **exclusivamente Android** nativo (Kotlin, Jetpack Compose/Material 3, Navigation
+  Compose). Não há versão iOS prevista; enquanto isso valer, não se cria backend próprio — dados
+  remotos só no Google Drive do usuário (Princípio II).
 - SDK: `minSdk 26`, `targetSdk`/`compileSdk 36`. A triagem via papel `ROLE_CALL_SCREENING`
   requer API 29+; o comportamento em API 26–28 MUST ser definido explicitamente (degradação
   documentada na UI), nunca falhar silenciosamente.
@@ -144,4 +177,4 @@ O app lida com contatos e histórico de chamadas — dados pessoais sensíveis (
 - Violações conhecidas no código existente são tratadas como débito e priorizadas como features
   do Spec Kit; código novo MUST NOT introduzir novas violações.
 
-**Version**: 1.0.0 | **Ratified**: 2026-10-13 | **Last Amended**: 2026-10-13
+**Version**: 2.0.0 | **Ratified**: 2026-10-13 | **Last Amended**: 2026-10-14
