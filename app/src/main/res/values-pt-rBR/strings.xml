@@ -82,6 +82,12 @@
     <string name="privacy_policy_body">O CallGuard foi criado para manter seus dados no seu dispositivo.\n\nO que acessamos: o número de cada chamada recebida, apenas para decidir se ela deve ser permitida ou bloqueada, e, nos planos Plus e Pro e com sua permissão, os contatos do seu aparelho, para permitir quem você já conhece. Nada disso sai do seu dispositivo nem é enviado para nós ou para terceiros.\n\nO que armazenamos: sua whitelist, o histórico de decisões de chamadas e suas configurações ficam no armazenamento privado do app. O histórico é guardado por 7 dias no Grátis, 90 no Plus e 365 no Pro, e depois apagado automaticamente. Desinstalar o app apaga tudo.\n\nCópia de segurança: você pode exportar sua whitelist e suas configurações (e, se escolher, o histórico) para um arquivo protegido por senha, salvo apenas onde você escolher. O CallGuard nunca recebe esse arquivo.\n\nPagamentos: a Google Play processa as compras; o app recebe apenas qual plano está ativo, nunca os dados do seu pagamento.\n\nSem anúncios, sem análise de uso, sem rastreamento: o CallGuard não inclui SDKs de publicidade ou analytics e não vende nem compartilha seus dados.\n\nEsta política pode ser atualizada conforme o app evolui.</string>
     <string name="language">Idioma</string>
     <string name="change_language">Alterar o idioma do app.</string>
+    <string name="appearance_title">Aparência</string>
+    <string name="appearance_description">Escolha entre tema claro e escuro.</string>
+    <string name="theme_system">Sistema</string>
+    <string name="theme_light">Claro</string>
+    <string name="theme_dark">Escuro</string>
+    <string name="brand_tagline">Privacidade em cada chamada</string>
     <string name="no_ads">Sem anúncios</string>
     <string name="app_version">Versão 1.0.0</string>
     <string name="contact_no_name">Sem nome</string>

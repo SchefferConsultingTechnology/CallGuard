@@ -191,11 +191,11 @@ private fun IntroCard() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.06f)
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         border = BorderStroke(
             width = 1.dp,
-            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Column(
@@ -204,7 +204,7 @@ private fun IntroCard() {
         ) {
             Surface(
                 shape = CircleShape,
-                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                color = MaterialTheme.colorScheme.primaryContainer,
                 modifier = Modifier.size(64.dp)
             ) {
                 Box(contentAlignment = Alignment.Center) {
@@ -263,7 +263,7 @@ private fun ConsentInfoCard(
         ) {
             Surface(
                 shape = CircleShape,
-                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                color = MaterialTheme.colorScheme.primaryContainer,
                 modifier = Modifier.size(38.dp)
             ) {
                 Box(contentAlignment = Alignment.Center) {

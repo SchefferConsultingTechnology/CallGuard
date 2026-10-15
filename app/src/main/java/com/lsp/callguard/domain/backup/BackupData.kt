@@ -1,6 +1,7 @@
 package com.lsp.callguard.domain.backup
 
-const val BACKUP_FORMAT_VERSION = 1
+/** v2 (feature 006) appends the theme choice at the end of the file. */
+const val BACKUP_FORMAT_VERSION = 2
 
 /** What a backup carries (constitution II): never the contacts cache, consent or the plan. */
 data class BackupData(
@@ -22,7 +23,9 @@ data class BackupSettings(
     val blockUnknown: Boolean,
     val blockPrivateNumbers: Boolean,
     /** App language code (e.g. "pt-BR"), or null when it follows the device. */
-    val language: String?
+    val language: String?,
+    /** "system" | "light" | "dark"; null in v1 files, which leaves the device's choice untouched. */
+    val themeMode: String? = null
 )
 
 data class BackupLog(

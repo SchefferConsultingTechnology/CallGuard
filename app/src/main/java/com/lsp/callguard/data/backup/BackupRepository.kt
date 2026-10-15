@@ -5,6 +5,7 @@ import com.lsp.callguard.data.local.dao.AllowedNumberDao
 import com.lsp.callguard.data.local.dao.CallDecisionLogDao
 import com.lsp.callguard.data.local.entity.AllowedNumberEntity
 import com.lsp.callguard.data.local.entity.CallDecisionLogEntity
+import com.lsp.callguard.data.local.preferences.AppearancePreferences
 import com.lsp.callguard.data.local.preferences.LanguagePreferences
 import com.lsp.callguard.data.local.preferences.LicensePreferences
 import com.lsp.callguard.data.local.preferences.SettingsPreferences
@@ -19,6 +20,7 @@ import com.lsp.callguard.domain.backup.BackupSettings
 import com.lsp.callguard.domain.backup.LocalEntry
 import com.lsp.callguard.domain.backup.mergeWhitelist
 import com.lsp.callguard.domain.billing.historyCutoff
+import com.lsp.callguard.domain.model.ThemeMode
 import com.lsp.callguard.domain.phone.PhoneNormalizer
 import com.lsp.callguard.domain.phone.RegionProvider
 import kotlinx.coroutines.flow.first
@@ -30,7 +32,9 @@ sealed interface ImportResult {
         val updated: Int,
         val historyAdded: Int,
         /** Language restored from the file, for the caller to apply. */
-        val language: AppLanguage?
+        val language: AppLanguage?,
+        /** Theme restored from the file (null for v1 files), for the caller to apply. */
+        val themeMode: ThemeMode? = null
     ) : ImportResult
 
     data class Failed(val error: BackupError) : ImportResult
@@ -42,6 +46,7 @@ class BackupRepository(
     private val callDecisionLogDao: CallDecisionLogDao,
     private val settingsPreferences: SettingsPreferences,
     private val languagePreferences: LanguagePreferences,
+    private val appearancePreferences: AppearancePreferences,
     private val licensePreferences: LicensePreferences,
     private val normalizer: PhoneNormalizer,
     private val regionProvider: RegionProvider,
@@ -59,7 +64,8 @@ class BackupRepository(
             settings = BackupSettings(
                 blockUnknown = settings.blockUnknown,
                 blockPrivateNumbers = settings.blockPrivateNumbers,
-                language = languagePreferences.selectedLanguageFlow.first()?.code
+                language = languagePreferences.selectedLanguageFlow.first()?.code,
+                themeMode = appearancePreferences.themeModeFlow.first().storageValue
             ),
             history = if (includeHistory) {
                 callDecisionLogDao.observeLatest().first().map {
@@ -104,13 +110,18 @@ class BackupRepository(
         val language = AppLanguage.fromCode(data.settings.language)
         language?.let { languagePreferences.saveSelectedLanguage(it) }
 
+        // v1 files carry no theme, and an unknown value is ignored: the device's choice stays.
+        val themeMode = ThemeMode.fromStorageOrNull(data.settings.themeMode)
+        themeMode?.let { appearancePreferences.setThemeMode(it) }
+
         val historyAdded = importHistory(data.history, now)
 
         return ImportResult.Imported(
             added = merge.toInsert.size,
             updated = merge.toUpdate.size,
             historyAdded = historyAdded,
-            language = language
+            language = language,
+            themeMode = themeMode
         )
     }
 

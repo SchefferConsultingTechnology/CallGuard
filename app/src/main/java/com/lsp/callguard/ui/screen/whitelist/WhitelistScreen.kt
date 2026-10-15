@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.ArrowBack
@@ -25,7 +26,7 @@ import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.Upgrade
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -35,14 +36,13 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,11 +51,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.lsp.callguard.R
-import androidx.compose.ui.res.stringResource
+import com.lsp.callguard.core.theme.CallGuardTheme
 
 @Composable
 fun WhitelistScreen(
@@ -282,7 +283,11 @@ private fun WhitelistUsageCard(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(8.dp),
-                    color = MaterialTheme.colorScheme.primary,
+                    color = if (count >= limit) {
+                        CallGuardTheme.extendedColors.warning
+                    } else {
+                        MaterialTheme.colorScheme.primary
+                    },
                     trackColor = MaterialTheme.colorScheme.surfaceVariant
                 )
 
@@ -302,7 +307,7 @@ private fun WhitelistUsageCard(
                     shape = RoundedCornerShape(14.dp),
                     border = BorderStroke(
                         width = 1.dp,
-                        color = MaterialTheme.colorScheme.outlineVariant
+                        color = MaterialTheme.colorScheme.outline
                     )
                 ) {
                     Icon(
@@ -333,7 +338,7 @@ private fun EmptyWhitelistCard() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(22.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         )
     ) {
         Column(
@@ -342,7 +347,7 @@ private fun EmptyWhitelistCard() {
         ) {
             Surface(
                 shape = CircleShape,
-                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                color = MaterialTheme.colorScheme.primaryContainer,
                 modifier = Modifier.size(54.dp)
             ) {
                 androidx.compose.foundation.layout.Box(
@@ -400,7 +405,7 @@ private fun WhitelistNumberCard(
         ) {
             Surface(
                 shape = CircleShape,
-                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                color = MaterialTheme.colorScheme.primaryContainer,
                 modifier = Modifier.size(42.dp)
             ) {
                 androidx.compose.foundation.layout.Box(
@@ -456,11 +461,11 @@ private fun PremiumHintCard(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(22.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.06f)
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         border = BorderStroke(
             width = 1.dp,
-            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
         Column(
@@ -565,7 +570,7 @@ private fun WhitelistCardHeader(
     ) {
         Surface(
             shape = CircleShape,
-            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+            color = MaterialTheme.colorScheme.primaryContainer,
             modifier = Modifier.size(38.dp)
         ) {
             androidx.compose.foundation.layout.Box(

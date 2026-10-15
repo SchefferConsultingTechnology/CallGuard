@@ -42,6 +42,40 @@ class BackupCodecTest {
         assertError(BackupError.Unreadable) { BackupCodec.decode(bytes.copyOf(bytes.size / 2)) }
     }
 
+    @Test
+    fun `round trip keeps each theme choice`() {
+        listOf("system", "light", "dark", null).forEach { theme ->
+            val withTheme = data.copy(settings = data.settings.copy(themeMode = theme))
+            assertEquals(withTheme, BackupCodec.decode(BackupCodec.encode(withTheme)))
+        }
+    }
+
+    @Test
+    fun `version 1 file without theme is still read`() {
+        // Layout written by the 005 encoder: no theme field at the end.
+        val bytes = ByteArrayOutputStream().also { stream ->
+            DataOutputStream(stream).use { out ->
+                out.writeInt(1)
+                out.writeLong(42)
+                out.writeInt(1)
+                out.writeUTF("Mãe")
+                out.writeUTF("+5511987654321")
+                out.writeLong(10)
+                out.writeBoolean(true)
+                out.writeBoolean(false)
+                out.writeBoolean(true)
+                out.writeUTF("pt-BR")
+                out.writeInt(0)
+            }
+        }.toByteArray()
+
+        val decoded = BackupCodec.decode(bytes)
+
+        assertEquals(1, decoded.formatVersion)
+        assertEquals(listOf(BackupEntry("Mãe", "+5511987654321", 10)), decoded.whitelist)
+        assertEquals(BackupSettings(blockUnknown = true, blockPrivateNumbers = false, language = "pt-BR", themeMode = null), decoded.settings)
+    }
+
     private fun assertError(expected: BackupError, block: () -> Unit) {
         try {
             block()

@@ -8,10 +8,12 @@ import com.lsp.callguard.data.backup.BackupRepository
 import com.lsp.callguard.data.backup.ImportResult
 import com.lsp.callguard.data.billing.BillingRepository
 import com.lsp.callguard.data.billing.RestoreResult
+import com.lsp.callguard.data.local.preferences.AppearancePreferences
 import com.lsp.callguard.data.local.preferences.LicensePreferences
 import com.lsp.callguard.data.local.preferences.SettingsPreferences
 import com.lsp.callguard.domain.backup.BackupError
 import com.lsp.callguard.domain.model.AppSettings
+import com.lsp.callguard.domain.model.ThemeMode
 import com.lsp.callguard.domain.model.Tier
 import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -30,7 +32,8 @@ sealed interface BackupEvent {
 
 data class SettingsUiState(
     val appSettings: AppSettings = AppSettings(),
-    val tier: Tier = Tier.FREE
+    val tier: Tier = Tier.FREE,
+    val themeMode: ThemeMode = ThemeMode.SYSTEM
 ) {
     val hasPaidPlan: Boolean
         get() = tier != Tier.FREE
@@ -41,6 +44,9 @@ class SettingsViewModel(
     private val licensePreferences: LicensePreferences,
     private val billingRepository: BillingRepository,
     private val backupRepository: BackupRepository,
+    private val appearancePreferences: AppearancePreferences,
+    /** Applies the night mode; runs only after the choice is saved, so a recreate reads it back. */
+    private val applyTheme: (ThemeMode) -> Unit,
     private val writeFile: suspend (Uri, ByteArray) -> Unit,
     private val readFile: suspend (Uri) -> ByteArray
 ) : ViewModel() {
@@ -97,11 +103,13 @@ class SettingsViewModel(
     val uiState: StateFlow<SettingsUiState> =
         combine(
             settingsPreferences.settingsFlow,
-            licensePreferences.licenseFlow
-        ) { settings, license ->
+            licensePreferences.licenseFlow,
+            appearancePreferences.themeModeFlow
+        ) { settings, license, themeMode ->
             SettingsUiState(
                 appSettings = settings,
-                tier = license.tier
+                tier = license.tier,
+                themeMode = themeMode
             )
         }.stateIn(
             scope = viewModelScope,
@@ -116,6 +124,13 @@ class SettingsViewModel(
             licensePreferences.setMockTier(tier)
         }
     }
+    fun setThemeMode(mode: ThemeMode) {
+        viewModelScope.launch {
+            appearancePreferences.setThemeMode(mode)
+            applyTheme(mode)
+        }
+    }
+
     fun setBlockUnknown(value: Boolean) {
         viewModelScope.launch {
             settingsPreferences.setBlockUnknown(value)

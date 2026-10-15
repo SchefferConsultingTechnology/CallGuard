@@ -33,11 +33,14 @@ import androidx.compose.material.icons.outlined.WorkspacePremium
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -46,18 +49,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.lsp.callguard.BuildConfig
 import com.lsp.callguard.R
-import com.lsp.callguard.ui.components.tierDisplayName
-import com.lsp.callguard.domain.model.Tier
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.ui.platform.LocalUriHandler
 import com.lsp.callguard.data.billing.BillingRepository
+import com.lsp.callguard.domain.model.ThemeMode
+import com.lsp.callguard.domain.model.Tier
+import com.lsp.callguard.ui.components.tierDisplayName
 
 @Composable
 fun SettingsScreen(
@@ -71,6 +72,7 @@ fun SettingsScreen(
     onBlockPrivateNumbersChange: (Boolean) -> Unit,
     onUseContactsAutomaticallyChange: (Boolean) -> Unit,
     onMockTierChange: (Tier) -> Unit,
+    onThemeModeChange: (ThemeMode) -> Unit,
     onRestorePurchases: () -> Unit,
     onExportBackup: () -> Unit,
     onImportBackup: () -> Unit,
@@ -163,6 +165,13 @@ fun SettingsScreen(
             item {
                 AppSettingsCard(
                     onOpenLanguage = onOpenLanguage
+                )
+            }
+
+            item {
+                AppearanceCard(
+                    selected = uiState.themeMode,
+                    onSelect = onThemeModeChange
                 )
             }
 
@@ -628,7 +637,7 @@ private fun SettingsIcon(
 ) {
     Surface(
         shape = CircleShape,
-        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+        color = MaterialTheme.colorScheme.primaryContainer,
         modifier = Modifier.size(38.dp)
     ) {
         androidx.compose.foundation.layout.Box(

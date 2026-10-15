@@ -263,7 +263,7 @@ private fun PlanCard(
         ),
         colors = CardDefaults.cardColors(
             containerColor = if (isCurrent) {
-                MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
+                MaterialTheme.colorScheme.surfaceVariant
             } else {
                 MaterialTheme.colorScheme.surface
             }
@@ -388,7 +388,7 @@ private fun FeatureLine(text: String) {
 private fun Badge(text: String) {
     Surface(
         shape = RoundedCornerShape(50),
-        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+        color = MaterialTheme.colorScheme.primaryContainer
     ) {
         Text(
             text = text,

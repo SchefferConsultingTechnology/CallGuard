@@ -27,6 +27,7 @@ import androidx.compose.material.icons.outlined.PhoneLocked
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.VerifiedUser
+import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -51,6 +52,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.lsp.callguard.R
+import com.lsp.callguard.core.theme.CallGuardTheme
 import com.lsp.callguard.domain.billing.EntitlementStatus
 import com.lsp.callguard.domain.model.PlanFeatures
 import com.lsp.callguard.domain.model.Tier
@@ -299,45 +301,53 @@ private fun DowngradeNoticeCard(
     val before = PlanFeatures.of(previousTier)
     val now = PlanFeatures.of(currentTier)
 
+    val warning = CallGuardTheme.extendedColors
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(22.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+            containerColor = warning.warningContainer,
+            contentColor = warning.onWarningContainer
         )
     ) {
         Column(modifier = Modifier.padding(18.dp)) {
-            Text(
-                text = stringResource(
-                    R.string.downgrade_title,
-                    tierDisplayName(previousTier),
-                    tierDisplayName(currentTier)
-                ),
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Outlined.WarningAmber,
+                    contentDescription = null,
+                    tint = warning.onWarningContainer,
+                    modifier = Modifier.size(22.dp)
+                )
+                Spacer(modifier = Modifier.width(10.dp))
+                Text(
+                    text = stringResource(
+                        R.string.downgrade_title,
+                        tierDisplayName(previousTier),
+                        tierDisplayName(currentTier)
+                    ),
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
+                )
+            }
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
                 text = stringResource(R.string.downgrade_whitelist_kept),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                style = MaterialTheme.typography.bodyMedium
             )
 
             if (before.contactsAllowed && !now.contactsAllowed) {
                 Text(
                     text = stringResource(R.string.downgrade_contacts_off),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
 
             if (now.historyRetentionDays < before.historyRetentionDays) {
                 Text(
                     text = stringResource(R.string.downgrade_history_shorter, now.historyRetentionDays),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
 
@@ -347,7 +357,10 @@ private fun DowngradeNoticeCard(
                 Button(onClick = onOpenPaywall, shape = RoundedCornerShape(14.dp)) {
                     Text(stringResource(R.string.downgrade_see_plans))
                 }
-                TextButton(onClick = onDismiss) {
+                TextButton(
+                    onClick = onDismiss,
+                    colors = ButtonDefaults.textButtonColors(contentColor = warning.onWarningContainer)
+                ) {
                     Text(stringResource(R.string.downgrade_dismiss))
                 }
             }
@@ -392,7 +405,11 @@ private fun WhitelistLimitCard(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(8.dp),
-                    color = MaterialTheme.colorScheme.primary,
+                    color = if (count >= limit) {
+                        CallGuardTheme.extendedColors.warning
+                    } else {
+                        MaterialTheme.colorScheme.primary
+                    },
                     trackColor = MaterialTheme.colorScheme.surfaceVariant
                 )
             }
@@ -462,7 +479,7 @@ private fun LockedContactsCard(
                         shape = RoundedCornerShape(14.dp),
                         border = BorderStroke(
                             width = 1.dp,
-                            color = MaterialTheme.colorScheme.outlineVariant
+                            color = MaterialTheme.colorScheme.outline
                         )
                     ) {
                         Icon(
@@ -515,7 +532,7 @@ private fun PrivacyCard() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(22.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         )
     ) {
         Column(
@@ -541,7 +558,7 @@ private fun HomeCardHeader(
     ) {
         Surface(
             shape = CircleShape,
-            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+            color = MaterialTheme.colorScheme.primaryContainer,
             modifier = Modifier.size(38.dp)
         ) {
             Box(contentAlignment = Alignment.Center) {
@@ -601,7 +618,7 @@ private fun CallHistoryCard(
             ) {
                 Surface(
                     shape = CircleShape,
-                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                    color = MaterialTheme.colorScheme.primaryContainer,
                     modifier = Modifier.size(42.dp)
                 ) {
                     Box(

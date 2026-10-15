@@ -35,6 +35,8 @@ object BackupCodec {
                 out.writeUTF(log.reason)
                 out.writeLong(log.createdAt)
             }
+
+            out.writeNullableUtf(data.settings.themeMode)
         }
         return bytes.toByteArray()
     }
@@ -57,11 +59,9 @@ object BackupCodec {
                     )
                 }
 
-                val settings = BackupSettings(
-                    blockUnknown = input.readBoolean(),
-                    blockPrivateNumbers = input.readBoolean(),
-                    language = input.readNullableUtf()
-                )
+                val blockUnknown = input.readBoolean()
+                val blockPrivateNumbers = input.readBoolean()
+                val language = input.readNullableUtf()
 
                 val history = List(input.readCount()) {
                     BackupLog(
@@ -73,6 +73,13 @@ object BackupCodec {
                         createdAt = input.readLong()
                     )
                 }
+
+                val settings = BackupSettings(
+                    blockUnknown = blockUnknown,
+                    blockPrivateNumbers = blockPrivateNumbers,
+                    language = language,
+                    themeMode = if (version >= 2) input.readNullableUtf() else null
+                )
 
                 return BackupData(version, exportedAt, whitelist, settings, history)
             }

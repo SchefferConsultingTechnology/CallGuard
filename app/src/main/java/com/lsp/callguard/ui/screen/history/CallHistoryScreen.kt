@@ -48,11 +48,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.lsp.callguard.R
+import com.lsp.callguard.core.theme.CallGuardTheme
 import com.lsp.callguard.domain.model.CallDecisionLog
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -262,7 +267,7 @@ private fun EmptyHistoryCard() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(22.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         )
     ) {
         Column(
@@ -271,7 +276,7 @@ private fun EmptyHistoryCard() {
         ) {
             Surface(
                 shape = CircleShape,
-                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                color = MaterialTheme.colorScheme.primaryContainer,
                 modifier = Modifier.size(58.dp)
             ) {
                 androidx.compose.foundation.layout.Box(
@@ -342,12 +347,16 @@ private fun HistorySummaryCard(
             ) {
                 SummaryPill(
                     icon = Icons.Outlined.Verified,
-                    title = stringResource(R.string.allowed_count, allowed)
+                    title = stringResource(R.string.allowed_count, allowed),
+                    container = CallGuardTheme.extendedColors.successContainer,
+                    content = CallGuardTheme.extendedColors.onSuccessContainer
                 )
 
                 SummaryPill(
                     icon = Icons.Outlined.Block,
-                    title = stringResource(R.string.blocked_count, blocked)
+                    title = stringResource(R.string.blocked_count, blocked),
+                    container = MaterialTheme.colorScheme.errorContainer,
+                    content = MaterialTheme.colorScheme.onErrorContainer
                 )
             }
         }
@@ -357,11 +366,14 @@ private fun HistorySummaryCard(
 @Composable
 private fun SummaryPill(
     icon: ImageVector,
-    title: String
+    title: String,
+    container: Color,
+    content: Color
 ) {
     Surface(
         shape = RoundedCornerShape(999.dp),
-        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)
+        color = container,
+        contentColor = content
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
@@ -370,7 +382,6 @@ private fun SummaryPill(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(18.dp)
             )
 
@@ -396,6 +407,13 @@ private fun CallHistoryItemCard(
     val title = displayPhone?.takeIf { it.isNotBlank() } ?: stringResource(R.string.private_number)
     val statusText = if (log.allowed) stringResource(R.string.status_allowed) else stringResource(R.string.status_blocked)
     val icon = if (log.allowed) Icons.Outlined.Verified else Icons.Outlined.Block
+    // Colour is never the only signal: icon and status text differ too (spec FR-008).
+    val statusColor = if (log.allowed) CallGuardTheme.extendedColors.success else MaterialTheme.colorScheme.error
+    val statusContainer = if (log.allowed) {
+        CallGuardTheme.extendedColors.successContainer
+    } else {
+        MaterialTheme.colorScheme.errorContainer
+    }
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -414,7 +432,7 @@ private fun CallHistoryItemCard(
         ) {
             Surface(
                 shape = CircleShape,
-                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                color = statusContainer,
                 modifier = Modifier.size(42.dp)
             ) {
                 androidx.compose.foundation.layout.Box(
@@ -423,7 +441,7 @@ private fun CallHistoryItemCard(
                     Icon(
                         imageVector = icon,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
+                        tint = statusColor,
                         modifier = Modifier.size(22.dp)
                     )
                 }
@@ -444,8 +462,15 @@ private fun CallHistoryItemCard(
 
                 Spacer(modifier = Modifier.height(4.dp))
 
+                val reason = formatReason(log.reason)
                 Text(
-                    text = "$statusText • ${formatReason(log.reason)}",
+                    text = buildAnnotatedString {
+                        withStyle(SpanStyle(color = statusColor, fontWeight = FontWeight.Medium)) {
+                            append(statusText)
+                        }
+                        append(" • ")
+                        append(reason)
+                    },
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

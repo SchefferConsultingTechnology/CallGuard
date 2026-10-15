@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108" width="108" height="108">
+<defs><linearGradient id="go" gradientUnits="userSpaceOnUse" x1="30" y1="86" x2="80" y2="22">
+<stop offset="0" stop-color="#2563EB"/><stop offset="1" stop-color="#38BDF8"/></linearGradient>
+<linearGradient id="gi" gradientUnits="userSpaceOnUse" x1="40" y1="76" x2="80" y2="36">
+<stop offset="0" stop-color="#38BDF8"/><stop offset="1" stop-color="#22D3EE"/></linearGradient></defs>
+<path d="M63.42,32.99 L54.00,27.55 L30.45,41.15 L30.45,68.34 L54.00,81.94 L77.55,68.34 L77.55,59.83" fill="none" stroke="url(#go)" stroke-width="9.0" stroke-linejoin="round" stroke-linecap="butt"/><path d="M77.55,46.73 L63.52,38.62 L49.49,46.73 L49.49,62.93 L63.52,71.03 L77.55,62.93 L77.55,59.83 L62.52,59.83" fill="none" stroke="url(#gi)" stroke-width="9.0" stroke-linejoin="round" stroke-linecap="butt"/></svg>

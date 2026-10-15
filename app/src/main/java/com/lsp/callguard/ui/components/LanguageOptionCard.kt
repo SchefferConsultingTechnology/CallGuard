@@ -45,7 +45,7 @@ fun LanguageOptionCard(
     }
 
     val containerColor = if (isSelected) {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
+        MaterialTheme.colorScheme.surfaceVariant
     } else {
         MaterialTheme.colorScheme.surface
     }

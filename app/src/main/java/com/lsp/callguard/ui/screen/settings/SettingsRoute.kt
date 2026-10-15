@@ -11,9 +11,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.lsp.callguard.R
 import com.lsp.callguard.core.language.LocaleManagerHelper
+import com.lsp.callguard.core.theme.ThemeModeApplier
 import com.lsp.callguard.data.backup.ImportResult
 import com.lsp.callguard.data.billing.RestoreResult
 import com.lsp.callguard.domain.backup.BackupError
@@ -28,6 +30,7 @@ fun SettingsRoute(
     onOpenTerms: () -> Unit,
     onOpenPrivacyPolicy: () -> Unit) {
     val viewModel = rememberSettingsViewModel()
+    val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -61,6 +64,7 @@ fun SettingsRoute(
                 is BackupEvent.Imported -> when (val result = event.result) {
                     is ImportResult.Imported -> {
                         result.language?.let(LocaleManagerHelper::applyLanguage)
+                        result.themeMode?.let { ThemeModeApplier.apply(context, it) }
                         importedTemplate.format(result.added, result.updated, result.historyAdded)
                     }
                     is ImportResult.Failed -> when (result.error) {
@@ -97,6 +101,7 @@ fun SettingsRoute(
         onBlockPrivateNumbersChange = viewModel::setBlockPrivateNumbers,
         onUseContactsAutomaticallyChange = viewModel::setUseContactsAutomatically,
         onMockTierChange = viewModel::setMockTier,
+        onThemeModeChange = viewModel::setThemeMode,
         onRestorePurchases = viewModel::restorePurchases,
         onExportBackup = { showExportDialog = true },
         onImportBackup = { importLauncher.launch(arrayOf("*/*")) },

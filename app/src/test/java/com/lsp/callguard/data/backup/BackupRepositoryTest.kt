@@ -4,13 +4,16 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import com.lsp.callguard.core.language.AppLanguage
 import com.lsp.callguard.data.local.entity.AllowedNumberEntity
 import com.lsp.callguard.data.local.entity.CallDecisionLogEntity
+import com.lsp.callguard.data.local.preferences.AppearancePreferences
 import com.lsp.callguard.data.local.preferences.LanguagePreferences
 import com.lsp.callguard.data.local.preferences.LicensePreferences
 import com.lsp.callguard.data.local.preferences.SettingsPreferences
 import com.lsp.callguard.domain.backup.BackupError
+import com.lsp.callguard.domain.model.ThemeMode
 import com.lsp.callguard.domain.phone.PhoneNormalizer
 import com.lsp.callguard.fakes.FakeAllowedNumberDao
 import com.lsp.callguard.fakes.FakeCallDecisionLogDao
+import java.io.File
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -18,7 +21,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
-import java.io.File
 
 class BackupRepositoryTest {
 
@@ -34,11 +36,13 @@ class BackupRepositoryTest {
         private val store = PreferenceDataStoreFactory.create { File(tempFolder.root, "$name.preferences_pb") }
         val settings = SettingsPreferences(store)
         val language = LanguagePreferences(store)
+        val appearance = AppearancePreferences(store)
         val repository = BackupRepository(
             allowedNumberDao = allowedDao,
             callDecisionLogDao = logDao,
             settingsPreferences = settings,
             languagePreferences = language,
+            appearancePreferences = appearance,
             licensePreferences = LicensePreferences(store),
             normalizer = PhoneNormalizer(),
             regionProvider = { "BR" },
@@ -57,15 +61,17 @@ class BackupRepositoryTest {
         val a = Device("a", whitelist = listOf(entry("1", "Mãe", "+5511987654321"), entry("2", "Clínica", "+551133334444")))
         a.settings.setBlockPrivateNumbers(false)
         a.language.saveSelectedLanguage(AppLanguage.ES_ES)
+        a.appearance.setThemeMode(ThemeMode.DARK)
         val file = a.repository.export(password, includeHistory = false)
 
         val b = Device("b")
         val result = b.repository.import(file, password)
 
-        assertEquals(ImportResult.Imported(added = 2, updated = 0, historyAdded = 0, language = AppLanguage.ES_ES), result)
+        assertEquals(ImportResult.Imported(added = 2, updated = 0, historyAdded = 0, language = AppLanguage.ES_ES, themeMode = ThemeMode.DARK), result)
         assertEquals(setOf("+5511987654321", "+551133334444"), b.allowedDao.current.map { it.phoneE164 }.toSet())
         assertEquals(false, b.settings.settingsFlow.first().blockPrivateNumbers)
         assertEquals(AppLanguage.ES_ES, b.language.selectedLanguageFlow.first())
+        assertEquals(ThemeMode.DARK, b.appearance.themeModeFlow.first())
     }
 
     @Test

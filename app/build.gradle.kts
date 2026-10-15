@@ -69,6 +69,7 @@ dependencies {
     implementation("androidx.room:room-ktx:$roomVersion")
     implementation(libs.billing.ktx)
     implementation(libs.libphonenumber)
+    implementation(libs.androidx.core.splashscreen)
     ksp(libs.androidx.room.compiler)
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)

@@ -7,9 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lsp.callguard.core.phone.PhoneServices
+import com.lsp.callguard.core.theme.ThemeModeApplier
 import com.lsp.callguard.data.backup.BackupRepository
 import com.lsp.callguard.data.billing.BillingRepository
 import com.lsp.callguard.data.local.database.CallGuardDatabase
+import com.lsp.callguard.data.local.preferences.AppearancePreferences
 import com.lsp.callguard.data.local.preferences.LanguagePreferences
 import com.lsp.callguard.data.local.preferences.LicensePreferences
 import com.lsp.callguard.data.local.preferences.SettingsPreferences
@@ -24,6 +26,7 @@ fun rememberSettingsViewModel(): SettingsViewModel {
     val factory = remember(context) {
         val preferences = SettingsPreferences(context.appPreferencesDataStore)
         val licensePreferences = LicensePreferences(context.appPreferencesDataStore)
+        val appearancePreferences = AppearancePreferences(context.appPreferencesDataStore)
         val database = CallGuardDatabase.getInstance(context)
 
 
@@ -34,11 +37,14 @@ fun rememberSettingsViewModel(): SettingsViewModel {
                     settingsPreferences = preferences,
                     licensePreferences = licensePreferences,
                     billingRepository = BillingRepository.getInstance(context, licensePreferences),
+                    appearancePreferences = appearancePreferences,
+                    applyTheme = { mode -> ThemeModeApplier.apply(context, mode) },
                     backupRepository = BackupRepository(
                         allowedNumberDao = database.allowedNumberDao(),
                         callDecisionLogDao = database.callDecisionLogDao(),
                         settingsPreferences = preferences,
                         languagePreferences = LanguagePreferences(context.appPreferencesDataStore),
+                        appearancePreferences = appearancePreferences,
                         licensePreferences = licensePreferences,
                         normalizer = PhoneServices.normalizer,
                         regionProvider = PhoneServices.regionProvider(context)
