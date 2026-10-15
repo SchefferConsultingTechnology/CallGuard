@@ -59,7 +59,7 @@
     <string name="settings_subtitle">Controle privacidade, proteção e licença.</string>
     <string name="license_active">Sua licença está ativa.</string>
     <string name="license_free">Você está usando recursos básicos com limite de whitelist.</string>
-    <string name="subscription_benefits">Uma licença desbloqueia contatos automáticos, whitelist ilimitada e restauração futura.</string>
+    <string name="subscription_benefits">O Plus libera contatos automáticos e whitelist ilimitada. O Pro vai incluir backup automático no Google Drive (em breve).</string>
     <string name="license_mock_mode">Plano simulado (desenvolvimento)</string>
     <string name="license_mock_mode_description">Escolha um plano localmente para testar o app sem a Google Play.</string>
     <string name="block_unknown_numbers">Bloquear números desconhecidos</string>

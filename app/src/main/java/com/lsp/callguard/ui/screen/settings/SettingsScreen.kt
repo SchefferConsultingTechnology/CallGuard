@@ -28,17 +28,15 @@ import androidx.compose.material.icons.outlined.Policy
 import androidx.compose.material.icons.outlined.PrivacyTip
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.material.icons.outlined.WorkspacePremium
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
@@ -247,19 +245,11 @@ private fun LicenseCard(
         if (tier == Tier.FREE) {
             Spacer(modifier = Modifier.height(14.dp))
 
-            FilledTonalButton(
+            Button(
                 onClick = onOpenPaywall,
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(14.dp)
             ) {
-                Icon(
-                    imageVector = Icons.Outlined.Star,
-                    contentDescription = null,
-                    modifier = Modifier.size(18.dp)
-                )
-
-                Spacer(modifier = Modifier.width(8.dp))
-
                 Text(stringResource(R.string.view_premium))
             }
         }
@@ -372,14 +362,10 @@ private fun ContactsSettingsCard(
         if (!hasPaidPlan) {
             Spacer(modifier = Modifier.height(14.dp))
 
-            OutlinedButton(
+            Button(
                 onClick = onOpenPaywall,
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(14.dp),
-                border = BorderStroke(
-                    width = 1.dp,
-                    color = MaterialTheme.colorScheme.outlineVariant
-                )
+                shape = RoundedCornerShape(14.dp)
             ) {
                 Text(stringResource(R.string.unlock_contacts_premium))
             }
@@ -460,7 +446,7 @@ private fun AppInfoCard() {
 }
 
 @Composable
-private fun SettingsCard(
+internal fun SettingsCard(
     content: @Composable () -> Unit
 ) {
     Card(
@@ -577,7 +563,7 @@ private fun SettingsActionRow(
 }
 
 @Composable
-private fun SettingsItemHeader(
+internal fun SettingsItemHeader(
     icon: ImageVector,
     title: String,
     description: String

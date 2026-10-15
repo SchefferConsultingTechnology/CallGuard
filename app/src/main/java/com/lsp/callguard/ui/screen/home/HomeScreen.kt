@@ -189,80 +189,46 @@ private fun ProtectionStatusCard(
     isProtectionEnabled: Boolean,
     onOpenProtectionSetup: () -> Unit
 ) {
+    // Same structure as PlanStatusCard: header row, full-width action below.
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(22.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         border = BorderStroke(
             width = 1.dp,
-            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     ) {
-        Row(
-            modifier = Modifier.padding(18.dp),
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            modifier = Modifier.padding(18.dp)
         ) {
-            Box(
-                modifier = Modifier
-                    .size(58.dp)
-                    .background(
-                        color = MaterialTheme.colorScheme.primaryContainer,
-                        shape = CircleShape
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Security,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(30.dp)
-                )
-            }
+            HomeCardHeader(
+                icon = Icons.Outlined.Security,
+                title = if (isProtectionEnabled) {
+                    stringResource(R.string.protection_status_active)
+                } else {
+                    stringResource(R.string.protection_status_not_configured)
+                },
+                description = stringResource(R.string.protection_whitelist_prompt)
+            )
 
-            Spacer(modifier = Modifier.width(14.dp))
+            Spacer(modifier = Modifier.height(14.dp))
 
-            Column(
-                modifier = Modifier.weight(1f)
+            Button(
+                onClick = onOpenProtectionSetup,
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(14.dp)
             ) {
                 Text(
                     text = if (isProtectionEnabled) {
                         stringResource(R.string.protection_status_active)
                     } else {
-                        stringResource(R.string.protection_status_not_configured)
-                    },
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.SemiBold
-                    ),
-                    color = MaterialTheme.colorScheme.onSurface
+                        stringResource(R.string.activate_protection)
+                    }
                 )
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Text(
-                    text = stringResource(R.string.protection_whitelist_prompt),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-
-                Button(
-                    onClick = onOpenProtectionSetup,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(48.dp)
-                ) {
-                    Text(
-                        text = if (isProtectionEnabled) {
-                            stringResource(R.string.protection_status_active)
-                        } else {
-                            stringResource(R.string.activate_protection)
-                        }
-                    )
-                }
-
             }
-
         }
     }
 }
